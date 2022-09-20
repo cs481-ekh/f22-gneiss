@@ -31,10 +31,21 @@ export function NewAccountForm(props: newAcccountFormProps) {
     },
   };
 
+  const [firstNameField, setFirstNameField] = useState("");
+  const [lastNameField, setLastNameField] = useState("");
   const [emailField, setEmailField] = useState("");
   const [passwordField, setPasswordField] = useState("");
+  const [passwordField2, setPasswordField2] = useState("");
   const [alertReason, setAlertReason] = useState("");
   const [checked, setChecked] = useState(false);
+
+  const handleFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFirstNameField(e.target.value);
+  };
+
+  const handleLastNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setLastNameField(e.target.value);
+  };
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmailField(e.target.value);
@@ -42,6 +53,10 @@ export function NewAccountForm(props: newAcccountFormProps) {
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordField(e.target.value);
+  };
+
+  const handlePassword2Change = (e: ChangeEvent<HTMLInputElement>) => {
+    setPasswordField2(e.target.value);
   };
 
   const handleCheckedChange = (
@@ -52,11 +67,19 @@ export function NewAccountForm(props: newAcccountFormProps) {
   };
 
   const handleSubmit = () => {
+    console.log(`First Name: ${firstNameField}`);
+    console.log(`Last Name: ${lastNameField}`);
     console.log(`Email: ${emailField}`);
     console.log(`Password: ${passwordField}`);
+    console.log(`Check Password: ${passwordField2}`);
 
-    if (emailField === "" || passwordField === "") {
-      setAlertReason("Enter your email and password.");
+    if (firstNameField  === "" || lastNameField  === "" || emailField === "" || passwordField === "" || passwordField2 === "") {
+      setAlertReason("Enter your name, email address, and password.");
+      return;
+    }
+
+    if (!(passwordField === passwordField2)) {
+      setAlertReason("Your passwords must match.");
       return;
     }
 
@@ -76,9 +99,20 @@ export function NewAccountForm(props: newAcccountFormProps) {
 
   return (
     <FormGroup style={styles.signIn}>
-      <Link href="/" underline="always">
-          Back
-      </Link>
+      <TextField
+        onChange={handleFirstNameChange}
+        style={styles.input}
+        id="firstName"
+        label="First Name"
+        variant="outlined"
+      />
+      <TextField
+        onChange={handleLastNameChange}
+        style={styles.input}
+        id="lastName"
+        label="Last Name"
+        variant="outlined"
+      />
       <TextField
         onChange={handleEmailChange}
         style={styles.input}
@@ -94,6 +128,14 @@ export function NewAccountForm(props: newAcccountFormProps) {
         variant="outlined"
         type="password"
       />
+      <TextField
+        onChange={handlePassword2Change}
+        style={styles.input}
+        id="checkpassword"
+        label="Confirm Password"
+        variant="outlined"
+        type="password"
+      />
       <div>
         <Button
           onClick={handleSubmit}
@@ -103,6 +145,9 @@ export function NewAccountForm(props: newAcccountFormProps) {
           Create Account
         </Button>
       </div>
+      <Link href="/" underline="always">
+          Back
+      </Link>
       <Snackbar open={alertReason !== ""}>
         <Alert
           className="alert"
