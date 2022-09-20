@@ -2,6 +2,7 @@ import * as React from "react";
 import { ChangeEvent, useState } from "react";
 import {
   Alert,
+  Link,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -75,6 +76,9 @@ export function NewAccountForm(props: newAcccountFormProps) {
 
   return (
     <FormGroup style={styles.signIn}>
+      <Link href="/" underline="always">
+          Back
+      </Link>
       <TextField
         onChange={handleEmailChange}
         style={styles.input}
@@ -91,18 +95,12 @@ export function NewAccountForm(props: newAcccountFormProps) {
         type="password"
       />
       <div>
-        <FormControlLabel
-          control={
-            <Checkbox checked={checked} onChange={handleCheckedChange} />
-          }
-          label="keep me logged in"
-        />
         <Button
           onClick={handleSubmit}
           style={styles.button}
           variant="contained"
         >
-          Sign in
+          Create Account
         </Button>
       </div>
       <Snackbar open={alertReason !== ""}>
