@@ -66,7 +66,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
     setChecked(checked);
   };
 
-  const checkSignage = /^[a-z]+$/i;
+  //const checkSignage = /^[a-z]+$/i;
 
   const handleSubmit = () => {
     console.log(`First Name: ${firstNameField}`);
@@ -89,7 +89,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
 
     //Check username/password requirements and security for text fields.
     //Firstname, Lastname, and Email forms must use appropriate signage (alpha characters only)
-    if (firstNameField.match(checkSignage) || lastNameField.match(checkSignage) ) {
+    if (!(firstNameField.match(/^[a-z]+$/i)) || !(lastNameField.match(/^[a-z]+$/i)) ) {
       setAlertReason("Name fields must only be alphanumeric");
       return;
     }
