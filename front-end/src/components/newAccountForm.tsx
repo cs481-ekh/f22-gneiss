@@ -66,6 +66,8 @@ export function NewAccountForm(props: newAcccountFormProps) {
     setChecked(checked);
   };
 
+  const checkSignage = /^[a-z]+$/i;
+
   const handleSubmit = () => {
     console.log(`First Name: ${firstNameField}`);
     console.log(`Last Name: ${lastNameField}`);
@@ -73,15 +75,28 @@ export function NewAccountForm(props: newAcccountFormProps) {
     console.log(`Password: ${passwordField}`);
     console.log(`Check Password: ${passwordField2}`);
 
+    //All fields must be filled
     if (firstNameField  === "" || lastNameField  === "" || emailField === "" || passwordField === "" || passwordField2 === "") {
       setAlertReason("Enter your name, email address, and password.");
       return;
     }
 
-    if (!(passwordField === passwordField2)) {
+    //Passwords must match
+    if (passwordField !== passwordField2) {
       setAlertReason("Your passwords must match.");
       return;
     }
+
+    //Check username/password requirements and security for text fields.
+    //Firstname, Lastname, and Email forms must use appropriate signage (alpha characters only)
+    if (firstNameField.match(checkSignage) || lastNameField.match(checkSignage) ) {
+      setAlertReason("Name fields must only be alphanumeric");
+      return;
+    }
+
+    //Passwords must be correct format (6-18 characters, 1 letter, 1 number, 1 special character, no spaces)
+
+    //console.log info should be passed to the backend here.
 
     history.push("home");
   };
