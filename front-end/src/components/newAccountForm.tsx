@@ -3,8 +3,6 @@ import { ChangeEvent, useState } from "react";
 import {
   Alert,
   Link,
-  Checkbox,
-  FormControlLabel,
   FormGroup,
   Snackbar,
   TextField,
@@ -37,7 +35,6 @@ export function NewAccountForm(props: newAcccountFormProps) {
   const [passwordField, setPasswordField] = useState("");
   const [passwordField2, setPasswordField2] = useState("");
   const [alertReason, setAlertReason] = useState("");
-  const [checked, setChecked] = useState(false);
 
   const handleFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFirstNameField(e.target.value);
@@ -57,13 +54,6 @@ export function NewAccountForm(props: newAcccountFormProps) {
 
   const handlePassword2Change = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordField2(e.target.value);
-  };
-
-  const handleCheckedChange = (
-    event: ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
-    setChecked(checked);
   };
 
   //Alpha Characters only (case insensitive)
