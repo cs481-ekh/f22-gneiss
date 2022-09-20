@@ -21,9 +21,9 @@ jobs:
         with:
           node-version: '18'
       - run: npm --prefix ./front-end install ./front-end
-      - run: npm install --save-dev prettier
-      - run: npx prettier front-end/src/
-      - run: cd front-end && CI=true npm test
+      - run: npm --prefix ./front-end run build ./front-end
+      - run: npx --prefix ./front-end prettier ./front-end/src
+      - run: CI=true npm --prefix ./front-end test ./front-end
       - run: curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.44.0/ktlint && chmod a+x ktlint && sudo mv ktlint /usr/local/bin/
       - name: run ktlint
         run: |
