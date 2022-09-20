@@ -66,7 +66,14 @@ export function NewAccountForm(props: newAcccountFormProps) {
     setChecked(checked);
   };
 
-  //const checkSignage = /^[a-z]+$/i;
+  //Alpha Characters only (case insensitive)
+  const checkSignage = /^[a-z]+$/i;
+  
+  /* min eight characters,
+  max 20 characters, 
+  at least one letter, one number 
+  and one special character */
+  const checkPassSignage = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/;
 
   const handleSubmit = () => {
     console.log(`First Name: ${firstNameField}`);
@@ -89,12 +96,16 @@ export function NewAccountForm(props: newAcccountFormProps) {
 
     //Check username/password requirements and security for text fields.
     //Firstname, Lastname, and Email forms must use appropriate signage (alpha characters only)
-    if (!(firstNameField.match(/^[a-z]+$/i)) || !(lastNameField.match(/^[a-z]+$/i)) ) {
-      setAlertReason("Name fields must only be alphanumeric");
+    if (!(firstNameField.match(checkSignage)) || !(lastNameField.match(checkSignage)) ) {
+      setAlertReason("Name fields must only be alphanumeric.");
       return;
     }
 
-    //Passwords must be correct format (6-18 characters, 1 letter, 1 number, 1 special character, no spaces)
+    //Passwords must be correct format (8-20 characters, 1 letter, 1 number, 1 special character, no spaces)
+    if (!(passwordField.match(checkPassSignage)) || !(passwordField2.match(checkPassSignage)) ) {
+      setAlertReason("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&), and no spaces.");
+      return;
+    }
 
     //console.log info should be passed to the backend here.
 
