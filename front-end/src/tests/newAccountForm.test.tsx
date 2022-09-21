@@ -10,8 +10,8 @@ test("First Name, Last Name, Email, Password, and Confirm Password fields must b
   expect(screen.getByText("Enter your name, email address, and password.")).toBeTruthy();
 });
 
-//Firstname, Lastname, and Email forms must use appropriate signage
-test("Firstname, Lastname, and Email forms must use appropriate signage", () => {
+//Firstname and Lastname forms must use appropriate signage
+test("Firstname and Lastname forms must use appropriate signage", () => {
   render(<NewAccountForm />);
   fireEvent.change(screen.getByLabelText("First Name"), {
     target: { value: "Luc4$" },
@@ -33,13 +33,195 @@ test("Firstname, Lastname, and Email forms must use appropriate signage", () => 
 });
 
 //Passwords must be correct format (6-18 characters, 1 letter, 1 number, 1 special character, no spaces)
-// test("Passwords must be correct format", () => {
-//   render(<NewAccountForm />);
-//   fireEvent.click(screen.getByText("Create Account"));
-//   expect(screen.getByText("Enter your name, email address, and password.")).toBeTruthy();
-// });
+test("Passwords must be correct format (all lowercase)", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "invalidpass" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "invalidpass" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^), and no spaces.")).toBeTruthy();
+});
+
+test("Passwords must be correct format (ALL UPPERCASE)", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "INVALIDPASS" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "INVALIDPASS" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^), and no spaces.")).toBeTruthy();
+});
+
+test("Passwords must be correct format (All Letters)", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "InvalidPass" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "InvalidPass" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^), and no spaces.")).toBeTruthy();
+});
+
+test("Passwords must be correct format (All Numbers)", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "012345678" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "012345678" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^), and no spaces.")).toBeTruthy();
+});
+
+test("Passwords must be correct format (All Symbols)", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "!@#$%^&" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "!@#$%^&" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^), and no spaces.")).toBeTruthy();
+});
+
+test("Passwords must be correct format (Includes Space)", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "12345 A$valid" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "12345 A$valid" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^), and no spaces.")).toBeTruthy();
+});
+
+test("Passwords must be correct format (Too Short)", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "1A$a" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "1A$a" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^), and no spaces.")).toBeTruthy();
+});
+
+test("Passwords must be correct format (Too Long)", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "1A$a123456789012345!a" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "1A$a123456789012345!a" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^), and no spaces.")).toBeTruthy();
+});
 
 //Passwords must match
+test("Passwords must be correct format (Passwords Don't Match)", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "1A$a123456789012345!a" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "a!543210987654321a$A1" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Your passwords must match.")).toBeTruthy();
+});
 
 // test("If input validation succeeds, go to landing page", () => {
 //   const result = render(<NewAccountForm />);
