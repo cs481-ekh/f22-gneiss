@@ -66,7 +66,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
   max 20 characters, 
   at least one letter, one number 
   and one special character */
-  const checkPassSignage = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^])[A-Za-z\d@$!%*#?&^]{8,20}$/;
+  const checkPassSignage = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,20}$/;
 
   const handleSubmit = () => {
     console.log(`First Name: ${firstNameField}`);
@@ -102,7 +102,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
 
     //Passwords must be correct format (8-20 characters, 1 letter, 1 number, 1 special character, no spaces)
     if (!(passwordField.match(checkPassSignage))) {
-      setAlertReason("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^), and no spaces.");
+      setAlertReason("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces.");
       return;
     }
 
