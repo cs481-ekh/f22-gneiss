@@ -101,7 +101,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
     }
 
     //Passwords must be correct format (8-20 characters, 1 letter, 1 number, 1 special character, no spaces)
-    if (!(passwordField.match(checkPassSignage)) || !(passwordField2.match(checkPassSignage)) ) {
+    if (!(passwordField.match(checkPassSignage))) {
       setAlertReason("Passwords must be 6-20 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^), and no spaces.");
       return;
     }
