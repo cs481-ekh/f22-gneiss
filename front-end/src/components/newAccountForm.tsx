@@ -59,6 +59,9 @@ export function NewAccountForm(props: newAcccountFormProps) {
   //Alpha Characters only (case insensitive)
   const checkSignage = /^[a-z]+$/i;
 
+  //Basic email signage.
+  const checkEmailSignage = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+
   /* min eight characters,
   max 20 characters, 
   at least one letter, one number 
@@ -78,16 +81,22 @@ export function NewAccountForm(props: newAcccountFormProps) {
       return;
     }
 
-    //Passwords must match
-    if (passwordField !== passwordField2) {
-      setAlertReason("Your passwords must match.");
+    //Check username/password requirements and security for text fields.
+    //Firstname and Lastname forms must use appropriate signage (alpha characters only)
+    if (!(firstNameField.match(checkSignage)) || !(lastNameField.match(checkSignage)) ) {
+      setAlertReason("Name fields must only be alphanumeric.");
       return;
     }
 
-    //Check username/password requirements and security for text fields.
-    //Firstname, Lastname, and Email forms must use appropriate signage (alpha characters only)
-    if (!(firstNameField.match(checkSignage)) || !(lastNameField.match(checkSignage)) ) {
-      setAlertReason("Name fields must only be alphanumeric.");
+    //Email should only allow basic signage.
+    if (!(emailField.match(checkEmailSignage)) ) {
+      setAlertReason("Please enter a valid email address.");
+      return;
+    }
+
+    //Passwords must match
+    if (passwordField !== passwordField2) {
+      setAlertReason("Your passwords must match.");
       return;
     }
 

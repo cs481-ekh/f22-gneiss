@@ -32,6 +32,50 @@ test("Firstname and Lastname forms must use appropriate signage", () => {
   expect(screen.getByText("Name fields must only be alphanumeric.")).toBeTruthy();
 });
 
+//Firstname and Lastname forms must use appropriate signage
+test("Firstname and Lastname forms must use appropriate signage", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Luc4$" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "R1n%l3r" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "1234ValidPa$$" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "1234ValidPa$$" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Name fields must only be alphanumeric.")).toBeTruthy();
+});
+
+//Email should follow expected format and only allow basic signage.
+test("Email should follow expected format and only allow basic signage", () => {
+  render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "1#valid @boisestateedu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "1A$a123456789012345!a" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "1A$a123456789012345!a" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(screen.getByText("Please enter a valid email address.")).toBeTruthy();
+});
+
 //Passwords must be correct format (6-18 characters, 1 letter, 1 number, 1 special character, no spaces)
 test("Passwords must be correct format (all lowercase)", () => {
   render(<NewAccountForm />);
