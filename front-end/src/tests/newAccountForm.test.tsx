@@ -29,17 +29,17 @@ test("Firstname and Lastname forms must use appropriate signage", () => {
     target: { value: "1234ValidPa$$" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Name fields must only be alphanumeric.")).toBeTruthy();
+  expect(screen.getByText("Name fields must only be alphabetic characters.")).toBeTruthy();
 });
 
 //Firstname and Lastname forms must use appropriate signage
-test("Firstname and Lastname forms must use appropriate signage", () => {
+test("Firstname and Lastname signage, spaces", () => {
   render(<NewAccountForm />);
   fireEvent.change(screen.getByLabelText("First Name"), {
-    target: { value: "Luc4$" },
+    target: { value: "Luc as" },
   });
   fireEvent.change(screen.getByLabelText("Last Name"), {
-    target: { value: "R1n%l3r" },
+    target: { value: "Rins ler" },
   });
   fireEvent.change(screen.getByLabelText("Email"), {
     target: { value: "valid@boisestate.edu" },
@@ -51,7 +51,7 @@ test("Firstname and Lastname forms must use appropriate signage", () => {
     target: { value: "1234ValidPa$$" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Name fields must only be alphanumeric.")).toBeTruthy();
+  expect(screen.getByText("Name fields must only be alphabetic characters.")).toBeTruthy();
 });
 
 //Email should follow expected format and only allow basic signage.

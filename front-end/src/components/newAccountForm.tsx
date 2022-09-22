@@ -84,7 +84,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
     //Check username/password requirements and security for text fields.
     //Firstname and Lastname forms must use appropriate signage (alpha characters only)
     if (!(firstNameField.match(checkSignage)) || !(lastNameField.match(checkSignage)) ) {
-      setAlertReason("Name fields must only be alphanumeric.");
+      setAlertReason("Name fields must only be alphabetic characters.");
       return;
     }
 
