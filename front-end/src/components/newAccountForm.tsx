@@ -57,7 +57,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
   };
 
   //Alpha Characters only (case insensitive)
-  const checkSignage = /^[a-z]+$/i;
+  const checkSignage = /^[a-z'-]+$/i;
 
   //Basic email signage.
   const checkEmailSignage = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
@@ -84,7 +84,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
     //Check username/password requirements and security for text fields.
     //Firstname and Lastname forms must use appropriate signage (alpha characters only)
     if (!(firstNameField.match(checkSignage)) || !(lastNameField.match(checkSignage)) ) {
-      setAlertReason("Name fields must only be alphabetic characters.");
+      setAlertReason("Name fields must only be alphabetic characters, - or '.");
       return;
     }
 
