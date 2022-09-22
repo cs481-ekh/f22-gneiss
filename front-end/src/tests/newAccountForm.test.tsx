@@ -267,14 +267,24 @@ test("Passwords must be correct format (Passwords Don't Match)", () => {
   expect(screen.getByText("Your passwords must match.")).toBeTruthy();
 });
 
-// test("If input validation succeeds, go to landing page", () => {
-//   const result = render(<NewAccountForm />);
-//   fireEvent.change(screen.getByLabelText("Email"), {
-//     target: { value: "email" },
-//   });
-//   fireEvent.change(screen.getByLabelText("Password"), {
-//     target: { value: "password" },
-//   });
-//   fireEvent.click(screen.getByText("Create Account"));
-//   expect(() => screen.getByRole("alert")).toThrow();
-// });
+//If account info is valid, go to landing page.
+test("If new account validation succeeds, go to landing page", () => {
+  const result = render(<NewAccountForm />);
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "1A$a123456789012345!" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "1A$a123456789012345!" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  expect(() => screen.getByRole("alert")).toThrow();
+});
