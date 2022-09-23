@@ -109,10 +109,8 @@ export function SignInForm(props: SignInFormProps) {
           Sign in
         </Button>
       </div>
-      <Link style={styles.navLink}
-        href="/newuser" 
-        underline="always">
-          Need account?
+      <Link style={styles.navLink} href="/newuser" underline="always">
+        Need account?
       </Link>
       <Snackbar open={alertReason !== ""}>
         <Alert

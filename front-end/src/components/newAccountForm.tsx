@@ -1,12 +1,6 @@
 import * as React from "react";
 import { ChangeEvent, useState } from "react";
-import {
-  Alert,
-  Link,
-  FormGroup,
-  Snackbar,
-  TextField,
-} from "@mui/material";
+import { Alert, Link, FormGroup, Snackbar, TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import history from "./history";
 
@@ -63,13 +57,14 @@ export function NewAccountForm(props: newAcccountFormProps) {
   const checkSignage = /^[a-z'-]+$/i;
 
   //Basic email signage.
-  const checkEmailSignage = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+  const checkEmailSignage = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
   /* min eight characters,
   max 20 characters, 
   at least one letter, one number 
   and one special character */
-  const checkPassSignage = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,50}$/;
+  const checkPassSignage =
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,50}$/;
 
   const handleSubmit = () => {
     console.log(`First Name: ${firstNameField}`);
@@ -79,20 +74,29 @@ export function NewAccountForm(props: newAcccountFormProps) {
     console.log(`Check Password: ${passwordField2}`);
 
     //All fields must be filled
-    if (firstNameField  === "" || lastNameField  === "" || emailField === "" || passwordField === "" || passwordField2 === "") {
+    if (
+      firstNameField === "" ||
+      lastNameField === "" ||
+      emailField === "" ||
+      passwordField === "" ||
+      passwordField2 === ""
+    ) {
       setAlertReason("Enter your name, email address, and password.");
       return;
     }
 
     //Check username/password requirements and security for text fields.
     //Firstname and Lastname forms must use appropriate signage (alpha characters only)
-    if (!(firstNameField.match(checkSignage)) || !(lastNameField.match(checkSignage)) ) {
+    if (
+      !firstNameField.match(checkSignage) ||
+      !lastNameField.match(checkSignage)
+    ) {
       setAlertReason("Name fields must only be alphabetic characters, - or '.");
       return;
     }
 
     //Email should only allow basic signage.
-    if (!(emailField.match(checkEmailSignage)) ) {
+    if (!emailField.match(checkEmailSignage)) {
       setAlertReason("Please enter a valid email address.");
       return;
     }
@@ -104,8 +108,10 @@ export function NewAccountForm(props: newAcccountFormProps) {
     }
 
     //Passwords must be correct format (8-20 characters, 1 letter, 1 number, 1 special character, no spaces)
-    if (!(passwordField.match(checkPassSignage))) {
-      setAlertReason("Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces.");
+    if (!passwordField.match(checkPassSignage)) {
+      setAlertReason(
+        "Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces."
+      );
       return;
     }
 
@@ -173,10 +179,8 @@ export function NewAccountForm(props: newAcccountFormProps) {
           Create Account
         </Button>
       </div>
-      <Link style={styles.navLink}
-      href="/"
-      underline="always">
-          Back
+      <Link style={styles.navLink} href="/" underline="always">
+        Back
       </Link>
       <Snackbar open={alertReason !== ""}>
         <Alert

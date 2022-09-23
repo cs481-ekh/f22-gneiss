@@ -7,7 +7,9 @@ test("First Name, Last Name, Email, Password, and Confirm Password fields must b
     target: { value: "email" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Enter your name, email address, and password.")).toBeTruthy();
+  expect(
+    screen.getByText("Enter your name, email address, and password.")
+  ).toBeTruthy();
 });
 
 //Firstname and Lastname forms must use appropriate signage
@@ -29,7 +31,9 @@ test("Firstname and Lastname forms must use appropriate signage", () => {
     target: { value: "1234ValidPa$$" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Name fields must only be alphabetic characters, - or '.")).toBeTruthy();
+  expect(
+    screen.getByText("Name fields must only be alphabetic characters, - or '.")
+  ).toBeTruthy();
 });
 
 test("Firstname and Lastname forms must allow for - or '", () => {
@@ -71,7 +75,9 @@ test("Firstname and Lastname signage, spaces", () => {
     target: { value: "1234ValidPa$$" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Name fields must only be alphabetic characters, - or '.")).toBeTruthy();
+  expect(
+    screen.getByText("Name fields must only be alphabetic characters, - or '.")
+  ).toBeTruthy();
 });
 
 //Email should follow expected format and only allow basic signage.
@@ -115,7 +121,11 @@ test("Passwords must be correct format (all lowercase)", () => {
     target: { value: "invalidpass" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces.")).toBeTruthy();
+  expect(
+    screen.getByText(
+      "Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces."
+    )
+  ).toBeTruthy();
 });
 
 test("Passwords must be correct format (ALL UPPERCASE)", () => {
@@ -136,7 +146,11 @@ test("Passwords must be correct format (ALL UPPERCASE)", () => {
     target: { value: "INVALIDPASS" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces.")).toBeTruthy();
+  expect(
+    screen.getByText(
+      "Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces."
+    )
+  ).toBeTruthy();
 });
 
 test("Passwords must be correct format (All Letters)", () => {
@@ -157,7 +171,11 @@ test("Passwords must be correct format (All Letters)", () => {
     target: { value: "InvalidPass" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces.")).toBeTruthy();
+  expect(
+    screen.getByText(
+      "Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces."
+    )
+  ).toBeTruthy();
 });
 
 test("Passwords must be correct format (All Numbers)", () => {
@@ -178,7 +196,11 @@ test("Passwords must be correct format (All Numbers)", () => {
     target: { value: "012345678" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces.")).toBeTruthy();
+  expect(
+    screen.getByText(
+      "Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces."
+    )
+  ).toBeTruthy();
 });
 
 test("Passwords must be correct format (All Symbols)", () => {
@@ -199,7 +221,11 @@ test("Passwords must be correct format (All Symbols)", () => {
     target: { value: "!@#$%^&" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces.")).toBeTruthy();
+  expect(
+    screen.getByText(
+      "Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces."
+    )
+  ).toBeTruthy();
 });
 
 test("Passwords must be correct format (Includes Space)", () => {
@@ -220,7 +246,11 @@ test("Passwords must be correct format (Includes Space)", () => {
     target: { value: "12345 A$valid" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces.")).toBeTruthy();
+  expect(
+    screen.getByText(
+      "Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces."
+    )
+  ).toBeTruthy();
 });
 
 test("Passwords must be correct format (Too Short)", () => {
@@ -241,7 +271,11 @@ test("Passwords must be correct format (Too Short)", () => {
     target: { value: "1A$a" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces.")).toBeTruthy();
+  expect(
+    screen.getByText(
+      "Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces."
+    )
+  ).toBeTruthy();
 });
 
 test("Passwords must be correct format (Too Long)", () => {
@@ -262,7 +296,11 @@ test("Passwords must be correct format (Too Long)", () => {
     target: { value: "zK4gt2cKWsWUX$^am*u#_mjt$@Vyqxgdtsa6FdJB*MZ2BMWp!XZ" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(screen.getByText("Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces.")).toBeTruthy();
+  expect(
+    screen.getByText(
+      "Passwords must be 6-50 characters, and contain 1 letter, 1 number, 1 special character (@$!%*#?&^_), and no spaces."
+    )
+  ).toBeTruthy();
 });
 
 //Passwords must match
