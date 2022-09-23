@@ -27,6 +27,9 @@ export function NewAccountForm(props: newAcccountFormProps) {
     button: {
       backgroundColor: "#D64309",
     },
+    navLink: {
+      margin: "10px",
+    }
   };
 
   const [firstNameField, setFirstNameField] = useState("");
@@ -170,7 +173,9 @@ export function NewAccountForm(props: newAcccountFormProps) {
           Create Account
         </Button>
       </div>
-      <Link href="/" underline="always">
+      <Link style={styles.button}
+      href="/"
+      underline="always">
           Back
       </Link>
       <Snackbar open={alertReason !== ""}>
