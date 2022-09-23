@@ -29,6 +29,9 @@ export function SignInForm(props: SignInFormProps) {
     button: {
       backgroundColor: "#D64309",
     },
+    navLink: {
+      margin: "8px",
+    },
   };
 
   const [emailField, setEmailField] = useState("");
@@ -106,7 +109,9 @@ export function SignInForm(props: SignInFormProps) {
           Sign in
         </Button>
       </div>
-      <Link href="/newuser" underline="always">
+      <Link style={styles.navLink}
+        href="/newuser" 
+        underline="always">
           Need account?
       </Link>
       <Snackbar open={alertReason !== ""}>
