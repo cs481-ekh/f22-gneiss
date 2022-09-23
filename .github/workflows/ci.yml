@@ -29,3 +29,19 @@ jobs:
         run: |
           ktlint --reporter=checkstyle,output=build/ktlint-report.xml
         continue-on-error: true
+  
+  test: 
+    runs-on: ubuntu-latest
+      
+    strategy:
+      matrix:
+        node-version: [18.x]
+      
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm --prefix ./front-end install ./front-end
+      - run: CI=true npm --prefix ./front-end test ./front-end
+      - run: npx --prefix ./front-end prettier ./front-end/src
