@@ -43,5 +43,5 @@ jobs:
         with:
           node-version: '18'
       - run: npm --prefix ./front-end install ./front-end
-      - run: CI=true npm --prefix ./front-end test ./front-end
+      - run: CI=true npm --prefix ./front-end test -- --coverage ./front-end
       - run: npx --prefix ./front-end prettier ./front-end/src
