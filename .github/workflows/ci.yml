@@ -6,7 +6,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  front-end-build:
 
     runs-on: ubuntu-latest
 
@@ -28,7 +28,19 @@ jobs:
           ktlint --reporter=checkstyle,output=build/ktlint-report.xml
         continue-on-error: true
   
-  test: 
+  back-end-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - run: mvn package -f back-end/pom.xml -DskipTests
+      
+  
+  front-end-test: 
     runs-on: ubuntu-latest
       
     strategy:
