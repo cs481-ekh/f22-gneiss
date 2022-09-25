@@ -55,3 +55,27 @@ jobs:
       - run: npm --prefix ./front-end install ./front-end
       - run: CI=true npm --prefix ./front-end test -- --coverage ./front-end
       - run: npx --prefix ./front-end prettier ./front-end/src
+
+  back-end-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - run: mvn test -f back-end/pom.xml -DskipTests
+  
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: build
+        uses: docker/build-push-action@v3
+      - run: docker build -t gneiss:latest .
