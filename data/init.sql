@@ -4,13 +4,14 @@ CREATE TABLE users (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    firstname VARCHAR(50) NOT NULL,
-    lastname VARCHAR(50) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
     role_id INT NOT NULL
+    FOREIGN KEY(role_id) REFERENCES rolesManagement(role_id)
 );
 
 CREATE TABLE rolesManagement (
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    role_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     role VARCHAR(50) NOT NULL,
-    permission_level VARCHAR(50) NOT NULL
+    permission_level INT NOT NULL
 );
