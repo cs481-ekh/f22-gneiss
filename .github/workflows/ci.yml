@@ -41,6 +41,7 @@ jobs:
       - uses: checkity/upload@v1
         with:
           file-pattern: '**/lcov.info'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   back-end-test:
     runs-on: ubuntu-latest
