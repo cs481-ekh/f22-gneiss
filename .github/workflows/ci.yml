@@ -2,11 +2,14 @@ name: CI
 
 on:
   push:
+    branches: [ "main" ]
+    paths-ignore: [ ".github/**", "docs/**", "**/.gitignore", "build.sh", "clean.sh", "test.sh", "CONTRIBUTORS", "docker-compose.yaml", "LICENSE", "README.MD", "**/Dockerfile" ]
   pull_request:
     branches: [ "main" ]
+    paths-ignore: [ ".github/**", "docs/**", "**/.gitignore", "build.sh", "clean.sh", "test.sh", "CONTRIBUTORS", "docker-compose.yaml", "LICENSE", "README.MD", "**/Dockerfile" ]
 
 jobs:
-  front-end-build:
+  front-end-build-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,6 +18,10 @@ jobs:
           node-version: '18'
       - run: npm --prefix ./front-end install ./front-end
       - run: npm --prefix ./front-end run build ./front-end
+      - run: CI=true npm --prefix ./front-end test -- --coverage ./front-end
+      - name: run prettier lint
+        run: npm --prefix ./front-end prettier ./front-end/src
+        continue-on-error: true
   
   back-end-build:
     runs-on: ubuntu-latest
@@ -25,30 +32,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - run: mvn package -f back-end/pom.xml -DskipTests
-      
-  
-  front-end-test: 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: npm --prefix ./front-end install ./front-end
-      - run: CI=true npm --prefix ./front-end test -- --coverage ./front-end
-      - run: npx --prefix ./front-end prettier ./front-end/src
-
-  back-end-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - run: mvn test -f back-end/pom.xml
+      - run: mvn package -f back-end/pom.xml
       - run: curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.44.0/ktlint && chmod a+x ktlint && sudo mv ktlint /usr/local/bin/
       - name: run ktlint
         run: ktlint
