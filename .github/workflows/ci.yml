@@ -38,10 +38,9 @@ jobs:
       - run: npm --prefix ./front-end install ./front-end
       - run: CI=true npm --prefix ./front-end test -- --coverage ./front-end
       - run: npx --prefix ./front-end prettier ./front-end/src
-      - uses: hrgui/lcov-reporter-action@v0.1.0
+      - uses: checkity/upload@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: ./front-end/coverage/lcov.info
+          file-pattern: '**/lcov.info'
 
   back-end-test:
     runs-on: ubuntu-latest
