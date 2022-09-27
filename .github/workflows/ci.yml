@@ -38,6 +38,9 @@ jobs:
       - run: npm --prefix ./front-end install ./front-end
       - run: CI=true npm --prefix ./front-end test -- --coverage ./front-end
       - run: npx --prefix ./front-end prettier ./front-end/src
+      - uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: .front-end/coverage/lcov.info
 
   back-end-test:
     runs-on: ubuntu-latest
