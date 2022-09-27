@@ -5,7 +5,6 @@ import { NewAccountPage } from "./pages/newAccountPage";
 import history from "./components/history";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { MainPage } from "./pages/mainPage";
-import CreatePacketStepper from "./components/createPacket/createPacketStepper";
 
 const theme = createTheme({
   palette: {
