@@ -26,9 +26,6 @@ export function SignInForm(props: SignInFormProps) {
     input: {
       margin: "10px",
     },
-    button: {
-      backgroundColor: "#D64309",
-    },
     navLink: {
       margin: "8px",
     },
@@ -103,7 +100,6 @@ export function SignInForm(props: SignInFormProps) {
         />
         <Button
           onClick={handleSubmit}
-          style={styles.button}
           variant="contained"
         >
           Sign in
