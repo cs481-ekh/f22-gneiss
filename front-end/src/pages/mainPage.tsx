@@ -22,7 +22,7 @@ export function MainPage(props: MainPageProps) {
       justifyContent: "center",
     } as const,
   };
-  
+
   const navItems: NavInfo[] = [
     {
       label: "Home",

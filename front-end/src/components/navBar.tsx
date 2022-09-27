@@ -9,12 +9,12 @@ import {
 import * as React from "react";
 
 export type NavInfo = {
-  label: string
-  href: string
-}
+  label: string;
+  href: string;
+};
 
 export interface INavBarProps {
-  content: NavInfo[]
+  content: NavInfo[];
   barWidth: string;
 }
 

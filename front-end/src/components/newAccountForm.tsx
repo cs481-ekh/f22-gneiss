@@ -168,10 +168,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
         type="password"
       />
       <div>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-        >
+        <Button onClick={handleSubmit} variant="contained">
           Create Account
         </Button>
       </div>

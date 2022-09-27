@@ -98,10 +98,7 @@ export function SignInForm(props: SignInFormProps) {
           }
           label="keep me logged in"
         />
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-        >
+        <Button onClick={handleSubmit} variant="contained">
           Sign in
         </Button>
       </div>
