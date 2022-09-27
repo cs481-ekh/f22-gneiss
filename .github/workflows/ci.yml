@@ -40,7 +40,7 @@ jobs:
       - run: npx --prefix ./front-end prettier ./front-end/src
       - uses: romeovs/lcov-reporter-action@v0.2.16
         with:
-          lcov-file: .front-end/coverage/lcov.info
+          lcov-file: ./front-end/coverage/lcov.info
 
   back-end-test:
     runs-on: ubuntu-latest
