@@ -20,7 +20,7 @@ jobs:
       - run: npm --prefix ./front-end run build ./front-end
       - run: CI=true npm --prefix ./front-end test -- --coverage ./front-end
       - name: run prettier lint
-        run: npm --prefix ./front-end prettier ./front-end/src
+        run: npx --prefix ./front-end prettier ./front-end/src
         continue-on-error: true
   
   back-end-build:
