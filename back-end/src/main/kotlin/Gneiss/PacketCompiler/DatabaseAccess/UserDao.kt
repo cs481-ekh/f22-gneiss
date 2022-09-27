@@ -30,9 +30,9 @@ class UserDao {
     }
 
     companion object sqlQueries {
-        val getAccountQuery = "SELECT id, email, firstname, lastname FROM users WHERE email = ?"
+        val getAccountQuery = "SELECT id, email, firs_tname, last_name FROM users WHERE email = ?"
 
-        val createAccountQuery = "INSERT INTO users (email, password, firstname, lastname) VALUES (?, ?, ?, ?)"
+        val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, ?)"
     }
 
     fun checkAccountExists(email: String): Boolean {
@@ -52,13 +52,14 @@ class UserDao {
         }
     }
 
-    fun createAccount(email: String, password: String, firstName: String, lastName: String) {
+    fun createAccount(email: String, password: String, firstName: String, lastName: String, roleId: Int) {
         getConnection()
         val prepStatement = connection!!.prepareStatement(createAccountQuery)
         prepStatement.setString(1, email)
         prepStatement.setString(2, password)
         prepStatement.setString(3, firstName)
         prepStatement.setString(4, lastName)
+        prepStatement.setInt(5, roleId)
 
         prepStatement.executeUpdate()
         connection!!.close()
