@@ -3,44 +3,31 @@ name: CI
 on:
   push:
     branches: [ "main" ]
-    paths-ignore: [ ".github/**", "docs/**", "**/.gitignore", "build.sh", "clean.sh", "test.sh", "CONTRIBUTORS", "docker-compose.yaml", "LICENSE", "README.MD", "**/Dockerfile" ]
+    paths-ignore: [ ".github/**", "docs/**", "**/.gitignore", "clean.sh", "test.sh", "CONTRIBUTORS", "docker-compose.yaml", "LICENSE", "README.MD", "**/Dockerfile" ]
   pull_request:
     branches: [ "main" ]
     paths-ignore: [ ".github/**", "docs/**", "**/.gitignore", "build.sh", "clean.sh", "test.sh", "CONTRIBUTORS", "docker-compose.yaml", "LICENSE", "README.MD", "**/Dockerfile" ]
 
 jobs:
-  front-end-build-test:
+  build-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Setu up Node
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - run: npm --prefix ./front-end install ./front-end
-      - run: npm --prefix ./front-end run build ./front-end
-      - run: CI=true npm --prefix ./front-end test -- --coverage ./front-end
-      - name: run prettier lint
-        run: npx --prefix ./front-end prettier ./front-end/src
-        continue-on-error: true
-  
-  back-end-build:
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-      - run: mvn package -f back-end/pom.xml
-      - run: curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.44.0/ktlint && chmod a+x ktlint && sudo mv ktlint /usr/local/bin/
-      - name: run ktlint
-        run: ktlint
-        continue-on-error: true
-  
-  docker-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: docker build -t back-end:latest -f back-end/Dockerfile .
-      - run: docker build -t front-end:latest -f front-end/Dockerfile .
+      - name: Build front-end && back-end
+        run: |
+          chmod +x build.sh
+          ./build.sh
+      - name: Run test and linters
+        run: |
+          chmod +x test.sh
+          ./test.sh
