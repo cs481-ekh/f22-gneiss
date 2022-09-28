@@ -3,8 +3,10 @@ import { unstable_HistoryRouter as Router } from "react-router-dom";
 import { SignInPage } from "./pages/signInPage";
 import { NewAccountPage } from "./pages/newAccountPage";
 import history from "./components/history";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { Button, createTheme, Divider, ThemeProvider } from "@mui/material";
 import { MainPage } from "./pages/mainPage";
+import CreatePacketStepper from "./components/createPacket/createPacketStepper";
+import { createPacketSteps } from "./data/createPacketSteps";
 
 const theme = createTheme({
   palette: {
@@ -27,21 +29,23 @@ function App() {
             <Route path="/newuser" element={<NewAccountPage />} />
             <Route
               path="/home"
-              element={
-                <MainPage
-                  pageContent={() => {
-                    return <p>Welcome home :)</p>;
-                  }}
-                />
-              }
+              element={<MainPage pageContent={<p>Welcome home :)</p>} />}
             />
             <Route
               path="/createpacket"
               element={
                 <MainPage
-                  pageContent={() => {
-                    return <p>Create Packet :)</p>;
-                  }}
+                  pageContent={
+                    <CreatePacketStepper
+                      steps={createPacketSteps}
+                      stepsFinishedComponent={() => (
+                        <div>
+                          <Divider />
+                          <p>You did it :)</p>
+                        </div>
+                      )}
+                    />
+                  }
                 />
               }
             />

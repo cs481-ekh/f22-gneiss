@@ -3,7 +3,7 @@ import React from "react";
 import { NavBar, NavInfo } from "../components/navBar";
 
 export interface MainPageProps {
-  pageContent: React.FC;
+  pageContent: React.ReactNode;
 }
 
 export function MainPage(props: MainPageProps) {
@@ -41,9 +41,7 @@ export function MainPage(props: MainPageProps) {
   return (
     <div style={styles.outerBox}>
       <NavBar content={navItems} barWidth="20vw" />
-      <div style={styles.centerBox}>
-        <props.pageContent />
-      </div>
+      <div style={styles.centerBox}>{props.pageContent}</div>
     </div>
   );
 }
