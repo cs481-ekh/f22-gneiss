@@ -6,7 +6,6 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
-import * as React from "react";
 
 export type NavInfo = {
   label: string;
