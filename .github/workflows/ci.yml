@@ -2,10 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+    - main
     paths-ignore: [ ".github/**", "docs/**", "**/.gitignore", "build.sh", "clean.sh", "test.sh", "CONTRIBUTORS", "docker-compose.yaml", "LICENSE", "README.MD", "**/Dockerfile", "test" ]
   pull_request:
-    branches: [ "main" ]
+    branches: 
+    - main
     paths-ignore: [ ".github/**", "docs/**", "**/.gitignore", "build.sh", "clean.sh", "test.sh", "CONTRIBUTORS", "docker-compose.yaml", "LICENSE", "README.MD", "**/Dockerfile" ]
 
 jobs:
