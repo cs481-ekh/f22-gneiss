@@ -18,9 +18,6 @@ export function NewAccountForm(props: newAcccountFormProps) {
     input: {
       margin: "10px",
     },
-    button: {
-      backgroundColor: "#D64309",
-    },
     navLink: {
       margin: "8px",
     },
@@ -171,11 +168,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
         type="password"
       />
       <div>
-        <Button
-          onClick={handleSubmit}
-          style={styles.button}
-          variant="contained"
-        >
+        <Button onClick={handleSubmit} variant="contained">
           Create Account
         </Button>
       </div>
