@@ -12,17 +12,16 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - name: Setu up Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - uses: actions/checkout@v3
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
+      - uses: actions/checkout@v3
       - name: Build front-end && back-end
         run: |
           chmod +x build.sh
