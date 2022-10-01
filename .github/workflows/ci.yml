@@ -5,51 +5,51 @@ on:
     branches:
       - main
     paths-ignore:
-      - ".github/**"
-      - 'docs/**"'
-      - "**/.gitignore"
-      - "build.sh"
-      - "clean.sh"
-      - "test.sh"
-      - "CONTRIBUTORS"
-      - "docker-compose.yaml"
-      - "LICENSE"
-      - "README.MD"
-      - "**/Dockerfile"
-      - "test"
+      - '.github/**'
+      - 'docs/**''
+      - '**/.gitignore'
+      - 'build.sh'
+      - 'clean.sh'
+      - 'test.sh'
+      - 'CONTRIBUTORS'
+      - 'docker-compose.yaml'
+      - 'LICENSE'
+      - 'README.MD'
+      - '**/Dockerfile'
+      - 'test'
   pull_request:
     branches:
       - main
     paths-ignore:
-      - ".github/**"
-      - 'docs/**"'
-      - "**/.gitignore"
-      - "build.sh"
-      - "clean.sh"
-      - "test.sh"
-      - "CONTRIBUTORS"
-      - "docker-compose.yaml"
-      - "LICENSE"
-      - "README.MD"
-      - "**/Dockerfile"
-      - "test"
+      - '.github/**'
+      - 'docs/**''
+      - '**/.gitignore'
+      - 'build.sh'
+      - 'clean.sh'
+      - 'test.sh'
+      - 'CONTRIBUTORS'
+      - 'docker-compose.yaml'
+      - 'LICENSE'
+      - 'README.MD'
+      - '**/Dockerfile'
+      - 'test'
   workflow_dispatch:
     inputs:
       logLevel:
-        description: "Log level"
+        description: 'Log level'
         required: true
-        default: "warning"
+        default: 'warning'
         type: choice
         options:
           - info
           - warning
           - debug
       tags:
-        description: "Test scenario tags"
+        description: 'Test scenario tags'
         required: false
         type: boolean
       environment:
-        description: "Environment to run tests against"
+        description: 'Environment to run tests against'
         type: environment
         required: true
 jobs:
@@ -60,12 +60,12 @@ jobs:
       - name: Setu up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: "17"
-          distribution: "temurin"
+          java-version: '17'
+          distribution: 'temurin'
       - uses: actions/checkout@v3
       - name: Build front-end && back-end
         run: |
