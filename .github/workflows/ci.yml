@@ -6,7 +6,7 @@ on:
       - main
     paths-ignore:
       - '.github/**'
-      - 'docs/**''
+      - 'docs/**"'
       - '**/.gitignore'
       - 'build.sh'
       - 'clean.sh'
@@ -18,11 +18,11 @@ on:
       - '**/Dockerfile'
       - 'test'
   pull_request:
-    branches:
+    branches: 
       - main
     paths-ignore:
       - '.github/**'
-      - 'docs/**''
+      - 'docs/**"'
       - '**/.gitignore'
       - 'build.sh'
       - 'clean.sh'
