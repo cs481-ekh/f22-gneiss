@@ -1,8 +1,9 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { CommaSeparatedList } from "./commaSeparatedList";
+import { IStepProps } from "./IStepProps";
 
-export interface InvoiceStepProps {}
+export interface InvoiceStepProps extends IStepProps{}
 
 export function InvoiceStep(props: InvoiceStepProps) {
   const styles = {
@@ -15,7 +16,7 @@ export function InvoiceStep(props: InvoiceStepProps) {
       flexDirection: "column",
       justifyContent: "space-between",
       marginLeft: "10vw",
-    } as const,
+    } as const,    
   };
 
   const [wordSet, setWordSet] = useState(new Set<string>());
@@ -25,7 +26,7 @@ export function InvoiceStep(props: InvoiceStepProps) {
       <CommaSeparatedList wordSet={wordSet} setWordSet={setWordSet} />
       <div style={styles.buttons}>
         <Button variant="contained">Select Invoice</Button>
-        <Button variant="contained">Save</Button>
+        <Button onClick={props.completeStep} variant="contained">Save & Continue</Button>
       </div>
     </div>
   );
