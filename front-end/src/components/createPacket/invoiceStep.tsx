@@ -1,7 +1,8 @@
 import { Button } from "@mui/material";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { CommaSeparatedList } from "./commaSeparatedList";
 import { IStepProps } from "./IStepProps";
+//Needs to import Axios?
 
 export interface InvoiceStepProps extends IStepProps{}
 
@@ -19,17 +20,19 @@ export function InvoiceStep(props: InvoiceStepProps) {
     } as const,    
   };
 
-  const [wordSet, setWordSet] = useState(new Set<string>());
+  const [file, setFile] = useState()
+  function handleChange(event:any) { //event is inferred, needs specification
+    setFile(event.target.files[0])
+  }
 
   return (
     <div style={styles.outerBox}>
       <form>
-          <h1>Invoice File Upload</h1>
-          <input type="file" />
-          <button type="submit">Upload</button>
-        </form>
+        <h1>Invoice File Upload</h1>
+        <input type="file" onChange={handleChange}/>
+        <button type="submit">Upload</button>
+      </form>
       <div style={styles.buttons}>
-        <Button variant="contained">Select Invoice</Button>
         <Button onClick={props.completeStep} variant="contained">Save & Continue</Button>
       </div>
     </div>
