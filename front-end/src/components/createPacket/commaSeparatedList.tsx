@@ -17,6 +17,7 @@ export function CommaSeparatedList(props: CommaSeparatedListProps) {
       height: "10vw",
       overflow: "scroll",
       border: "1px solid black",
+      borderRadius: "10px",
     } as const,
   };
 
@@ -48,6 +49,11 @@ export function CommaSeparatedList(props: CommaSeparatedListProps) {
       }}
     />
   ));
+
+  if (input === "" && props.wordSet.size > 0) {
+    // Rerenders input
+    setInput(Array.from(props.wordSet).join(","));
+  }
 
   return (
     <div>
