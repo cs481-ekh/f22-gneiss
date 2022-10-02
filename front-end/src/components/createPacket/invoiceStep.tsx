@@ -23,7 +23,11 @@ export function InvoiceStep(props: InvoiceStepProps) {
 
   return (
     <div style={styles.outerBox}>
-      <CommaSeparatedList wordSet={wordSet} setWordSet={setWordSet} />
+      <form>
+          <h1>Invoice File Upload</h1>
+          <input type="file" />
+          <button type="submit">Upload</button>
+        </form>
       <div style={styles.buttons}>
         <Button variant="contained">Select Invoice</Button>
         <Button onClick={props.completeStep} variant="contained">Save & Continue</Button>
