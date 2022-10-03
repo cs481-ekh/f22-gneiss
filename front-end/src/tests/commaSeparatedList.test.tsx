@@ -33,20 +33,20 @@ test("Repeat items only appear in the set once", () => {
 });
 
 test("Empty items don't appear in the set", () => {
-    render(<ListParent />);
-    const list = ",,,test1,,test2,,,,,test3";
-    fireEvent.change(screen.getByLabelText("Highlight Words"), {
-      target: { value: list },
-    });
-    expect(screen.getByText("3")).toBeTruthy();
+  render(<ListParent />);
+  const list = ",,,test1,,test2,,,,,test3";
+  fireEvent.change(screen.getByLabelText("Highlight Words"), {
+    target: { value: list },
   });
+  expect(screen.getByText("3")).toBeTruthy();
+});
 
 test("Removed items are taken out of input field", () => {
-    render(<ListParent />);
-    const list = "test1,test2,test3";
-    fireEvent.change(screen.getByLabelText("Highlight Words"), {
-      target: { value: list },
-    });
-    fireEvent.click(screen.getAllByTestId("CancelIcon")[1]);
-    expect(screen.getByLabelText("Highlight Words")).toHaveValue("test1,test3")
+  render(<ListParent />);
+  const list = "test1,test2,test3";
+  fireEvent.change(screen.getByLabelText("Highlight Words"), {
+    target: { value: list },
   });
+  fireEvent.click(screen.getAllByTestId("CancelIcon")[1]);
+  expect(screen.getByLabelText("Highlight Words")).toHaveValue("test1,test3");
+});
