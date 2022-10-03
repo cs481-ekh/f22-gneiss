@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths-ignore: 
-      - '.github/**' 
-      - 'docs/**"' 
+      - '.github/**'
+      - 'docs/**'
       - '**/.gitignore'
       - 'build.sh'
       - 'clean.sh'
@@ -21,8 +21,8 @@ on:
     branches: 
       - main
     paths-ignore:
-      - '.github/**' 
-      - 'docs/**"' 
+      - '.github/**'
+      - 'docs/**'
       - '**/.gitignore'
       - 'build.sh'
       - 'clean.sh'
@@ -33,6 +33,21 @@ on:
       - 'README.MD'
       - '**/Dockerfile'
       - 'test'
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
+      tags:
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
 jobs:
   build-test:
     timeout-minutes: 10

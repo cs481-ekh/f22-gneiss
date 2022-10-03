@@ -10,7 +10,7 @@ export const createPacketSteps: StepInfo[] = [
   },
   {
     label: "Approval",
-    element: ExampleStep,
+    element: ApprovalStep,
   },
   {
     label: "CSV",

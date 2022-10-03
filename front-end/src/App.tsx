@@ -3,7 +3,7 @@ import { unstable_HistoryRouter as Router } from "react-router-dom";
 import { SignInPage } from "./pages/signInPage";
 import { NewAccountPage } from "./pages/newAccountPage";
 import history from "./components/history";
-import { Button, createTheme, Divider, ThemeProvider } from "@mui/material";
+import { createTheme, Divider, ThemeProvider } from "@mui/material";
 import { MainPage } from "./pages/mainPage";
 import CreatePacketStepper from "./components/createPacket/createPacketStepper";
 import { createPacketSteps } from "./data/createPacketSteps";
