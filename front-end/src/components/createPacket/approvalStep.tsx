@@ -1,10 +1,10 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { CommaSeparatedList } from "./commaSeparatedList";
+import { FileSelectButton } from "./fileSelectButton";
+import { IStepProps } from "./IStepProps";
 
-export interface ApprovalStepProps {}
-
-export function ApprovalStep(props: ApprovalStepProps) {
+export function ApprovalStep(props: IStepProps) {
   const styles = {
     outerBox: {
       display: "flex",
@@ -15,6 +15,7 @@ export function ApprovalStep(props: ApprovalStepProps) {
       flexDirection: "column",
       justifyContent: "space-between",
       marginLeft: "10vw",
+      width: "150px",
     } as const,
   };
 
@@ -24,8 +25,10 @@ export function ApprovalStep(props: ApprovalStepProps) {
     <div style={styles.outerBox}>
       <CommaSeparatedList wordSet={wordSet} setWordSet={setWordSet} />
       <div style={styles.buttons}>
-        <Button variant="contained">Select PDF</Button>
-        <Button variant="contained">Save</Button>
+        <FileSelectButton buttonLabel="Upload File" />
+        <Button variant="contained" onClick={props.completeStep}>
+          Save
+        </Button>
       </div>
     </div>
   );

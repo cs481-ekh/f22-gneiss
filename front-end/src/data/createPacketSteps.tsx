@@ -1,3 +1,4 @@
+import { ApprovalStep } from "../components/createPacket/approvalStep";
 import { StepInfo } from "../components/createPacket/createPacketStepper";
 import { ExampleStep } from "../components/createPacket/exampleStep";
 
@@ -8,7 +9,7 @@ export const createPacketSteps: StepInfo[] = [
   },
   {
     label: "Approval",
-    element: ExampleStep,
+    element: ApprovalStep,
   },
   {
     label: "CSV",
