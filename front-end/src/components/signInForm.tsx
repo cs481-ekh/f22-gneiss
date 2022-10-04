@@ -1,6 +1,8 @@
+import * as React from "react";
 import { ChangeEvent, useState } from "react";
 import {
   Alert,
+  Link,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -24,8 +26,8 @@ export function SignInForm(props: SignInFormProps) {
     input: {
       margin: "10px",
     },
-    button: {
-      backgroundColor: "#D64309",
+    navLink: {
+      margin: "8px",
     },
   };
 
@@ -96,14 +98,13 @@ export function SignInForm(props: SignInFormProps) {
           }
           label="keep me logged in"
         />
-        <Button
-          onClick={handleSubmit}
-          style={styles.button}
-          variant="contained"
-        >
+        <Button onClick={handleSubmit} variant="contained">
           Sign in
         </Button>
       </div>
+      <Link style={styles.navLink} href="/newuser" underline="always">
+        Need account?
+      </Link>
       <Snackbar open={alertReason !== ""}>
         <Alert
           className="alert"
