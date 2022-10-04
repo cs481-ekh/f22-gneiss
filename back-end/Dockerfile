@@ -7,4 +7,5 @@ RUN mvn -f /home/app/pom.xml clean test package
 # Package stage
 FROM openjdk:latest
 COPY --from=build /home/app/target/*.jar app.jar
-ENTRYPOINT ["java","-jar","app.jar"]
+RUN mkdir output
+CMD ["java","-jar","app.jar"]
