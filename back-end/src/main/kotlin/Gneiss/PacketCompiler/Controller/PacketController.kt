@@ -17,7 +17,7 @@ class PacketController {
     var pdfHelper = PDFHelper()
     var highlightPDF = HighlightPDF(pdfHelper)
 
-    @PostMapping("/highlightPDF")
+    @PostMapping("/api/highlightpdf")
     fun FileUpload(@RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): HighlightPDFResponse {
         var outputName = Date().getTime().toString()
         return highlightPDF.highlightPDF(

@@ -21,6 +21,8 @@ services:
     image: gneiss-front:latest
     ports:
       - 3000:3000
+    links:
+      - back-end
   back-end:
     image: gneiss-back:latest
     volumes:
