@@ -22,14 +22,14 @@ export function ApprovalStep(props: IStepProps) {
 
   const [wordSet, setWordSet] = useState(new Set<string>());
   const [file, setFile] = useState<File>();
-  const [alertActive, setAlertActive] = useState(false)
+  const [alertActive, setAlertActive] = useState(false);
   const [alertReason, setAlertReason] = useState("");
 
   const startAlert = (reason: string) => {
-    setAlertActive(true)
-    setAlertReason(reason)
-  }
-  
+    setAlertActive(true);
+    setAlertReason(reason);
+  };
+
   const handleAlertClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -43,45 +43,50 @@ export function ApprovalStep(props: IStepProps) {
 
   const validate = (f: File | undefined) => {
     if (f === undefined) {
-      startAlert("You must select a PDF file")
-      return false
-    }
-    
-    if (f.type !== "application/pdf") {
-      startAlert("File selected is not a PDF")
-      return false
+      startAlert("You must select a PDF file");
+      return false;
     }
 
-    return true
-  }
+    if (f.type !== "application/pdf") {
+      startAlert("File selected is not a PDF");
+      return false;
+    }
+
+    return true;
+  };
 
   const save = async () => {
     if (!validate(file)) {
-      return
+      return;
     }
     let formData = new FormData();
     formData.append("file", file!);
-    formData.append("highlightWords", Array.from(wordSet).join(","))
+    formData.append("highlightWords", Array.from(wordSet).join(","));
 
     axios
-      .post('/api/highlightpdf', formData, {
+      .post("/api/highlightpdf", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-        }
+        },
       })
       .then(() => {
-        props.completeStep()
+        props.completeStep();
       })
       .catch((e: any) => {
-        startAlert("Failed to save PDF")
+        startAlert("Failed to save PDF");
       });
-  }
+  };
 
   return (
     <div style={styles.outerBox}>
       <CommaSeparatedList wordSet={wordSet} setWordSet={setWordSet} />
       <div style={styles.buttons}>
-        <FileSelectButton buttonLabel="Upload File" validateSelection={validate} file={file} setFile={setFile} />
+        <FileSelectButton
+          buttonLabel="Upload File"
+          validateSelection={validate}
+          file={file}
+          setFile={setFile}
+        />
         <Button variant="contained" onClick={save}>
           Save
         </Button>

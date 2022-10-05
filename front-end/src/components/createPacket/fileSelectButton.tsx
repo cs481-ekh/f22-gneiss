@@ -5,7 +5,7 @@ export interface FileSelectButtonProps {
   buttonLabel: string;
   file: File | undefined;
   setFile: React.Dispatch<React.SetStateAction<File | undefined>>;
-  validateSelection: (f: File | undefined) => boolean
+  validateSelection: (f: File | undefined) => boolean;
 }
 
 export function FileSelectButton(props: FileSelectButtonProps) {
@@ -30,7 +30,7 @@ export function FileSelectButton(props: FileSelectButtonProps) {
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newFile = event.target.files?.item(0)!;
     if (!props.validateSelection(newFile)) {
-      return
+      return;
     }
     props.setFile(newFile);
   };
@@ -43,7 +43,12 @@ export function FileSelectButton(props: FileSelectButtonProps) {
         component="label"
       >
         {props.buttonLabel}
-        <input type="file" data-testid="fileSelect" onChange={onChange} hidden />
+        <input
+          type="file"
+          data-testid="fileSelect"
+          onChange={onChange}
+          hidden
+        />
       </Button>
       <p style={styles.fileName}>{props.file?.name}</p>
     </div>
