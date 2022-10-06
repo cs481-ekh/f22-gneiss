@@ -6,9 +6,6 @@ WORKDIR /front-end
 ENV CI=true
 
 COPY front-end /front-end
-RUN npm ci && \
-    npm install -g serve
+RUN npm ci
 
-RUN npm run build
-
-CMD [ "serve", "build" ]
+CMD [ "npm", "run", "start" ]

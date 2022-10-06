@@ -5,7 +5,7 @@ class LoginResponse()
 
 class Login {
     companion object {
-        fun login(req: LoginRequest):  LoginResponse{
+        fun login(req: LoginRequest): LoginResponse {
             return LoginResponse()
         }
     }
