@@ -1,6 +1,6 @@
 package Gneiss.PacketCompiler.Service
 
-class PacketPostRequest(val invoice: String, val approval: String, val csv: String, val compiled: String)
+class PacketPostRequest(val invoicePDFPath: String, val approvalPDFPath: String, val csvPDFPath: String, val compiledPDFPath: String)
 
 class PacketPostResponse()
 
