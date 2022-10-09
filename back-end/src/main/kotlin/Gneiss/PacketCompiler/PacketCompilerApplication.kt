@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class PacketCompilerApplication
 
 fun main(args: Array<String>) {
-	runApplication<PacketCompilerApplication>(*args)
+    runApplication<PacketCompilerApplication>(*args)
 }

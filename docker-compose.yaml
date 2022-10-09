@@ -1,4 +1,6 @@
 version: '3'
+volumes:
+  output:
 services:
   mysql-server:
     image: mysql:latest
@@ -10,12 +12,20 @@ services:
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
-    - "3306:3306"
+      - 3306:3306
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
   front-end:
     image: gneiss-front:latest
     ports:
       - 3000:3000
+    links:
+      - back-end
   back-end:
     image: gneiss-back:latest
+    volumes:
+      - output:/output
     ports:
       - 8080:8080
