@@ -9,11 +9,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 
 @SpringBootTest
-class UserManagementTests() { 
+class UserManagementTests() {
 
     var databaseAccess = mockk<UserDao>()
 
@@ -33,7 +32,7 @@ class UserManagementTests() {
 
     @Test
     fun userAccountNotCreated() {
-        every {databaseAccess.checkAccountExists(any())} returns true
+        every { databaseAccess.checkAccountExists(any()) } returns true
 
         val userService = Users(databaseAccess)
 

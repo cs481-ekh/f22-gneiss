@@ -1,24 +1,23 @@
 package Gneiss.PacketCompiler.DatabaseAccess
 
-import java.sql.SQLException
+import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement
-import java.sql.Connection
 import java.sql.ResultSet
-import java.lang.IllegalStateException
+import java.sql.SQLException
 
 class UserDao {
 
-    //Username, Password, and URL for the mySQL database
-    //Currently using placeholders, will get the actual values from system properties
+    // Username, Password, and URL for the mySQL database
+    // Currently using placeholders, will get the actual values from system properties
     var databaseUsername = "user"
     var databasePassword = "password"
     var databaseUrl = "jdbc:mysql://localhost:3306/db"
     var connection: Connection? = null
 
-    //Function to get a connection to the database
-    //As we are only using the mySQL database for user management, this connection
-    //function only needs to be here, there will be a different one for Redis
+    // Function to get a connection to the database
+    // As we are only using the mySQL database for user management, this connection
+    // function only needs to be here, there will be a different one for Redis
     fun getConnection() {
         try {
             connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword)
@@ -44,9 +43,9 @@ class UserDao {
         val rowCount = getRowCount(resultSet)
         connection!!.close()
         if (rowCount >= 1) {
-            return true;
+            return true
         } else {
-            return false;
+            return false
         }
     }
 
