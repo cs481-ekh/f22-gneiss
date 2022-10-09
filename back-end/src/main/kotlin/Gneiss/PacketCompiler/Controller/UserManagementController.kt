@@ -1,7 +1,7 @@
 package Gneiss.PacketCompiler.Controller
 
-import Gneiss.PacketCompiler.Helpers.JWTHelper
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
+import Gneiss.PacketCompiler.Helpers.JWTHelper
 import Gneiss.PacketCompiler.Service.CreateTestRequest
 import Gneiss.PacketCompiler.Service.CreateTestResponse
 import Gneiss.PacketCompiler.Service.CreateUserRequest
@@ -22,7 +22,7 @@ class UserManagementController {
 
     val jwtHelper = JWTHelper()
     val login = Login(jwtHelper)
-    
+
     val userManagementDao = UserDao()
     val userService = Users(userManagementDao)
 

@@ -9,7 +9,7 @@ class CreateUserRequest(
     var password: String,
     var firstName: String,
     var lastName: String,
-    var roleId: Int,
+    var roleId: Int
 )
 
 class Users(userDao: UserDao) {
