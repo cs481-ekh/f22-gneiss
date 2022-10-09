@@ -4,7 +4,11 @@ import Gneiss.PacketCompiler.Helpers.PDFHelper
 import Gneiss.PacketCompiler.Service.HighlightPDF
 import Gneiss.PacketCompiler.Service.HighlightPDFRequest
 import Gneiss.PacketCompiler.Service.HighlightPDFResponse
+import Gneiss.PacketCompiler.Service.Packet
+import Gneiss.PacketCompiler.Service.PacketPostRequest
+import Gneiss.PacketCompiler.Service.PacketPostResponse
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
@@ -28,5 +32,10 @@ class PacketController {
             )
         )
         // TODO: PATCH
+    }
+
+    @PostMapping("/api/packet")
+    fun PacketPost(@RequestBody req: PacketPostRequest): PacketPostResponse {
+        return Packet.packetPost(req)
     }
 }
