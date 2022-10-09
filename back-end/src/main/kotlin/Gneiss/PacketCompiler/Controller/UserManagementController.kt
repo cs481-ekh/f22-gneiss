@@ -8,15 +8,15 @@ import Gneiss.PacketCompiler.Service.*
 
 @RestController
 @RequestMapping("account")
-class AccountController {
+class UserManagementController {
     @PostMapping("/test")
     fun CreateTest(@RequestBody req: CreateTestRequest): CreateTestResponse {
         return Test.CreateTest(req)
     }
 
-    @PostMapping("/create")
-    fun CreateAccount(@RequestBody req: CreateAccountRequest): ResponseEntity<String> {
-        return Users.createAccount(req)
+    @PostMapping("/user/create")
+    fun CreateUser(@RequestBody req: CreateUserRequest): CreateUserResponse {
+        return Users.createUser(req)
     }
 
     @PostMapping("/login")
