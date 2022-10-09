@@ -4,9 +4,7 @@ class PacketPostRequest(val invoicePDFPath: String, val approvalPDFPath: String,
 class PacketPatchRequest(val invoicePDFPath: String?, val approvalPDFPath: String?, val csvPDFPath: String?, val compiledPDFPath: String?)
 
 class PacketPostResponse()
-class PacketPatchResponse( 
-    
-)
+class PacketPatchResponse()
 
 class Packet {
     companion object {
@@ -21,16 +19,16 @@ class Packet {
         }
 
         fun packetPatch(req: PacketPatchRequest): PacketPatchResponse {
-            if(req.invoicePDFPath != null) {
+            if (req.invoicePDFPath != null) {
                 setInvoicePDFPath = req.invoicePDFPath
             }
-            if(req.approvalPDFPath != null) {
+            if (req.approvalPDFPath != null) {
                 setApprovalPDFPath = req.approvalPDFPath
             }
-            if(req.csvPDFPath != null) {
+            if (req.csvPDFPath != null) {
                 setCsvPDFPath = req.csvPDFPath
             }
-            if(req.compiledPDFPath != null) {
+            if (req.compiledPDFPath != null) {
                 setCompiledPDFPath = req.compiledPDFPath
             }
             return PacketPatchResponse()
