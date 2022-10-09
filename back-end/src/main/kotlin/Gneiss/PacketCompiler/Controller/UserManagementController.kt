@@ -37,7 +37,7 @@ class UserManagementController {
     }
 
     @PostMapping("/login")
-    fun LoginPost(@RequestBody req: LoginRequest): LoginResponse {
+    fun Login(@RequestBody req: LoginRequest): LoginResponse {
         return login.login(req)
     }
 }
