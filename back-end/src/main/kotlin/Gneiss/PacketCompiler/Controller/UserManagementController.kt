@@ -1,5 +1,6 @@
 package Gneiss.PacketCompiler.Controller
 
+import Gneiss.PacketCompiler.Helpers.JWTHelper
 import Gneiss.PacketCompiler.Service.CreateTestRequest
 import Gneiss.PacketCompiler.Service.CreateTestResponse
 import Gneiss.PacketCompiler.Service.CreateUserRequest
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UserManagementController {
+
+    var jwtHelper = JWTHelper()
+    var login = Login(jwtHelper)
+
     @PostMapping("/test")
     fun CreateTest(@RequestBody req: CreateTestRequest): CreateTestResponse {
         return Test.CreateTest(req)
@@ -25,8 +30,8 @@ class UserManagementController {
         return Users.createUser(req)
     }
 
-    @PostMapping("/login")
-    fun Login(@RequestBody req: LoginRequest): LoginResponse {
-        return Login.login(req)
+    @PostMapping("/api/login")
+    fun LoginPost(@RequestBody req: LoginRequest): LoginResponse {
+        return login.login(req)
     }
 }
