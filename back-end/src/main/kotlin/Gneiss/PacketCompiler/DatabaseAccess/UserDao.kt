@@ -43,9 +43,7 @@ class UserDao {
 
         val rowCount = getRowCount(resultSet)
         connection!!.close()
-        if (rowCount > 1) {
-            throw IllegalStateException("Unexpected response while checking if an Account exists, there are multiple accounts with the same email.");
-        } else if (rowCount == 1) {
+        if (rowCount >= 1) {
             return true;
         } else {
             return false;
