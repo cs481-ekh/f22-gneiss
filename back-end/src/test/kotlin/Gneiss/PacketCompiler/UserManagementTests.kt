@@ -1,8 +1,8 @@
 package Gneiss.PacketCompiler
 
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
-import Gneiss.PacketCompiler.Service.Users
 import Gneiss.PacketCompiler.Service.CreateUserRequest
+import Gneiss.PacketCompiler.Service.Users
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
