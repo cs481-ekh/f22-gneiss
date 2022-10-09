@@ -1,6 +1,7 @@
 package Gneiss.PacketCompiler.Controller
 
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
+import Gneiss.PacketCompiler.Helpers.JWTHelper
 import Gneiss.PacketCompiler.Service.CreateTestRequest
 import Gneiss.PacketCompiler.Service.CreateTestResponse
 import Gneiss.PacketCompiler.Service.CreateUserRequest
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/user")
 class UserManagementController {
 
+    val jwtHelper = JWTHelper()
+    val login = Login(jwtHelper)
+
     val userManagementDao = UserDao()
     val userService = Users(userManagementDao)
 
@@ -34,6 +38,6 @@ class UserManagementController {
 
     @PostMapping("/login")
     fun Login(@RequestBody req: LoginRequest): LoginResponse {
-        return Login.login(req)
+        return login.login(req)
     }
 }
