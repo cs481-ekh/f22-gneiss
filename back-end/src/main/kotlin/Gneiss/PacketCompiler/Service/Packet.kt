@@ -9,28 +9,23 @@ class PacketPatchResponse()
 class Packet {
     companion object {
 
-        var setInvoicePDFPath: String? = null
-        var setApprovalPDFPath: String? = null
-        var setCsvPDFPath: String? = null
-        var setCompiledPDFPath: String? = null
-
         fun packetPost(req: PacketPostRequest): PacketPostResponse {
             return PacketPostResponse()
         }
 
         fun packetPatch(req: PacketPatchRequest): PacketPatchResponse {
-            if (req.invoicePDFPath != null) {
-                setInvoicePDFPath = req.invoicePDFPath
-            }
-            if (req.approvalPDFPath != null) {
-                setApprovalPDFPath = req.approvalPDFPath
-            }
-            if (req.csvPDFPath != null) {
-                setCsvPDFPath = req.csvPDFPath
-            }
-            if (req.compiledPDFPath != null) {
-                setCompiledPDFPath = req.compiledPDFPath
-            }
+            // if (req.invoicePDFPath != null) {
+            //     setInvoicePDFPath = req.invoicePDFPath
+            // }
+            // if (req.approvalPDFPath != null) {
+            //     setApprovalPDFPath = req.approvalPDFPath
+            // }
+            // if (req.csvPDFPath != null) {
+            //     setCsvPDFPath = req.csvPDFPath
+            // }
+            // if (req.compiledPDFPath != null) {
+            //     setCompiledPDFPath = req.compiledPDFPath
+            // }
             return PacketPatchResponse()
         }
     }
