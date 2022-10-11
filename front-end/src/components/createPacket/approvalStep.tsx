@@ -88,7 +88,7 @@ export function ApprovalStep(props: IStepProps) {
           setFile={setFile}
         />
         <Button variant="contained" onClick={save}>
-          Save
+          Save & Continue
         </Button>
       </div>
       <Snackbar open={alertActive}>
