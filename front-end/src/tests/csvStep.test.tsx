@@ -34,7 +34,7 @@ test("File must be selected before clicking save", () => {
   ).toBeTruthy();
 });
 
-test("Selected file must be a PDF", () => {
+test("Selected file must be a CSV", () => {
   let completed = false;
   render(
     <CsvStep
@@ -65,7 +65,7 @@ test("400 response creates alert", async () => {
   userEvent.upload(screen.getByTestId("fileSelect"), file);
   fireEvent.click(screen.getByText("Save & Continue"));
   await waitFor(() =>
-    expect(screen.getByText("Failed to save PDF")).toBeTruthy()
+    expect(screen.getByText("Failed to save CSV")).toBeTruthy()
   );
 });
 
