@@ -7,7 +7,6 @@ import Gneiss.PacketCompiler.Service.CreateTestResponse
 import Gneiss.PacketCompiler.Service.CreateUserRequest
 import Gneiss.PacketCompiler.Service.Login
 import Gneiss.PacketCompiler.Service.LoginRequest
-import Gneiss.PacketCompiler.Service.LoginResponse
 import Gneiss.PacketCompiler.Service.Test
 import Gneiss.PacketCompiler.Service.Users
 import org.springframework.http.ResponseEntity

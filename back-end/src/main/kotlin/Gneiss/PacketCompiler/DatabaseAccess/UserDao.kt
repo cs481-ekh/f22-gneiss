@@ -5,7 +5,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.SQLException
 
-class CredentialsResponse(validFlag: Boolean, roleId: Int)
+class CredentialsResponse(val validFlag: Boolean, val roleId: String)
 
 class UserDao {
 
@@ -39,7 +39,7 @@ class UserDao {
 
     fun validateCredentials(email: String, password: String): CredentialsResponse {
         getConnection()
-        var prepStatement = this.connection!!.prepareStatment(validateCredentialsQuery)
+        var prepStatement = this.connection!!.prepareStatement(validateCredentialsQuery)
         prepStatement.setString(1, email)
         prepStatement.setString(2, password)
         var resultSet = prepStatement.executeQuery()
@@ -55,9 +55,9 @@ class UserDao {
             resultSet.beforeFirst()
             resultSet.next()
             val roleId = resultSet.getInt(4)
-            return CredentialsResponse(true, roleId)
+            return CredentialsResponse(true, roleId.toString())
         } else {
-            return CredentialsResponse(false, -1)
+            return CredentialsResponse(false, (-1).toString())
         }
     }
 
