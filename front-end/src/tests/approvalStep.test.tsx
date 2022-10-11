@@ -28,7 +28,7 @@ test("File must be selected before clicking save", () => {
       }}
     />
   );
-  fireEvent.click(screen.getByText("Save"));
+  fireEvent.click(screen.getByText("Save & Continue"));
   expect(screen.getByText("You must select a PDF file")).toBeTruthy();
 });
 
@@ -61,7 +61,7 @@ test("400 response creates alert", async () => {
     type: "application/pdf",
   });
   userEvent.upload(screen.getByTestId("fileSelect"), file);
-  fireEvent.click(screen.getByText("Save"));
+  fireEvent.click(screen.getByText("Save & Continue"));
   await waitFor(() =>
     expect(screen.getByText("Failed to save PDF")).toBeTruthy()
   );
@@ -85,6 +85,6 @@ test("Step is completed with 200 response", async () => {
   fireEvent.change(screen.getByLabelText("Highlight Words"), {
     target: { value: "broken" },
   });
-  fireEvent.click(screen.getByText("Save"));
+  fireEvent.click(screen.getByText("Save & Continue"));
   await waitFor(() => expect(completed).toBe(true));
 });
