@@ -29,7 +29,9 @@ test("File must be selected before clicking save", () => {
     />
   );
   fireEvent.click(screen.getByText("Save & Continue"));
-  expect(screen.getByText("You must select an Invoice (PDF) file")).toBeTruthy();
+  expect(
+    screen.getByText("You must select an Invoice (PDF) file")
+  ).toBeTruthy();
 });
 
 test("Selected file must be a PDF", () => {
