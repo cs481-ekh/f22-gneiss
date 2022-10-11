@@ -46,7 +46,7 @@ export function CsvStep(props: CSVStepProps) {
       return false;
     }
 
-    if (f.type !== "application/csv") {
+    if (f.type !== "text/csv") {
       startAlert("File selected is not a CSV file");
       return false;
     }
