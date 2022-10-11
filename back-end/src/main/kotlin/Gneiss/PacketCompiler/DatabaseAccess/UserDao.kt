@@ -5,6 +5,8 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.SQLException
 
+class CredentialsResponse(validFlag: Boolean, roleId: Int)
+
 class UserDao {
 
     // Username, Password, and URL for the mySQL database
@@ -19,7 +21,7 @@ class UserDao {
     // function only needs to be here, there will be a different one for Redis
     fun getConnection() {
         try {
-            connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword)
+            this.connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword)
             println("Connected to database")
         } catch (e: SQLException) {
             println("Unable to connect to database")
@@ -28,14 +30,40 @@ class UserDao {
     }
 
     companion object sqlQueries {
-        val getAccountQuery = "SELECT id, email, firs_tname, last_name FROM users WHERE email = ?"
+        val getAccountQuery = "SELECT id, email, first_name, last_name FROM users WHERE email = ?"
 
         val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, ?)"
+
+        val validateCredentialsQuery = "SELECT id, first_name, last_name, role_id FROM users WHERE email = ? AND password = ?"
+    }
+
+    fun validateCredentials(email: String, password: String): CredentialsResponse {
+        getConnection()
+        var prepStatement = this.connection!!.prepareStatment(validateCredentialsQuery)
+        prepStatement.setString(1, email)
+        prepStatement.setString(2, password)
+        var resultSet = prepStatement.executeQuery()
+
+        // Check how many rows are in the result set, if it equal to one it is a valid set of credentials 
+        var rowCount = getRowCount(resultSet)
+        connection!!.close()
+
+        // If the credentials are valid, we need to get the role_id out of the result
+        // To do this, we reset the result set pointer to the first row with beforeFirst() and next()
+        // And then get the int in the fourth position, where role_id is the query
+        if (rowCount == 1) {
+            resultSet.beforeFirst()
+            resultSet.next()
+            val roleId = resultSet.getInt(4)
+            return CredentialsResponse(true, roleId)
+        } else {
+            return CredentialsResponse(false, -1)
+        }
     }
 
     fun checkAccountExists(email: String): Boolean {
         getConnection()
-        var prepStatement = connection!!.prepareStatement(getAccountQuery)
+        var prepStatement = this.connection!!.prepareStatement(getAccountQuery)
         prepStatement.setString(1, email)
         var resultSet = prepStatement.executeQuery()
 

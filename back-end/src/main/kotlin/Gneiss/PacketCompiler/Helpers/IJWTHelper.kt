@@ -1,6 +1,6 @@
 package Gneiss.PacketCompiler.Helpers
 
-class JWTBody(val user: String, val role: String)
+class JWTBody(val user: String, val role: Int)
 
 interface IJWTHelper {
     fun createJWT(body: JWTBody): String
