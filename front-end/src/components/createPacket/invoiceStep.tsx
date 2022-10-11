@@ -1,8 +1,8 @@
-import { Button } from "@mui/material";
-import { SetStateAction, useState } from "react";
-import { CommaSeparatedList } from "./commaSeparatedList";
+import { Alert, Button, Snackbar } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
+import { FileSelectButton } from "./fileSelectButton";
 import { IStepProps } from "./IStepProps";
-//Needs to import Axios?
 
 export interface InvoiceStepProps extends IStepProps{}
 
@@ -21,20 +21,83 @@ export function InvoiceStep(props: InvoiceStepProps) {
   };
 
   const [file, setFile] = useState()
-  function handleChange(event:any) { //event is inferred, needs specification
-    setFile(event.target.files[0])
-  }
+  const [alertActive, setAlertActive] = useState(false);
+  const [alertReason, setAlertReason] = useState("");
+
+  const startAlert = (reason: string) => {
+    setAlertActive(true);
+    setAlertReason(reason);
+  };
+
+  const handleAlertClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertActive(false);
+  };
+
+  const validate = (f: File | undefined) => {
+    if (f === undefined) {
+      startAlert("You must select an Invoice (PDF) file");
+      return false;
+    }
+
+    if (f.type !== "application/pdf") {
+      startAlert("File selected is not a PDF");
+      return false;
+    }
+
+    return true;
+  };
+
+  const save = async () => {
+    if (!validate(file)) {
+      return;
+    }
+    let formData = new FormData();
+    formData.append("file", file!);
+
+    axios
+      .post("/api/highlightpdf", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() => {
+        props.completeStep();
+      })
+      .catch((e: any) => {
+        startAlert("Failed to save PDF");
+      });
+  };
 
   return (
     <div style={styles.outerBox}>
-      <form>
-        <h1>Invoice File Upload</h1>
-        <input type="file" onChange={handleChange}/>
-        <button type="submit">Upload</button>
-      </form>
       <div style={styles.buttons}>
-        <Button onClick={props.completeStep} variant="contained">Save & Continue</Button>
+      <FileSelectButton
+          buttonLabel="Upload File"
+          validateSelection={validate}
+          file={file}
+          setFile={setFile}
+        />
+        <Button variant="contained" onClick={save}>
+          Save & Continue
+        </Button>
       </div>
+      <Snackbar open={alertActive}>
+        <Alert
+          className="alert"
+          onClose={handleAlertClose}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {alertReason}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
