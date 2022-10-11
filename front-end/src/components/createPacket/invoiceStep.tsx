@@ -1,11 +1,12 @@
 import { Alert, Button, Snackbar } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { CommaSeparatedList } from "./commaSeparatedList";
 import { FileSelectButton } from "./fileSelectButton";
 import { IStepProps } from "./IStepProps";
 
-export function ApprovalStep(props: IStepProps) {
+export interface InvoiceStepProps extends IStepProps {}
+
+export function InvoiceStep(props: InvoiceStepProps) {
   const styles = {
     outerBox: {
       display: "flex",
@@ -16,11 +17,9 @@ export function ApprovalStep(props: IStepProps) {
       flexDirection: "column",
       justifyContent: "space-between",
       marginLeft: "10vw",
-      width: "150px",
     } as const,
   };
 
-  const [wordSet, setWordSet] = useState(new Set<string>());
   const [file, setFile] = useState<File>();
   const [alertActive, setAlertActive] = useState(false);
   const [alertReason, setAlertReason] = useState("");
@@ -43,7 +42,7 @@ export function ApprovalStep(props: IStepProps) {
 
   const validate = (f: File | undefined) => {
     if (f === undefined) {
-      startAlert("You must select a PDF file");
+      startAlert("You must select an Invoice (PDF) file");
       return false;
     }
 
@@ -61,10 +60,9 @@ export function ApprovalStep(props: IStepProps) {
     }
     let formData = new FormData();
     formData.append("file", file!);
-    formData.append("highlightWords", Array.from(wordSet).join(","));
 
     axios
-      .post("/api/highlightpdf", formData, {
+      .post("/api/invoice", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -79,7 +77,7 @@ export function ApprovalStep(props: IStepProps) {
 
   return (
     <div style={styles.outerBox}>
-      <CommaSeparatedList wordSet={wordSet} setWordSet={setWordSet} />
+      <h1>Invoice File Upload</h1>
       <div style={styles.buttons}>
         <FileSelectButton
           buttonLabel="Upload File"
