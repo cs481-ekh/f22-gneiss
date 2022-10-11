@@ -6,7 +6,7 @@ import userEvent from "@testing-library/user-event";
 
 let serverResponse = 0;
 const server: SetupServerApi = setupServer(
-  rest.post("/api/highlightpdf", async (req, res, ctx) => {
+  rest.post("/api/invoice", async (req, res, ctx) => {
     return res(ctx.status(serverResponse));
   })
 );
@@ -28,8 +28,8 @@ test("File must be selected before clicking save", () => {
       }}
     />
   );
-  fireEvent.click(screen.getByText("Save"));
-  expect(screen.getByText("You must select a PDF file")).toBeTruthy();
+  fireEvent.click(screen.getByText("Save & Continue"));
+  expect(screen.getByText("You must select an Invoice (PDF) file")).toBeTruthy();
 });
 
 test("Selected file must be a PDF", () => {
@@ -61,7 +61,7 @@ test("400 response creates alert", async () => {
     type: "application/pdf",
   });
   userEvent.upload(screen.getByTestId("fileSelect"), file);
-  fireEvent.click(screen.getByText("Save"));
+  fireEvent.click(screen.getByText("Save & Continue"));
   await waitFor(() =>
     expect(screen.getByText("Failed to save PDF")).toBeTruthy()
   );
@@ -82,9 +82,6 @@ test("Step is completed with 200 response", async () => {
     type: "application/pdf",
   });
   userEvent.upload(screen.getByTestId("fileSelect"), file);
-  fireEvent.change(screen.getByLabelText("Highlight Words"), {
-    target: { value: "broken" },
-  });
-  fireEvent.click(screen.getByText("Save"));
+  fireEvent.click(screen.getByText("Save & Continue"));
   await waitFor(() => expect(completed).toBe(true));
 });
