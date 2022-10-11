@@ -20,7 +20,7 @@ export function InvoiceStep(props: InvoiceStepProps) {
     } as const,    
   };
 
-  const [file, setFile] = useState()
+  const [file, setFile] = useState<File>()
   const [alertActive, setAlertActive] = useState(false);
   const [alertReason, setAlertReason] = useState("");
 
@@ -62,7 +62,7 @@ export function InvoiceStep(props: InvoiceStepProps) {
     formData.append("file", file!);
 
     axios
-      .post("/api/highlightpdf", formData, {
+      .post("/api/invoice", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -77,6 +77,7 @@ export function InvoiceStep(props: InvoiceStepProps) {
 
   return (
     <div style={styles.outerBox}>
+      <h1>Invoice File Upload</h1>
       <div style={styles.buttons}>
       <FileSelectButton
           buttonLabel="Upload File"
