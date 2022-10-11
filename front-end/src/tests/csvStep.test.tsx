@@ -59,8 +59,8 @@ test("400 response creates alert", async () => {
     />
   );
 
-  let file = new File(["blob"], "coolDocument.pdf", {
-    type: "application/pdf",
+  let file = new File(["blob"], "coolDocument.csv", {
+    type: "text/csv",
   });
   userEvent.upload(screen.getByTestId("fileSelect"), file);
   fireEvent.click(screen.getByText("Save & Continue"));
