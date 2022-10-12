@@ -7,7 +7,7 @@ import java.sql.SQLException
 
 class UserDao {
 
-    var databaseUsername = System.getenv("MYSQL_USER") 
+    var databaseUsername = System.getenv("MYSQL_USER")
     var databasePassword = System.getenv("MYSQL_PASSWORD")
     var databaseUrl = "jdbc:mysql://${System.getenv("MYSQL_HOST")}:${System.getenv("MYSQL_PORT")}/${System.getenv("MYSQL_DATABASE")}"
     var connection: Connection? = null
