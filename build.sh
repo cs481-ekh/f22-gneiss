@@ -9,5 +9,3 @@ mvn package -f back-end/pom.xml -DskipTests || ( echo "FAILED -- back-end: mvn p
 
 echo "docker build back-end"
 docker build --file=back-end/Dockerfile -t gneiss-back . || ( echo "FAILED -- docker build back-end"; exit 1; )
-echo "docker build front-end"
-docker build --file=front-end/Dockerfile -t gneiss-front . || ( echo "FAILED -- docker build front-end"; exit 1; )
