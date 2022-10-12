@@ -20,6 +20,8 @@ const theme = createTheme({
 });
 
 function App() {
+  //App.use('/', viewRouter);
+  //App.use('/auth/', authRouter);
   return (
     <ThemeProvider theme={theme}>
       <Router history={history}>
