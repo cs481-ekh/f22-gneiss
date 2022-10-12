@@ -36,6 +36,7 @@ To run the front-end, you'll want to spin up a development server. You'll need N
 
 The commands for starting up a development server are as follows:
 ```
+cd front-end
 npm ci
 npm run start
 ```
@@ -52,6 +53,7 @@ To run the back-end, you're going to need OpenJDK of at least version 19, and Ma
 
 Create a jar file with Maven, and then run that Jar file.
 ```
+cd back-end
 mvn package
 java -jar target/PacketCompiler-0.0.1-SNAPSHOT.jar    
 ```
