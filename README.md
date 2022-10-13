@@ -1,4 +1,4 @@
-# Packetto 
+# Paketto 
 [![CI](https://github.com/cs481-ekh/f22-gneiss/actions/workflows/ci.yml/badge.svg)](https://github.com/cs481-ekh/f22-gneiss/actions/workflows/ci.yml)
 
 A packet compiler made for Boise State's Mechanical and Biomedical Engineering Department
