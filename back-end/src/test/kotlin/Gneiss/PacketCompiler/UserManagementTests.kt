@@ -19,11 +19,11 @@ class UserManagementTests() {
     @Test
     fun userAccountCreated() {
         every { databaseAccess.checkAccountExists(any()) } returns false
-        every { databaseAccess.createAccount(any(), any(), any(), any(), any()) } returns Unit
+        every { databaseAccess.createAccount(any(), any(), any(), any()) } returns Unit
 
         val userService = Users(databaseAccess)
 
-        val userRequest = CreateUserRequest("someEmail@email.com", "somePassword", "firstName", "lastName", 1)
+        val userRequest = CreateUserRequest("someEmail@email.com", "somePassword", "firstName", "lastName")
         val responseExpected = ResponseEntity<String>("User account created successfully", HttpStatus.OK)
         val responseActual = userService.createUser(userRequest)
 
@@ -36,7 +36,7 @@ class UserManagementTests() {
 
         val userService = Users(databaseAccess)
 
-        val userRequest = CreateUserRequest("someEmail@email.com", "somePassword", "firstName", "lastName", 1)
+        val userRequest = CreateUserRequest("someEmail@email.com", "somePassword", "firstName", "lastName")
         val responseExpected = ResponseEntity<String>("Account already exists for this email", HttpStatus.NOT_ACCEPTABLE)
         val responseActual = userService.createUser(userRequest)
 
