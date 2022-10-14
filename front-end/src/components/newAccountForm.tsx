@@ -123,7 +123,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
     })
     .catch(() => {
       setAlertReason(
-        "Server Error creating User Account."
+        "Server error creating user account."
       );
     });
   };
