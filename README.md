@@ -19,6 +19,11 @@ First, you'll need Docker to be installed on your local machine. Run this comman
 ./build.sh
 ```
 
+If for some reason this doesn't work, try:
+```
+docker build --file=back-end/Dockerfile -t gneiss-back .
+```
+
 This will create the necessary Docker image for the project. To create a container from that image, run:
 ```
 docker-compose -f docker-compose.yaml --env-file production.env up
