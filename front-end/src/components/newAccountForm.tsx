@@ -109,20 +109,23 @@ export function NewAccountForm(props: newAcccountFormProps) {
     }
 
     //console.log info should be passed to the backend here.
-    axios.post("/api/user/create", {"email":emailField,"password":passwordField,"firstname":firstNameField,"lastname":lastNameField,})
+    axios.post("/api/user/create", {"email":emailField,"password":passwordField,"firstname":firstNameField,"lastname":lastNameField})
     .then((res) => {
         /**
-         * Waiting on Teddy to finish User Login endpoint
+         * Waiting on Teddy to finish the User Login endpoint
          */
         //axios
             //.post("/api/user/", {"room" : res.data.roomCode}, )
             //.then((userRes) => {
               
             //});
-    });
-
-
     history.push("home");
+    })
+    .catch(() => {
+      setAlertReason(
+        "Server Error creating User Account."
+      );
+    });
   };
 
   const handleAlertClose = (
