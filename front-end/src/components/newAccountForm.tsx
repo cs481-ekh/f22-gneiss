@@ -3,6 +3,7 @@ import { ChangeEvent, useState } from "react";
 import { Alert, Link, FormGroup, Snackbar, TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import history from "./history";
+import axios from "axios";
 
 export interface newAcccountFormProps {}
 
@@ -64,11 +65,6 @@ export function NewAccountForm(props: newAcccountFormProps) {
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,50}$/;
 
   const handleSubmit = () => {
-    console.log(`First Name: ${firstNameField}`);
-    console.log(`Last Name: ${lastNameField}`);
-    console.log(`Email: ${emailField}`);
-    console.log(`Password: ${passwordField}`);
-    console.log(`Check Password: ${passwordField2}`);
 
     //All fields must be filled
     if (
@@ -113,6 +109,18 @@ export function NewAccountForm(props: newAcccountFormProps) {
     }
 
     //console.log info should be passed to the backend here.
+    axios.post("/api/user/create", {"email":emailField,"password":passwordField,"firstname":firstNameField,"lastname":lastNameField,})
+    .then((res) => {
+        /**
+         * Waiting on Teddy to finish User Login endpoint
+         */
+        //axios
+            //.post("/api/user/", {"room" : res.data.roomCode}, )
+            //.then((userRes) => {
+              
+            //});
+    });
+
 
     history.push("home");
   };
