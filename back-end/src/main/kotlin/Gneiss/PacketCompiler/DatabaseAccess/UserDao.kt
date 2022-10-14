@@ -7,11 +7,9 @@ import java.sql.SQLException
 
 class UserDao {
 
-    // Username, Password, and URL for the mySQL database
-    // Currently using placeholders, will get the actual values from system properties
-    var databaseUsername = "user"
-    var databasePassword = "password"
-    var databaseUrl = "jdbc:mysql://localhost:3306/db"
+    var databaseUsername = System.getenv("MYSQL_USER")
+    var databasePassword = System.getenv("MYSQL_PASSWORD")
+    var databaseUrl = "jdbc:mysql://${System.getenv("MYSQL_HOST")}:${System.getenv("MYSQL_PORT")}/${System.getenv("MYSQL_DATABASE")}"
     var connection: Connection? = null
 
     // Function to get a connection to the database
@@ -20,17 +18,15 @@ class UserDao {
     fun getConnection() {
         try {
             connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword)
-            println("Connected to database")
         } catch (e: SQLException) {
-            println("Unable to connect to database")
             e.printStackTrace()
         }
     }
 
     companion object sqlQueries {
-        val getAccountQuery = "SELECT id, email, firs_tname, last_name FROM users WHERE email = ?"
+        val getAccountQuery = "SELECT id, email, first_name, last_name FROM users WHERE email = ?"
 
-        val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, ?)"
+        val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'user')"
     }
 
     fun checkAccountExists(email: String): Boolean {
@@ -48,14 +44,13 @@ class UserDao {
         }
     }
 
-    fun createAccount(email: String, password: String, firstName: String, lastName: String, roleId: Int) {
+    fun createAccount(email: String, password: String, firstName: String, lastName: String) {
         getConnection()
         val prepStatement = connection!!.prepareStatement(createAccountQuery)
         prepStatement.setString(1, email)
         prepStatement.setString(2, password)
         prepStatement.setString(3, firstName)
         prepStatement.setString(4, lastName)
-        prepStatement.setInt(5, roleId)
 
         prepStatement.executeUpdate()
         connection!!.close()
