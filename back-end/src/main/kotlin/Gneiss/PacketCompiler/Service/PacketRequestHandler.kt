@@ -17,14 +17,14 @@ class PacketPatchRequest(
 )
 
 class ApprovalPDFPostRequest(
-    val packetName: String,
+    val packetId: String,
     val outputName: String,
     val fileBytes: ByteArray,
     val highlightWords: Array<String>
 )
 
 class InvoicePDFPostRequest(
-    val packetName: String,
+    val packetId: String,
     val outputName: String,
     val fileBytes: ByteArray
 )
