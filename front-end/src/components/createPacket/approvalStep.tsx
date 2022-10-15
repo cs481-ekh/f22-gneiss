@@ -64,7 +64,7 @@ export function ApprovalStep(props: IStepProps) {
     formData.append("highlightWords", Array.from(wordSet).join(","));
 
     axios
-      .post("/api/highlightpdf", formData, {
+      .post("/api/packet/approvalpdf/todochangethis", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

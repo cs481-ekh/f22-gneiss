@@ -1,49 +1,52 @@
 package Gneiss.PacketCompiler.Controller
 
 import Gneiss.PacketCompiler.Helpers.PDFHelper
-import Gneiss.PacketCompiler.Service.HighlightPDF
-import Gneiss.PacketCompiler.Service.HighlightPDFRequest
-import Gneiss.PacketCompiler.Service.HighlightPDFResponse
-import Gneiss.PacketCompiler.Service.Packet
+import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
+import Gneiss.PacketCompiler.Service.ApprovalPDFPostResponse
+import Gneiss.PacketCompiler.Service.InvoicePDFPostRequest
+import Gneiss.PacketCompiler.Service.InvoicePDFPostResponse
 import Gneiss.PacketCompiler.Service.PacketPatchRequest
 import Gneiss.PacketCompiler.Service.PacketPatchResponse
 import Gneiss.PacketCompiler.Service.PacketPostRequest
 import Gneiss.PacketCompiler.Service.PacketPostResponse
+import Gneiss.PacketCompiler.Service.PacketRequestHandler
 import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import java.util.Date
 
 @RestController
+@RequestMapping("/api/packet")
 class PacketController {
 
     var outputPrefix = "output/"
     var pdfHelper = PDFHelper()
-    var highlightPDF = HighlightPDF(pdfHelper)
+    var packetHandler = PacketRequestHandler(pdfHelper)
 
-    @PostMapping("/api/highlightpdf")
-    fun FileUpload(@RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): HighlightPDFResponse {
+    @PostMapping("/approvalpdf/{name}")
+    fun approvalPDF(@PathVariable name: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): ApprovalPDFPostResponse {
         var outputName = Date().getTime().toString()
-        return highlightPDF.highlightPDF(
-            HighlightPDFRequest(
-                outputName = outputPrefix + outputName,
-                fileBytes = file.getBytes(),
-                highlightWords = highlightWords
-            )
-        )
-        // TODO: PATCH
+        return packetHandler.approvalPDFPost(ApprovalPDFPostRequest(name, outputPrefix + outputName + ".pdf", file.getBytes(), highlightWords))
     }
 
-    @PostMapping("/api/packet")
+    @PostMapping("/invoicepdf/{name}")
+    fun invoicePDF(@PathVariable name: String, @RequestParam("file") file: MultipartFile): InvoicePDFPostResponse {
+        var outputName = Date().getTime().toString()
+        return packetHandler.invoicePDFPost(InvoicePDFPostRequest(name, outputPrefix + outputName + ".pdf", file.getBytes()))
+    }
+
+    @PostMapping("/")
     fun PacketPost(@RequestBody req: PacketPostRequest): PacketPostResponse {
-        return Packet.packetPost(req)
+        return packetHandler.packetPost(req)
     }
 
-    @PatchMapping("/api/packet")
+    @PatchMapping("/")
     fun PacketPatch(@RequestBody req: PacketPatchRequest): PacketPatchResponse {
-        return Packet.packetPatch(req)
+        return packetHandler.packetPatch(req)
     }
 }
