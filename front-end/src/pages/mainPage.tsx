@@ -30,7 +30,7 @@ export function MainPage(props: MainPageProps) {
     },
     {
       label: "Create Packet",
-      href: "/createpacket",
+      href: "/createpacket/temporary-hardcoded-id",
     },
     {
       label: "Sign out",

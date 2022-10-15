@@ -32,7 +32,7 @@ function App() {
               element={<MainPage pageContent={<p>Welcome home :)</p>} />}
             />
             <Route
-              path="/createpacket"
+              path="/createpacket/:id"
               element={
                 <MainPage
                   pageContent={
