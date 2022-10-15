@@ -26,7 +26,7 @@ class PacketRequestHandlerTests {
         every { service.htmlToPDF(any(), capture(htmlOutput)) } just Runs
         var packetHandler = PacketRequestHandler(service)
 
-        val request = ApprovalPDFPostRequest("packetName", "outputName", ByteArray(0), arrayOf("text"))
+        val request = ApprovalPDFPostRequest("packetId", "outputName", ByteArray(0), arrayOf("text"))
         packetHandler.approvalPDFPost(request)
 
         assertThat(htmlOutput.captured).isEqualTo("<p>Hello <span style='background-color:yellow;'>text</span></p>")
@@ -38,7 +38,7 @@ class PacketRequestHandlerTests {
         every { service.htmlToPDF(any(), capture(htmlOutput)) } just Runs
         var packetHandler = PacketRequestHandler(service)
 
-        val request = ApprovalPDFPostRequest("packetName", "outputName", ByteArray(0), arrayOf("text"))
+        val request = ApprovalPDFPostRequest("packetId", "outputName", ByteArray(0), arrayOf("text"))
         packetHandler.approvalPDFPost(request)
 
         assertThat(htmlOutput.captured).isEqualTo("<p>Hello <span style='background-color:yellow;'>text</span></p>")
@@ -50,7 +50,7 @@ class PacketRequestHandlerTests {
         every { service.htmlToPDF(any(), capture(htmlOutput)) } just Runs
         var packetHandler = PacketRequestHandler(service)
 
-        val request = ApprovalPDFPostRequest("packetName", "outputName", ByteArray(0), arrayOf("text"))
+        val request = ApprovalPDFPostRequest("packetId", "outputName", ByteArray(0), arrayOf("text"))
         packetHandler.approvalPDFPost(request)
 
         assertThat(htmlOutput.captured).isEqualTo("<p><span style='background-color:yellow;'>text</span>ing <span style='background-color:yellow;'>text</span>ed <span style='background-color:yellow;'>text</span>book</p>")
@@ -60,7 +60,7 @@ class PacketRequestHandlerTests {
     fun invoicePDFPostWorks() {
         every { service.writeFile(any(), capture(byteOutput)) } just Runs
         var packetHandler = PacketRequestHandler(service)
-        val request = InvoicePDFPostRequest("packetName", "outputName", ByteArray(0))
+        val request = InvoicePDFPostRequest("packetId", "outputName", ByteArray(0))
         packetHandler.invoicePDFPost(request)
 
         assertThat(byteOutput.captured).isEqualTo(ByteArray(0))
