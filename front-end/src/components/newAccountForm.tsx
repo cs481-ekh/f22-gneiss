@@ -109,7 +109,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
     }
 
     //console.log info should be passed to the backend here.
-    axios.post("/api/user/create", {"email":emailField,"password":passwordField,"firstname":firstNameField,"lastname":lastNameField})
+    axios.post("/api/user/create", {"email":emailField,"password":passwordField,"firstName":firstNameField,"lastName":lastNameField})
     .then((res) => {
         /**
          * Waiting on Teddy to finish the User Login endpoint

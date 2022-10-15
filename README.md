@@ -20,6 +20,7 @@ First, you'll need Docker to be installed on your local machine. Run this comman
 ```
 
 If for some reason this doesn't work, try:
+
 ```
 docker build --file=back-end/Dockerfile -t gneiss-back .
 ```
