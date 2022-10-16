@@ -8,8 +8,7 @@ class CreateUserRequest(
     var email: String,
     var password: String,
     var firstName: String,
-    var lastName: String,
-    var roleId: Int
+    var lastName: String
 )
 
 class Users(userDao: UserDao) {
@@ -25,7 +24,7 @@ class Users(userDao: UserDao) {
             return ResponseEntity<String>("Account already exists for this email", HttpStatus.NOT_ACCEPTABLE)
         } else {
             // Create a new account and return a good response code
-            userDao.createAccount(req.email, req.password, req.firstName, req.lastName, req.roleId)
+            userDao.createAccount(req.email, req.password, req.firstName, req.lastName)
             return ResponseEntity<String>("User account created successfully", HttpStatus.OK)
         }
     }

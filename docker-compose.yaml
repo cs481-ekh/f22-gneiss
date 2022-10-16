@@ -7,25 +7,27 @@ services:
     volumes:
       - ./data/:/docker-entrypoint-initdb.d
     environment:
-      MYSQL_DATABASE: 'db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD} 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
     ports:
-      - 3306:3306
+      - ${MYSQL_PORT}:3306
   redis:
     image: redis:latest
     ports:
-      - 6379:6379
-  front-end:
-    image: gneiss-front:latest
-    ports:
-      - 3000:3000
-    links:
-      - back-end
+      - ${REDIS_PORT}:6379
   back-end:
     image: gneiss-back:latest
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD} 
+      MYSQL_HOST: mysql-server
+      MYSQL_PORT: ${MYSQL_PORT}
     volumes:
       - output:/output
     ports:
-      - 8080:8080
+      - ${BACKEND_PORT}:8080
+    links:
+      - mysql-server 
