@@ -65,7 +65,6 @@ export function NewAccountForm(props: newAcccountFormProps) {
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,50}$/;
 
   const handleSubmit = () => {
-
     //All fields must be filled
     if (
       firstNameField === "" ||
@@ -109,23 +108,27 @@ export function NewAccountForm(props: newAcccountFormProps) {
     }
 
     //console.log info should be passed to the backend here.
-    axios.post("/api/user/create", {"email":emailField,"password":passwordField,"firstName":firstNameField,"lastName":lastNameField})
-    .then((res) => {
+    axios
+      .post("/api/user/create", {
+        email: emailField,
+        password: passwordField,
+        firstName: firstNameField,
+        lastName: lastNameField,
+      })
+      .then((res) => {
         /**
-         * Waiting on Teddy to finish the User Login endpoint
+         * Waiting on the User Login endpoint here
          */
         //axios
-            //.post("/api/user/", {"room" : res.data.roomCode}, )
-            //.then((userRes) => {
-              
-            //});
-    history.push("home");
-    })
-    .catch(() => {
-      setAlertReason(
-        "Server error creating user account."
-      );
-    });
+        //.post("/api/user/", {"room" : res.data.roomCode}, )
+        //.then((userRes) => {
+
+        //});
+        history.push("home");
+      })
+      .catch(() => {
+        setAlertReason("Server error creating user account.");
+      });
   };
 
   const handleAlertClose = (

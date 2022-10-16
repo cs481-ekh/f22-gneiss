@@ -2,9 +2,6 @@ import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { NewAccountForm } from "../components/newAccountForm";
 import { rest } from "msw";
 import { setupServer, SetupServerApi } from "msw/node";
-import userEvent from "@testing-library/user-event";
-//200 - correct
-//400 - error
 
 let serverResponse = 0; //setting up fake server to send requests to.
 const server: SetupServerApi = setupServer(
@@ -369,7 +366,6 @@ test("If new account validation succeeds, go to landing page. Account is created
   await waitFor(() => expect(() => screen.getByRole("alert")).toThrow());
 });
 
-
 //If account info is invalid, expect rejecting (400) message from backend.
 test("Account is not created with 400 response", async () => {
   makeServerBeforeTest(400);
@@ -391,5 +387,7 @@ test("Account is not created with 400 response", async () => {
     target: { value: "1A$a12345_789012345!" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  await waitFor(() => expect(screen.getByText("Server error creating user account.")).toBeTruthy());
+  await waitFor(() =>
+    expect(screen.getByText("Server error creating user account.")).toBeTruthy()
+  );
 });
