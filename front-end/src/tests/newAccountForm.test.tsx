@@ -388,14 +388,13 @@ test("Account is created with 200 response", async () => {
     target: { value: "1A$a12345_789012345!" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  await waitFor(() => expect("Server error creating user account.").toBeFalsy());
+  await waitFor(() => expect(() => screen.getByRole("alert")).toThrow());
 });
 
 
 //If account info is invalid, expect rejecting (400) message from backend.
 test("Account is not created with 400 response", async () => {
   makeServerBeforeTest(400);
-  let completed = false;
   const result = render(<NewAccountForm />);
 
   fireEvent.change(screen.getByLabelText("First Name"), {
@@ -414,6 +413,5 @@ test("Account is not created with 400 response", async () => {
     target: { value: "1A$a12345_789012345!" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  await waitFor(() => expect(completed).toBe(false)); //true or false (false always passes, response may not be regarded)
-  expect(screen.getByText("Server error creating user account.")).toBeTruthy();
+  await waitFor(() => expect(screen.getByText("Server error creating user account.")).toBeTruthy());
 });
