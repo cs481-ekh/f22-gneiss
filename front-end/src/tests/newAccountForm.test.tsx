@@ -9,6 +9,7 @@ import userEvent from "@testing-library/user-event";
 let serverResponse = 0; //setting up fake server to send requests to.
 const server: SetupServerApi = setupServer(
   rest.post("/api/user/create", async (req, res, ctx) => {
+    console.log("string " + serverResponse);
     return res(ctx.status(serverResponse));
   })
 );
@@ -369,7 +370,6 @@ test("If new account validation succeeds, go to landing page", () => {
 //If account info is valid, expect accepting (200) message from backend.
 test("Account is created with 200 response", async () => {
   makeServerBeforeTest(200);
-  let completed = false;
   const result = render(<NewAccountForm />);
 
   fireEvent.change(screen.getByLabelText("First Name"), {
@@ -388,7 +388,7 @@ test("Account is created with 200 response", async () => {
     target: { value: "1A$a12345_789012345!" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  await waitFor(() => expect(completed).toBe(true));
+  await waitFor(() => expect("Server error creating user account.").toBeFalsy());
 });
 
 
@@ -414,5 +414,6 @@ test("Account is not created with 400 response", async () => {
     target: { value: "1A$a12345_789012345!" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  await waitFor(() => expect(completed).toBe(true));
+  await waitFor(() => expect(completed).toBe(false)); //true or false (false always passes, response may not be regarded)
+  expect(screen.getByText("Server error creating user account.")).toBeTruthy();
 });
