@@ -35,12 +35,12 @@ class UserDao {
 
     fun validateCredentials(email: String, password: String): CredentialsResponse {
         getConnection()
-        var prepStatement = this.connection!!.prepareStatement(validateCredentialsQuery)
+        var prepStatement = connection!!.prepareStatement(validateCredentialsQuery)
         prepStatement.setString(1, email)
         prepStatement.setString(2, password)
         var resultSet = prepStatement.executeQuery()
 
-        // Check how many rows are in the result set, if it equal to one it is a valid set of credentials 
+        // Check how many rows are in the result set, if it equal to one it is a valid set of credentials
         var rowCount = getRowCount(resultSet)
         connection!!.close()
 
@@ -59,7 +59,7 @@ class UserDao {
 
     fun checkAccountExists(email: String): Boolean {
         getConnection()
-        var prepStatement = this.connection!!.prepareStatement(getAccountQuery)
+        var prepStatement = connection!!.prepareStatement(getAccountQuery)
         prepStatement.setString(1, email)
         var resultSet = prepStatement.executeQuery()
 

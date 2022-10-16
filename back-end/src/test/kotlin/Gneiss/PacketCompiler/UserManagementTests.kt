@@ -38,7 +38,7 @@ class UserManagementTests() {
     @Test
     fun invalidLoginCredentials() {
         every { databaseAccess.validateCredentials(any(), any()) } returns CredentialsResponse(false, (-1).toString())
-       
+
         val loginService = Login(jwtHelper, databaseAccess)
 
         val loginRequest = LoginRequest("someEmail@email.com", "somePassword")

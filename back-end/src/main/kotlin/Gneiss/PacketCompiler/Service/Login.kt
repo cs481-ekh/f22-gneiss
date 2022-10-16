@@ -14,11 +14,11 @@ class Login(jwtHelper: JWTHelper, userDao: UserDao) {
     var userDao = userDao
 
     fun login(req: LoginRequest): ResponseEntity<String> {
-        //Check if the credentials passed in exist in the database table 'Users'
+        // Check if the credentials passed in exist in the database table 'Users'
         var validCredentials: CredentialsResponse = userDao.validateCredentials(req.username, req.password)
 
-        //If validCredentials is false, return a 401 response 'authentication failed'
-        //Otherwise return a 200 response with a jwt token as the body
+        // If validCredentials is false, return a 401 response 'authentication failed'
+        // Otherwise return a 200 response with a jwt token as the body
         if (!validCredentials.validFlag) {
             return ResponseEntity<String>("Invalid Credentials", HttpStatus.UNAUTHORIZED)
         } else {

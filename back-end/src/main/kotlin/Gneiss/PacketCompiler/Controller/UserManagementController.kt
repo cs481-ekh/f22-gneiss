@@ -22,7 +22,6 @@ class UserManagementController {
     val userManagementDao = UserDao()
     val userService = Users(userManagementDao)
 
-
     val jwtHelper = JWTHelper()
     val login = Login(jwtHelper, userManagementDao)
 
