@@ -5,6 +5,8 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.SQLException
 
+class CredentialsResponse(val validFlag: Boolean, val roleId: String)
+
 class UserDao {
 
     var databaseUsername = System.getenv("MYSQL_USER")
@@ -27,6 +29,32 @@ class UserDao {
         val getAccountQuery = "SELECT id, email, first_name, last_name FROM users WHERE email = ?"
 
         val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'user')"
+
+        val validateCredentialsQuery = "SELECT id, first_name, last_name, role_id FROM users WHERE email = ? AND password = ?"
+    }
+
+    fun validateCredentials(email: String, password: String): CredentialsResponse {
+        getConnection()
+        var prepStatement = connection!!.prepareStatement(validateCredentialsQuery)
+        prepStatement.setString(1, email)
+        prepStatement.setString(2, password)
+        var resultSet = prepStatement.executeQuery()
+
+        // Check how many rows are in the result set, if it equal to one it is a valid set of credentials
+        var rowCount = getRowCount(resultSet)
+        connection!!.close()
+
+        // If the credentials are valid, we need to get the role_id out of the result
+        // To do this, we reset the result set pointer to the first row with beforeFirst() and next()
+        // And then get the int in the fourth position, where role_id is the query
+        if (rowCount == 1) {
+            resultSet.beforeFirst()
+            resultSet.next()
+            val roleId = resultSet.getInt(4)
+            return CredentialsResponse(true, roleId.toString())
+        } else {
+            return CredentialsResponse(false, (-1).toString())
+        }
     }
 
     fun checkAccountExists(email: String): Boolean {
