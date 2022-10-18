@@ -116,15 +116,18 @@ export function NewAccountForm(props: newAcccountFormProps) {
         lastName: lastNameField,
       })
       .then((res) => {
-        /**
-         * Waiting on the User Login endpoint here
-         */
+        //User Login endpoint connection
         axios
         .post("/api/user/login", {
         username: emailField,
         password: passwordField,
-        });
-        history.push("home");
+        })
+        .then((loginRes) => {
+          history.push("home");
+        })
+        .catch(() => {
+          setAlertReason("Account created successfully, but login failed.");
+        })
       })
       .catch(() => {
         setAlertReason("Server error creating user account.");
