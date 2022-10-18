@@ -119,11 +119,11 @@ export function NewAccountForm(props: newAcccountFormProps) {
         /**
          * Waiting on the User Login endpoint here
          */
-        //axios
-        //.post("/api/user/", {"room" : res.data.roomCode}, )
-        //.then((userRes) => {
-
-        //});
+        axios
+        .post("/api/user/login", {
+        username: emailField,
+        password: passwordField,
+        });
         history.push("home");
       })
       .catch(() => {
