@@ -19,8 +19,8 @@ const theme = createTheme({
   },
 });
 
-export function ProtectedWrapper({ children }) {
-  if (true) {
+export function ProtectedWrapper({ children }: any) {
+  if (true) { // True - work as normal. False - Redirect to sign in. Replace with a connection to the login endpoint.
     return children;
   } else {
     return <Navigate to="/" replace />;
@@ -35,12 +35,10 @@ function App() {
           <Routes>
             <Route path="/" element={<SignInPage />} />
             <Route path="/newuser" element={<NewAccountPage />} />
-            <ProtectedWrapper>
             <Route
               path="/home"
-              element={<MainPage pageContent={<p>Welcome home :)</p>} />}
+              element={<ProtectedWrapper><MainPage pageContent={<p>Welcome home :)</p>} /></ProtectedWrapper>}
             />
-            </ProtectedWrapper>
             <Route
               path="/createpacket/:id"
               element={
