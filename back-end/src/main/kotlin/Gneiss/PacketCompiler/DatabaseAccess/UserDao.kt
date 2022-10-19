@@ -33,41 +33,17 @@ class UserDao {
 
         val validateCredentialsQuery = "SELECT id, first_name, last_name, role_id FROM users WHERE email = ? AND password = ?"
 
-        val validateHashedCredentialsQuery = "SELECT password, role_id WHERE email = ?"
+        val validateHashedCredentialsQuery = "SELECT id, password, first_name, last_name, role_id WHERE email = ?"
     }
 
     fun validateCredentials(email: String, password: String): CredentialsResponse {
-        getConnection()
-        var prepStatement = connection!!.prepareStatement(validateCredentialsQuery)
-        prepStatement.setString(1, email)
-        prepStatement.setString(2, password)
-        var resultSet = prepStatement.executeQuery()
-
-        // Check how many rows are in the result set, if it equal to one it is a valid set of credentials
-        var rowCount = getRowCount(resultSet)
-        connection!!.close()
-
-        // If the credentials are valid, we need to get the role_id out of the result
-        // To do this, we reset the result set pointer to the first row with beforeFirst() and next()
-        // And then get the int in the fourth position, where role_id is the query
-        if (rowCount == 1) {
-            resultSet.beforeFirst()
-            resultSet.next()
-            val roleId = resultSet.getInt(4)
-            return CredentialsResponse(true, roleId.toString())
-        } else {
-            return CredentialsResponse(false, (-1).toString())
-        }
-    }
-
-    fun validateHashedCredentials(email: String, password: String) : CredentialsResponse {
         getConnection()
         var prepStatement = connection!!.prepareStatement(validateHashedCredentialsQuery)
         prepStatement.setString(1, email)
         var resultSet = prepStatement.executeQuery()
         connection!!.close()
-        val hashedPassword = resultSet.getString(1)
-        val roleId = resultSet.getInt(2)
+        val hashedPassword = resultSet.getString(2)
+        val roleId = resultSet.getInt(5)
         if (BCrypt.checkpw(password, hashedPassword)) {
             return CredentialsResponse(true, roleId.toString())
         }
