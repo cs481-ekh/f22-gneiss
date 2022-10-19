@@ -4,6 +4,7 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.SQLException
+import org.springframework.security.crypto.bcrypt.BCrypt 
 
 class CredentialsResponse(val validFlag: Boolean, val roleId: String)
 
@@ -31,6 +32,8 @@ class UserDao {
         val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'user')"
 
         val validateCredentialsQuery = "SELECT id, first_name, last_name, role_id FROM users WHERE email = ? AND password = ?"
+
+        val validateHashedCredentialsQuery = "SELECT password, role_id WHERE email = ?"
     }
 
     fun validateCredentials(email: String, password: String): CredentialsResponse {
@@ -57,6 +60,20 @@ class UserDao {
         }
     }
 
+    fun validateHashedCredentials(email: String, password: String) : CredentialsResponse {
+        getConnection()
+        var prepStatement = connection!!.prepareStatement(validateHashedCredentialsQuery)
+        prepStatement.setString(1, email)
+        var resultSet = prepStatement.executeQuery()
+        connection!!.close()
+        val hashedPassword = resultSet.getString(1)
+        val roleId = resultSet.getInt(2)
+        if (BCrypt.checkpw(password, hashedPassword)) {
+            return CredentialsResponse(true, roleId.toString())
+        }
+        return CredentialsResponse(false, (-1).toString())
+    }
+
     fun checkAccountExists(email: String): Boolean {
         getConnection()
         var prepStatement = connection!!.prepareStatement(getAccountQuery)
@@ -75,8 +92,9 @@ class UserDao {
     fun createAccount(email: String, password: String, firstName: String, lastName: String) {
         getConnection()
         val prepStatement = connection!!.prepareStatement(createAccountQuery)
+        val passwordHash: String = BCrypt.hashpw(password, BCrypt.gensalt())
         prepStatement.setString(1, email)
-        prepStatement.setString(2, password)
+        prepStatement.setString(2, passwordHash)
         prepStatement.setString(3, firstName)
         prepStatement.setString(4, lastName)
 
