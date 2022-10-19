@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { unstable_HistoryRouter as Router } from "react-router-dom";
 import { SignInPage } from "./pages/signInPage";
 import { NewAccountPage } from "./pages/newAccountPage";
@@ -19,6 +19,14 @@ const theme = createTheme({
   },
 });
 
+export function ProtectedWrapper({ children }) {
+  if (true) {
+    return children;
+  } else {
+    return <Navigate to="/" replace />;
+  }
+}
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -27,10 +35,12 @@ function App() {
           <Routes>
             <Route path="/" element={<SignInPage />} />
             <Route path="/newuser" element={<NewAccountPage />} />
+            <ProtectedWrapper>
             <Route
               path="/home"
               element={<MainPage pageContent={<p>Welcome home :)</p>} />}
             />
+            </ProtectedWrapper>
             <Route
               path="/createpacket/:id"
               element={
