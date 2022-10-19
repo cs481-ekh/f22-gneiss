@@ -1,7 +1,7 @@
 import { Alert, Button, Snackbar } from "@mui/material";
-import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { getHttpService } from "../../data/httpService";
 import { CommaSeparatedList } from "./commaSeparatedList";
 import { FileSelectButton } from "./fileSelectButton";
 import { IStepProps } from "./IStepProps";
@@ -26,6 +26,7 @@ export function ApprovalStep(props: IStepProps) {
   const [alertActive, setAlertActive] = useState(false);
   const [alertReason, setAlertReason] = useState("");
   const { id } = useParams()
+  const httpService = getHttpService()
 
   const startAlert = (reason: string) => {
     setAlertActive(true);
@@ -65,7 +66,7 @@ export function ApprovalStep(props: IStepProps) {
     formData.append("file", file!);
     formData.append("highlightWords", Array.from(wordSet).join(","));
 
-    axios
+    httpService.axios
       .post(`/api/packet/approvalpdf/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",

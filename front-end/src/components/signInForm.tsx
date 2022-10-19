@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { Button } from "@mui/material";
 import history from "./history";
+import { getHttpService } from "../data/httpService";
 
 export interface SignInFormProps {}
 
@@ -35,6 +36,7 @@ export function SignInForm(props: SignInFormProps) {
   const [passwordField, setPasswordField] = useState("");
   const [alertReason, setAlertReason] = useState("");
   const [checked, setChecked] = useState(false);
+  const httpService = getHttpService()
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmailField(e.target.value);
@@ -60,7 +62,11 @@ export function SignInForm(props: SignInFormProps) {
       return;
     }
 
-    history.push("home");
+    httpService.axios.post<any>("/api/user/login", {"username": emailField, "password": passwordField}).then((res) => {
+      httpService.setAuth(res.data)
+      history.push("home");
+    });
+
   };
 
   const handleAlertClose = (

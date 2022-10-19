@@ -1,6 +1,6 @@
 import { Alert, Button, Snackbar } from "@mui/material";
-import axios from "axios";
 import { useState } from "react";
+import { getHttpService } from "../../data/httpService";
 import { FileSelectButton } from "./fileSelectButton";
 import { IStepProps } from "./IStepProps";
 
@@ -23,6 +23,7 @@ export function InvoiceStep(props: InvoiceStepProps) {
   const [file, setFile] = useState<File>();
   const [alertActive, setAlertActive] = useState(false);
   const [alertReason, setAlertReason] = useState("");
+  const httpService = getHttpService()
 
   const startAlert = (reason: string) => {
     setAlertActive(true);
@@ -61,7 +62,7 @@ export function InvoiceStep(props: InvoiceStepProps) {
     let formData = new FormData();
     formData.append("file", file!);
 
-    axios
+    httpService.axios
       .post("/api/invoice", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
