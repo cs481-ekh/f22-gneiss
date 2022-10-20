@@ -1,10 +1,10 @@
 package Gneiss.PacketCompiler.DatabaseAccess
 
+import org.springframework.security.crypto.bcrypt.BCrypt
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.SQLException
-import org.springframework.security.crypto.bcrypt.BCrypt 
 
 class CredentialsResponse(val validFlag: Boolean, val roleId: String)
 
