@@ -1,19 +1,18 @@
-package com.csalem;
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.api.sync.RedisCommands;
-import io.lettuce.core.api.sync.RedisStringCommands;
-import io.lettuce.core.api.StatefulRedisConnection;
+package Gneiss.PacketCompiler.DatabaseAccess
 
-class Main {
+import io.github.crackthecodeabhi.kreds.connection.newClient
+import io.github.crackthecodeabhi.kreds.connection.Endpoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
-    public static void main(String[] args) {
-        RedisClient client = RedisClient.create("redis://password@172.26.106.248:6379/0");
-        StatefulRedisConnection connection = client.connect();
-        RedisCommands syncCommands = connection.sync();
-        System.out.println("Connection successful!");
-        connection.close();
-        client.shutdown();
+fun main() = runBlocking { // this: CoroutineScope
+    launch {
+        newClient(Endpoint.from("127.0.0.1:6379")).use { client ->
+            client.set("foo","100") 
+            println("incremented value of foo ${client.incr("foo")}") // prints 101
+            client.expire("foo",3u) // set expiration to 3 seconds
+            delay(3000)
+            assert(client.get("foo") == null)
+        }
     }
-
-    
 }
