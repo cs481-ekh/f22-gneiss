@@ -42,7 +42,6 @@ class UserDao {
 
         // Check how many rows are in the result set, if it equal to one it is a valid set of credentials
         var rowCount = getRowCount(resultSet)
-        println("Row Count for Login Response = " + rowCount);
 
         // If the credentials are valid, we need to get the role_id out of the result
         // To do this, we reset the result set pointer to the first row with beforeFirst() and next()
@@ -51,7 +50,6 @@ class UserDao {
             resultSet.beforeFirst()
             resultSet.next()
             val roleId = resultSet.getString(4)
-            println("role_id for resultSet (first row): " + roleId)
             connection!!.close()
             return CredentialsResponse(true, roleId)
         } else {
