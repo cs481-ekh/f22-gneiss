@@ -35,13 +35,14 @@ class UserDao {
 
     fun validateCredentials(email: String, password: String): CredentialsResponse {
         getConnection()
-        var prepStatement = connection!!.prepareStatement(validateCredentialsQuery)
+        var prepStatement = connection!!.prepareStatement(validateCredentialsQuery, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
         prepStatement.setString(1, email)
         prepStatement.setString(2, password)
         var resultSet = prepStatement.executeQuery()
 
         // Check how many rows are in the result set, if it equal to one it is a valid set of credentials
         var rowCount = getRowCount(resultSet)
+        println("Row Count for Login Response = " + rowCount);
 
         // If the credentials are valid, we need to get the role_id out of the result
         // To do this, we reset the result set pointer to the first row with beforeFirst() and next()
@@ -49,12 +50,13 @@ class UserDao {
         if (rowCount == 1) {
             resultSet.beforeFirst()
             resultSet.next()
-            val roleId = resultSet.getInt(4)
+            val roleId = resultSet.getString(4)
+            println("role_id for resultSet (first row): " + roleId)
             connection!!.close()
-            return CredentialsResponse(true, roleId.toString())
+            return CredentialsResponse(true, roleId)
         } else {
             connection!!.close()
-            return CredentialsResponse(false, (-1).toString())
+            return CredentialsResponse(false, "invalidRole")
         }
     }
 

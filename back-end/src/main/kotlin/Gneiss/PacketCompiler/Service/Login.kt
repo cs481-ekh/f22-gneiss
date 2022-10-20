@@ -25,6 +25,7 @@ class Login(jwtHelper: JWTHelper, userDao: UserDao) {
             return ResponseEntity<LoginResponse>(LoginResponse("Invalid Credentials"), HttpStatus.UNAUTHORIZED)
         } else {
             val jwt = jwtHelper.createJWT(JWTBody(req.username, validCredentials.roleId))
+            println(jwt)
             val response: LoginResponse = LoginResponse(jwt)
             return ResponseEntity<LoginResponse>(response, HttpStatus.OK)
         }
