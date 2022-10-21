@@ -124,15 +124,14 @@ export function NewAccountForm(props: newAcccountFormProps) {
         })
         .then((loginRes) => {
           //Checking the status of the response
-          localStorage.setItem('jwt', loginRes.data)
-
-          //  axios.post('http://yourendpoint',data,{ headers: { Authorization:localStorage.getItem('jwtToken') } })
-          //   .then(response=> console.log(response))
-          //   .catch(error => console.log(error));
-
+          localStorage.setItem('jwt', loginRes.data['jwt'])
+          
+          console.log(loginRes.data);
+          
           history.push("home");
         })
         .catch(() => {
+          console.log("Error during logins");
           setAlertReason("Account created successfully, but login failed.");
         })
       })
