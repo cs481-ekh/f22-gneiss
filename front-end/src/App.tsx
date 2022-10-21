@@ -19,8 +19,11 @@ const theme = createTheme({
   },
 });
 
+//Some method to verify the jwt
+
+
 export function ProtectedWrapper({ children }: any) {
-  if (true) { // True - work as normal. False - Redirect to sign in. Replace with a connection to the login endpoint.
+  if (true) { // True - work as normal. False - Redirect to sign in. Check if there's a JWT in Session or Local storage.
     return children;
   } else {
     return <Navigate to="/" replace />;

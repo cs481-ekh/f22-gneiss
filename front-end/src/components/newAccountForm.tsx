@@ -64,7 +64,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
   const checkPassSignage =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,50}$/;
 
-  const handleSubmit = () => {
+  const handleSubmit = () => { //may want to remove async later
     //All fields must be filled
     if (
       firstNameField === "" ||
@@ -123,6 +123,13 @@ export function NewAccountForm(props: newAcccountFormProps) {
         password: passwordField,
         })
         .then((loginRes) => {
+          //Checking the status of the response
+          localStorage.setItem('jwt', loginRes.data)
+
+          //  axios.post('http://yourendpoint',data,{ headers: { Authorization:localStorage.getItem('jwtToken') } })
+          //   .then(response=> console.log(response))
+          //   .catch(error => console.log(error));
+
           history.push("home");
         })
         .catch(() => {
