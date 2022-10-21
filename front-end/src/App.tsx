@@ -25,14 +25,14 @@ const theme = createTheme({
 // Go to local storage and copy the jwt token
 // go to jwt.io and decode the token to make sure the exprDate is a day in the future
 // Test with method:
-const jwt = localStorage.getItem('jwt');
-var isExpired = false;
-const token = localStorage.getItem('id_token');
-var decodedToken=jwt.decode(token, {complete: true});
-var dateNow = new Date();
+// const jwt = localStorage.getItem('jwt');
+// var isExpired = false;
+// const token = localStorage.getItem('id_token');
+// var decodedToken=jwt.decode(token, {complete: true});
+// var dateNow = new Date();
 
-if(decodedToken.exp < dateNow.getTime())
-    isExpired = true;
+// if(decodedToken.exp < dateNow.getTime())
+//     isExpired = true;
 
 
 export function ProtectedWrapper({ children }: any) {
