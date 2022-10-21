@@ -96,9 +96,9 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-        	<groupId>io.github.crackthecodeabhi</groupId>
-        	<artifactId>kreds</artifactId>
-        	<version>0.8</version>
+    		<groupId>redis.clients</groupId>
+    		<artifactId>jedis</artifactId>
+    		<version>4.3.0</version>
 		</dependency>
 	</dependencies>
 

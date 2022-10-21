@@ -1,18 +1,17 @@
 package Gneiss.PacketCompiler.DatabaseAccess
 
-import io.github.crackthecodeabhi.kreds.connection.newClient
-import io.github.crackthecodeabhi.kreds.connection.Endpoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import java.sql.Connection
+import redis.clients.jedis.Jedis;
+import org.springframework.stereotype.Service
+import redis.clients.jedis.JedisPool
 
-fun main() = runBlocking { // this: CoroutineScope
-    launch {
-        newClient(Endpoint.from("127.0.0.1:6379")).use { client ->
-            client.set("foo","100") 
-            println("incremented value of foo ${client.incr("foo")}") // prints 101
-            client.expire("foo",3u) // set expiration to 3 seconds
-            delay(3000)
-            assert(client.get("foo") == null)
-        }
+@Service
+object CacheManager {
+    private lateinit var jedisPool: JedisPool
+
+    var connection: Connection? = null
+
+    fun getConnection() {
+        JedisPool pool = new JedisPool("localhost", 6379)
     }
 }
