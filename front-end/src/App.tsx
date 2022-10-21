@@ -19,11 +19,24 @@ const theme = createTheme({
   },
 });
 
-//Some method to verify the jwt
+// Build it
+// Run it
+// Create an account to make a jwt for that account
+// Go to local storage and copy the jwt token
+// go to jwt.io and decode the token to make sure the exprDate is a day in the future
+// Test with method:
+const jwt = localStorage.getItem('jwt');
+var isExpired = false;
+const token = localStorage.getItem('id_token');
+var decodedToken=jwt.decode(token, {complete: true});
+var dateNow = new Date();
+
+if(decodedToken.exp < dateNow.getTime())
+    isExpired = true;
 
 
 export function ProtectedWrapper({ children }: any) {
-  if (true) { // True - work as normal. False - Redirect to sign in. Check if there's a JWT in Session or Local storage.
+  if (true) { // True - work as normal. False - Redirect to sign in. Check if there's a JWT in Local storage.
     return children;
   } else {
     return <Navigate to="/" replace />;
