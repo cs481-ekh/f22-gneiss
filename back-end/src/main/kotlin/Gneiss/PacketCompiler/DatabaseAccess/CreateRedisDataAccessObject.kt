@@ -12,6 +12,19 @@ object CacheManager {
     var connection: Connection? = null
 
     fun getConnection() {
-        JedisPool pool = new JedisPool("localhost", 6379)
+        try {
+            jedisPool = JedisPool("clientName", "Jedis")
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
     }
+
+    fun redisPost() {
+
+    }
+
+    fun redisPatch() {
+        
+    }
+        
 }
