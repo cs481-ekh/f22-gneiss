@@ -4,7 +4,6 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  useTheme,
 } from "@mui/material";
 
 export type NavInfo = {
@@ -18,20 +17,16 @@ export interface INavBarProps {
 }
 
 export function NavBar(props: INavBarProps) {
-  const theme = useTheme();
   const styles = {
     drawer: {
       width: props.barWidth,
     },
-    linkText: {
-      color: "white",
-    } as const,
   };
 
   const mapLinks = props.content.map((v) => (
     <ListItem key={v.label} disablePadding>
       <ListItemButton component="a" href={v.href}>
-        <ListItemText style={styles.linkText} primary={v.label} />
+        <ListItemText primary={v.label} />
       </ListItemButton>
     </ListItem>
   ));
@@ -43,7 +38,6 @@ export function NavBar(props: INavBarProps) {
         "& .MuiDrawer-paper": {
           width: props.barWidth,
           boxSizing: "border-box",
-          backgroundColor: theme.palette.primary.dark,
         },
       }}
       variant="permanent"

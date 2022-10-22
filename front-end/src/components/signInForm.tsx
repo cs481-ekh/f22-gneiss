@@ -20,7 +20,6 @@ export function SignInForm(props: SignInFormProps) {
     signIn: {
       display: "flex",
       flexDirection: "column",
-      backgroundColor: "rgba(255,255,255, 0.9)",
       borderRadius: "8px",
       padding: "25px 75px",
     } as const,
