@@ -25,6 +25,10 @@ class redisDao {
             }
         }
 
+        fun getJedis(): Jedis {
+            return jedisPool.resource
+        }
+
         fun <T> get(key: String, clazz: Class<T>): T {
             val value: String = getJedis().get(key)
             val mapper = ObjectMapper().registerModule(KotlinModule())
@@ -38,7 +42,7 @@ class redisDao {
     
         fun set(key: String, value: Any): Unit {
             val mapper = ObjectMapper().writeValueAsString(value)
-            getJedis().set(key, mapper)
+            getJedis().set(key, mapper);
         }
         fun redisPost() {
 
