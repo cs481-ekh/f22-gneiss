@@ -36,16 +36,16 @@ class UserDao {
 
     fun validateCredentials(email: String, password: String): CredentialsResponse {
         getConnection()
-        var prepStatement = connection!!.prepareStatement(validateHashedCredentialsQuery)
+        var prepStatement = connection!!.prepareStatement(validateHashedCredentialsQuery, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
         prepStatement.setString(1, email)
         var resultSet = prepStatement.executeQuery()
         val hashedPassword = resultSet.getString(2)
-        val roleId = resultSet.getInt(5)
+        val roleId = resultSet.getString(5)
         connection!!.close()
         if (BCrypt.checkpw(password, hashedPassword)) {
-            return CredentialsResponse(true, roleId.toString())
+            return CredentialsResponse(true, roleId)
         }
-        return CredentialsResponse(false, (-1).toString())
+        return CredentialsResponse(false, "invalidRole")
     }
 
     fun checkAccountExists(email: String): Boolean {
