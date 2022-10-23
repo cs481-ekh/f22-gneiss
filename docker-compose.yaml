@@ -15,7 +15,6 @@ services:
       - ${MYSQL_PORT}:3306
   redis:
     image: redis:latest
-    command: redis-server --requirepass gneisspassword
     ports:
       - ${REDIS_PORT}:6379
   back-end:
@@ -26,9 +25,12 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD} 
       MYSQL_HOST: mysql-server
       MYSQL_PORT: ${MYSQL_PORT}
+      REDIS_HOST: redis
+      REDIS_PORT: ${REDIS_PORT}
     volumes:
       - output:/output
     ports:
       - ${BACKEND_PORT}:8080
     links:
       - mysql-server 
+      - redis

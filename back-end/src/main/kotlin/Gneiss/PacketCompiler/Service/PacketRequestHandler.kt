@@ -1,6 +1,8 @@
 package Gneiss.PacketCompiler.Service
 
+import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
+import Gneiss.PacketCompiler.Models.Packet
 
 class PacketPostRequest(
     val invoicePDFPath: String,
@@ -37,27 +39,32 @@ class ApprovalPDFPostResponse()
 
 class InvoicePDFPostResponse()
 
-class PacketRequestHandler(pdfHelper: IPDFHelper) {
+class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
     var pdfHelper = pdfHelper
+    var packetDao = packetDao
 
-    fun packetPost(req: PacketPostRequest): PacketPostResponse {
+    fun packetPost(user: String, id: String, req: PacketPostRequest): PacketPostResponse {
+        var packet = Packet(req.invoicePDFPath, req.approvalPDFPath, req.csvPDFPath, req.compiledPDFPath)
+        packetDao.set(user, id, packet)
         return PacketPostResponse()
     }
 
-    fun packetPatch(req: PacketPatchRequest): PacketPatchResponse {
-        // if (req.invoicePDFPath != null) {
-        //     setInvoicePDFPath = req.invoicePDFPath
-        // }
-        // if (req.approvalPDFPath != null) {
-        //     setApprovalPDFPath = req.approvalPDFPath
-        // }
-        // if (req.csvPDFPath != null) {
-        //     setCsvPDFPath = req.csvPDFPath
-        // }
-        // if (req.compiledPDFPath != null) {
-        //     setCompiledPDFPath = req.compiledPDFPath
-        // }
+    fun packetPatch(user: String, id: String, req: PacketPatchRequest): PacketPatchResponse {
+        val packet = packetDao.get(user, id)
+        if (req.invoicePDFPath != null) {
+            packet.invoicePDFPath = req.invoicePDFPath
+        }
+        if (req.approvalPDFPath != null) {
+            packet.approvalPDFPath = req.approvalPDFPath
+        }
+        if (req.csvPDFPath != null) {
+            packet.csvPDFPath = req.csvPDFPath
+        }
+        if (req.compiledPDFPath != null) {
+            packet.compiledPDFPath = req.compiledPDFPath
+        }
+        packetDao.set(user, id, packet)
         return PacketPatchResponse()
     }
 
