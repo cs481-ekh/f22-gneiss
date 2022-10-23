@@ -1,8 +1,12 @@
 package Gneiss.PacketCompiler
 
+import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
+import Gneiss.PacketCompiler.Models.Packet
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
 import Gneiss.PacketCompiler.Service.InvoicePDFPostRequest
+import Gneiss.PacketCompiler.Service.PacketPatchRequest
+import Gneiss.PacketCompiler.Service.PacketPostRequest
 import Gneiss.PacketCompiler.Service.PacketRequestHandler
 import io.mockk.Runs
 import io.mockk.every
@@ -16,16 +20,41 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class PacketRequestHandlerTests {
 
+    var pdfHelper = mockk<IPDFHelper>()
+    var packetDao = mockk<IPacketDao>()
+
+    var packetOutput = slot<Packet>()
     var htmlOutput = slot<String>()
     var byteOutput = slot<ByteArray>()
-    var service = mockk<IPDFHelper>()
+
+    fun getHandler(): PacketRequestHandler {
+        return PacketRequestHandler(pdfHelper, packetDao)
+    }
+
+    @Test
+    fun packetPostWorks() {
+        every { packetDao.set(any(), any(), capture(packetOutput)) } just Runs
+        var packetHandler = getHandler()
+
+        packetHandler.packetPost("user", "id", PacketPostRequest("a", "b", "c", "d"))
+        assertThat(packetOutput.equals(Packet("a", "b", "c", "d")))
+    }
+
+    @Test
+    fun packetPatchWorks() {
+        every { packetDao.set(any(), any(), capture(packetOutput)) } just Runs
+        every { packetDao.get(any(), any()) } returns Packet("a", "b", "c", "d")
+        var packetHandler = getHandler()
+
+        packetHandler.packetPatch("user", "id", PacketPatchRequest("grapes", null, null, null))
+        assertThat(packetOutput.equals(Packet("grapes", "b", "c", "d")))
+    }
 
     @Test
     fun approvalPDFPostTextIsHighlighted() {
-        every { service.getTextFromPDF(any()) } returns "Hello text"
-        every { service.htmlToPDF(any(), capture(htmlOutput)) } just Runs
-        var packetHandler = PacketRequestHandler(service)
-
+        every { pdfHelper.getTextFromPDF(any()) } returns "Hello text"
+        every { pdfHelper.htmlToPDF(any(), capture(htmlOutput)) } just Runs
+        var packetHandler = getHandler()
         val request = ApprovalPDFPostRequest("packetId", "outputName", ByteArray(0), arrayOf("text"))
         packetHandler.approvalPDFPost(request)
 
@@ -34,10 +63,9 @@ class PacketRequestHandlerTests {
 
     @Test
     fun approvalPDFPostHighlightWordsIsCaseInsensitive() {
-        every { service.getTextFromPDF(any()) } returns "Hello tEXt"
-        every { service.htmlToPDF(any(), capture(htmlOutput)) } just Runs
-        var packetHandler = PacketRequestHandler(service)
-
+        every { pdfHelper.getTextFromPDF(any()) } returns "Hello tEXt"
+        every { pdfHelper.htmlToPDF(any(), capture(htmlOutput)) } just Runs
+        var packetHandler = getHandler()
         val request = ApprovalPDFPostRequest("packetId", "outputName", ByteArray(0), arrayOf("text"))
         packetHandler.approvalPDFPost(request)
 
@@ -46,10 +74,9 @@ class PacketRequestHandlerTests {
 
     @Test
     fun approvalPDFPostPartialWordHighlightWorks() {
-        every { service.getTextFromPDF(any()) } returns "texting texted textbook"
-        every { service.htmlToPDF(any(), capture(htmlOutput)) } just Runs
-        var packetHandler = PacketRequestHandler(service)
-
+        every { pdfHelper.getTextFromPDF(any()) } returns "texting texted textbook"
+        every { pdfHelper.htmlToPDF(any(), capture(htmlOutput)) } just Runs
+        var packetHandler = getHandler()
         val request = ApprovalPDFPostRequest("packetId", "outputName", ByteArray(0), arrayOf("text"))
         packetHandler.approvalPDFPost(request)
 
@@ -58,8 +85,8 @@ class PacketRequestHandlerTests {
 
     @Test
     fun invoicePDFPostWorks() {
-        every { service.writeFile(any(), capture(byteOutput)) } just Runs
-        var packetHandler = PacketRequestHandler(service)
+        every { pdfHelper.writeFile(any(), capture(byteOutput)) } just Runs
+        var packetHandler = getHandler()
         val request = InvoicePDFPostRequest("packetId", "outputName", ByteArray(0))
         packetHandler.invoicePDFPost(request)
 
