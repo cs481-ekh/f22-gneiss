@@ -18,9 +18,15 @@ class Auth(jwtHelper: JWTHelper, userDao: UserDao) {
         //Parse the JWT passed in into the body
         val jwtBody: JWTBody? = jwtHelper.parseJWT(req.jwt)
 
+        var validFlag = false
+        var response = AuthResponse(validFlag)
         //Use the credentials from the jwtBody to query the database and confirm the email/role exists
-        val validFlag = userDao.checkAccountExists(jwtBody.user)
-        val response = AuthResponse(validFlag)
+        if (jwtBody == null) {
+            return ResponseEntity<AuthResponse>(response, HttpStatus.UNAUTHORIZED)
+        } else {
+            validFlag = userDao.checkAccountExists(jwtBody.user)
+            response = AuthResponse(validFlag)
+        }
         
         //If so return true inside an AuthResponse
         if (validFlag) {
