@@ -98,7 +98,6 @@ class PacketRequestHandlerTests {
         val request = InvoicePDFPostRequest("outputName", ByteArray(0))
         packetHandler.invoicePDFPost("user", "packetid", request)
 
-
         assertThat(byteOutput.captured).isEqualTo(ByteArray(0))
     }
 }
