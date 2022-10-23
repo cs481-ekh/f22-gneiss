@@ -50,6 +50,7 @@ export function PacketsPage(props: PacketsPageProps) {
   const [search, setSearch] = useState("");
 
   const addPacket = () => {
+    setSearch("")
     let np = packets.slice();
     np.push({
       name: "",
@@ -94,6 +95,7 @@ export function PacketsPage(props: PacketsPageProps) {
           variant="filled"
           label="Search Packets"
           disabled={!canCreatePacket}
+          value={search}
           onChange={handleSearchChange}
         />
         <div style={styles.controls}>
