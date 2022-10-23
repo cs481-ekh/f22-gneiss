@@ -88,7 +88,7 @@ export function PacketsPage(props: PacketsPageProps) {
     ));
 
   return (
-    <Paper style={styles.page}>
+    <div style={styles.page}>
       <header style={styles.header}>
         <h1>Packets</h1>
         <TextField
@@ -110,6 +110,6 @@ export function PacketsPage(props: PacketsPageProps) {
         </div>
       </header>
       <Paper style={styles.packetList}>{listPackets}</Paper>
-    </Paper>
+    </div>
   );
 }
