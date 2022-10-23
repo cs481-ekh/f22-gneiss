@@ -31,8 +31,6 @@ class UserDao {
 
         val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'user')"
 
-        val validateCredentialsQuery = "SELECT id, first_name, last_name, role_id FROM users WHERE email = ? AND password = ?"
-
         val validateHashedCredentialsQuery = "SELECT id, password, first_name, last_name, role_id WHERE email = ?"
     }
 
@@ -41,9 +39,9 @@ class UserDao {
         var prepStatement = connection!!.prepareStatement(validateHashedCredentialsQuery)
         prepStatement.setString(1, email)
         var resultSet = prepStatement.executeQuery()
-        connection!!.close()
         val hashedPassword = resultSet.getString(2)
         val roleId = resultSet.getInt(5)
+        connection!!.close()
         if (BCrypt.checkpw(password, hashedPassword)) {
             return CredentialsResponse(true, roleId.toString())
         }
