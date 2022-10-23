@@ -2,6 +2,7 @@ import { AddCircle } from "@mui/icons-material";
 import { Button, Paper, TextField } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { PacketListEntry } from "../components/packets/PacketListEntry";
+import { v4 as uuidv4 } from "uuid";
 
 export interface PacketsPageProps {}
 
@@ -23,7 +24,7 @@ export function PacketsPage(props: PacketsPageProps) {
     packetList: {
       display: "flex",
       flexDirection: "column-reverse",
-      gap: "8px"
+      gap: "8px",
     } as const,
   };
 
@@ -50,11 +51,11 @@ export function PacketsPage(props: PacketsPageProps) {
   const [search, setSearch] = useState("");
 
   const addPacket = () => {
-    setSearch("")
+    setSearch("");
     let np = packets.slice();
     np.push({
       name: "",
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       new: true,
     });
     setPackets(np);
@@ -66,11 +67,12 @@ export function PacketsPage(props: PacketsPageProps) {
   };
 
   const renamePacket = (index: number, name: string) => {
-    let np = packets.slice()
-    np[index].name = name
-    np[index].new = false
-    setPackets(np)
-  }
+    let np = packets.slice();
+    np[index].name = name;
+    np[index].new = false;
+    setPackets(np);
+    setCanCreatePacket(true);
+  };
 
   const listPackets = packets
     .filter((packet) =>
@@ -82,7 +84,6 @@ export function PacketsPage(props: PacketsPageProps) {
         name={packet.name}
         id={packet.id}
         new={packet.new}
-        setPacketValid={setCanCreatePacket}
         renameFunc={(name: string) => renamePacket(i, name)}
       />
     ));
@@ -93,7 +94,7 @@ export function PacketsPage(props: PacketsPageProps) {
         <h1>Packets</h1>
         <TextField
           variant="filled"
-          label="Search Packets"
+          label="Search packets"
           disabled={!canCreatePacket}
           value={search}
           onChange={handleSearchChange}
