@@ -8,6 +8,9 @@ import Gneiss.PacketCompiler.Service.CreateUserRequest
 import Gneiss.PacketCompiler.Service.Login
 import Gneiss.PacketCompiler.Service.LoginRequest
 import Gneiss.PacketCompiler.Service.LoginResponse
+import Gneiss.PacketCompiler.Service.Auth
+import Gneiss.PacketCompiler.Service.AuthRequest
+import Gneiss.PacketCompiler.Service.AuthResponse
 import Gneiss.PacketCompiler.Service.Test
 import Gneiss.PacketCompiler.Service.Users
 import org.springframework.http.ResponseEntity
@@ -25,6 +28,7 @@ class UserManagementController {
 
     val jwtHelper = JWTHelper()
     val login = Login(jwtHelper, userManagementDao)
+    val auth = Auth(jwtHelper, userManagementDao)
 
     @PostMapping("/test")
     fun CreateTest(@RequestBody req: CreateTestRequest): CreateTestResponse {
@@ -39,5 +43,10 @@ class UserManagementController {
     @PostMapping("/login")
     fun Login(@RequestBody req: LoginRequest): ResponseEntity<LoginResponse> {
         return login.login(req)
+    }
+
+    @PostMapping("/auth")
+    fun AuthenticateJWT(@RequestBody req: AuthRequest): ResponseEntity<AuthResponse> {
+        return auth.authenticateJWT(req)
     }
 }
