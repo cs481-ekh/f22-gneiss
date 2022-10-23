@@ -7,6 +7,7 @@ import { createTheme, Divider, ThemeProvider } from "@mui/material";
 import { MainPage } from "./pages/mainPage";
 import CreatePacketStepper from "./components/createPacket/createPacketStepper";
 import { createPacketSteps } from "./data/createPacketSteps";
+import axios from "axios";
 
 const theme = createTheme({
   palette: {
@@ -19,28 +20,36 @@ const theme = createTheme({
   },
 });
 
-// Build it
-// Run it
-// Create an account to make a jwt for that account
-// Go to local storage and copy the jwt token
-// go to jwt.io and decode the token to make sure the exprDate is a day in the future
-// Test with method:
-// const jwt = localStorage.getItem('jwt');
-// var isExpired = false;
-// const token = localStorage.getItem('id_token');
-// var decodedToken=jwt.decode(token, {complete: true});
-// var dateNow = new Date();
 
 // if(decodedToken.exp < dateNow.getTime())
 //     isExpired = true;
 
 
 export function ProtectedWrapper({ children }: any) {
-  if (true) { // True - work as normal. False - Redirect to sign in. Check if there's a JWT in Local storage.
-    return children;
-  } else {
+  //Grab the existing jwt out of local storage, if there isn't one default to redirecting to login page
+  let localJWT = localStorage.getItem("jwt")
+  
+  //If localJWT doesn't exist redirect to login page
+  if(localJWT === null){
     return <Navigate to="/" replace />;
   }
+
+  axios
+    .post("/api/user/auth", {jwt: localJWT})
+      .then((authRes) => {
+        const authData = JSON.stringify(authRes.data);
+        const authJSON = JSON.parse(authData);
+        const validFlag = authJSON.validJWT;
+
+        if (validFlag) { // True - work as normal. False - Redirect to sign in. Check if there's a JWT in Local storage.
+          return children;
+        } else {
+          return <Navigate to="/" replace />;
+        }
+      })
+      .catch((e: any) => {
+        return <Navigate to="/" replace />;
+      });
 }
 
 function App() {
