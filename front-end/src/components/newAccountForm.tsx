@@ -1,6 +1,13 @@
 import * as React from "react";
 import { ChangeEvent, useState } from "react";
-import { Alert, Link, FormGroup, Snackbar, TextField } from "@mui/material";
+import {
+  Alert,
+  Link,
+  FormGroup,
+  Snackbar,
+  TextField,
+  Paper,
+} from "@mui/material";
 import { Button } from "@mui/material";
 import history from "./history";
 
@@ -11,7 +18,6 @@ export function NewAccountForm(props: newAcccountFormProps) {
     signIn: {
       display: "flex",
       flexDirection: "column",
-      backgroundColor: "rgba(255,255,255, 0.9)",
       borderRadius: "8px",
       padding: "25px 75px",
     } as const,
@@ -129,62 +135,64 @@ export function NewAccountForm(props: newAcccountFormProps) {
   };
 
   return (
-    <FormGroup style={styles.signIn}>
-      <TextField
-        onChange={handleFirstNameChange}
-        style={styles.input}
-        id="firstName"
-        label="First Name"
-        variant="outlined"
-      />
-      <TextField
-        onChange={handleLastNameChange}
-        style={styles.input}
-        id="lastName"
-        label="Last Name"
-        variant="outlined"
-      />
-      <TextField
-        onChange={handleEmailChange}
-        style={styles.input}
-        id="email"
-        label="Email"
-        variant="outlined"
-      />
-      <TextField
-        onChange={handlePasswordChange}
-        style={styles.input}
-        id="password"
-        label="Password"
-        variant="outlined"
-        type="password"
-      />
-      <TextField
-        onChange={handlePassword2Change}
-        style={styles.input}
-        id="checkpassword"
-        label="Confirm Password"
-        variant="outlined"
-        type="password"
-      />
-      <div>
-        <Button onClick={handleSubmit} variant="contained">
-          Create Account
-        </Button>
-      </div>
-      <Link style={styles.navLink} href="/" underline="always">
-        Back
-      </Link>
-      <Snackbar open={alertReason !== ""}>
-        <Alert
-          className="alert"
-          onClose={handleAlertClose}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {alertReason}
-        </Alert>
-      </Snackbar>
-    </FormGroup>
+    <Paper>
+      <FormGroup style={styles.signIn}>
+        <TextField
+          onChange={handleFirstNameChange}
+          style={styles.input}
+          id="firstName"
+          label="First Name"
+          variant="outlined"
+        />
+        <TextField
+          onChange={handleLastNameChange}
+          style={styles.input}
+          id="lastName"
+          label="Last Name"
+          variant="outlined"
+        />
+        <TextField
+          onChange={handleEmailChange}
+          style={styles.input}
+          id="email"
+          label="Email"
+          variant="outlined"
+        />
+        <TextField
+          onChange={handlePasswordChange}
+          style={styles.input}
+          id="password"
+          label="Password"
+          variant="outlined"
+          type="password"
+        />
+        <TextField
+          onChange={handlePassword2Change}
+          style={styles.input}
+          id="checkpassword"
+          label="Confirm Password"
+          variant="outlined"
+          type="password"
+        />
+        <div>
+          <Button onClick={handleSubmit} variant="contained">
+            Create Account
+          </Button>
+        </div>
+        <Link style={styles.navLink} href="/" underline="always">
+          Back
+        </Link>
+        <Snackbar open={alertReason !== ""}>
+          <Alert
+            className="alert"
+            onClose={handleAlertClose}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            {alertReason}
+          </Alert>
+        </Snackbar>
+      </FormGroup>
+    </Paper>
   );
 }

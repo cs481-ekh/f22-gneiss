@@ -6,6 +6,7 @@ export interface PacketListEntryProps {
   id: string;
   new: boolean;
   setPacketValid: Dispatch<React.SetStateAction<boolean>>;
+  renameFunc: (name: string) => void;
 }
 
 export function PacketListEntry(props: PacketListEntryProps) {
@@ -19,30 +20,31 @@ export function PacketListEntry(props: PacketListEntryProps) {
   const [nameInputActive, setNameInputActive] = useState(props.new);
 
   const handleNameInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value)
-    validateName(e.target.value)
-  }
+    setName(e.target.value);
+    validateName(e.target.value);
+  };
 
   const handleNameInputBlur = () => {
     if (validateName(name) === "") {
-      setNameInputActive(false)
+      setNameInputActive(false);
+      props.renameFunc(name)
     }
-  }
+  };
 
   const validateName = (name: string) => {
-    props.setPacketValid(false)
+    props.setPacketValid(false);
     if (name.length < 3) {
-      return "Must be at least 3 characters"
+      return "Must be at least 3 characters";
     }
     if (name.length > 20) {
-      return "Must not exceed 20 characters"
+      return "Must not exceed 20 characters";
     }
-    props.setPacketValid(true)
-    return ""
-  }
+    props.setPacketValid(true);
+    return "";
+  };
 
   return (
-    <Paper key={props.id} style={styles.packet}>
+    <Paper elevation={3} key={props.id} style={styles.packet}>
       {nameInputActive && (
         <TextField
           autoFocus
@@ -54,9 +56,7 @@ export function PacketListEntry(props: PacketListEntryProps) {
           onBlur={handleNameInputBlur}
         />
       )}
-      {!nameInputActive && (
-        <Link href={`/packet/${props.id}`}>{name}</Link>
-      )}
+      {!nameInputActive && <Link href={`/packet/${props.id}`}>{name}</Link>}
       <Divider />
     </Paper>
   );
