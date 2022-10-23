@@ -35,13 +35,13 @@ class PacketController {
     @PostMapping("/approvalpdf/{id}")
     fun approvalPDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): ApprovalPDFPostResponse {
         var outputName = Date().getTime().toString()
-        return packetHandler.approvalPDFPost(ApprovalPDFPostRequest(id, outputPrefix + outputName + ".pdf", file.getBytes(), highlightWords))
+        return packetHandler.approvalPDFPost("user", id, ApprovalPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes(), highlightWords))
     }
 
     @PostMapping("/invoicepdf/{id}")
     fun invoicePDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile): InvoicePDFPostResponse {
         var outputName = Date().getTime().toString()
-        return packetHandler.invoicePDFPost(InvoicePDFPostRequest(id, outputPrefix + outputName + ".pdf", file.getBytes()))
+        return packetHandler.invoicePDFPost("user", id, InvoicePDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
     }
 
     @PostMapping("/{id}")
