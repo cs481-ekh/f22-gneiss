@@ -23,6 +23,7 @@ export function PacketsPage(props: PacketsPageProps) {
     packetList: {
       display: "flex",
       flexDirection: "column-reverse",
+      gap: "8px"
     } as const,
   };
 
