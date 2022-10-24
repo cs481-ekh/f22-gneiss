@@ -50,6 +50,7 @@ export function ProtectedWrapper({ children }: any) {
       .catch((e: any) => {
         return <Navigate to="/" replace />;
       });
+  return <Navigate to="/" replace />;
 }
 
 function App() {
