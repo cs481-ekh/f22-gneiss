@@ -19,14 +19,12 @@ class PacketPatchRequest(
 )
 
 class ApprovalPDFPostRequest(
-    val packetId: String,
     val outputName: String,
     val fileBytes: ByteArray,
     val highlightWords: Array<String>
 )
 
 class InvoicePDFPostRequest(
-    val packetId: String,
     val outputName: String,
     val fileBytes: ByteArray
 )
@@ -68,7 +66,7 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
         return PacketPatchResponse()
     }
 
-    fun approvalPDFPost(req: ApprovalPDFPostRequest): ApprovalPDFPostResponse {
+    fun approvalPDFPost(user: String, id: String, req: ApprovalPDFPostRequest): ApprovalPDFPostResponse {
         var pdfText = pdfHelper.getTextFromPDF(req.fileBytes)
 
         var htmlBuilder = StringBuilder()
@@ -86,13 +84,13 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
         pdfHelper.htmlToPDF(req.outputName, result)
 
+        packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null))
         return ApprovalPDFPostResponse()
-        // TODO PATCH
     }
 
-    fun invoicePDFPost(req: InvoicePDFPostRequest): InvoicePDFPostResponse {
+    fun invoicePDFPost(user: String, id: String, req: InvoicePDFPostRequest): InvoicePDFPostResponse {
         pdfHelper.writeFile(req.outputName, req.fileBytes)
+        packetPatch(user, id, PacketPatchRequest(req.outputName, null, null, null))
         return InvoicePDFPostResponse()
-        // TODO PATCH
     }
 }

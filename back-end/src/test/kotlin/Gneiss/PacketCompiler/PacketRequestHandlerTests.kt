@@ -54,9 +54,11 @@ class PacketRequestHandlerTests {
     fun approvalPDFPostTextIsHighlighted() {
         every { pdfHelper.getTextFromPDF(any()) } returns "Hello text"
         every { pdfHelper.htmlToPDF(any(), capture(htmlOutput)) } just Runs
+        every { packetDao.set(any(), any(), capture(packetOutput)) } just Runs
+        every { packetDao.get(any(), any()) } returns Packet("a", "b", "c", "d")
         var packetHandler = getHandler()
-        val request = ApprovalPDFPostRequest("packetId", "outputName", ByteArray(0), arrayOf("text"))
-        packetHandler.approvalPDFPost(request)
+        val request = ApprovalPDFPostRequest("outputName", ByteArray(0), arrayOf("text"))
+        packetHandler.approvalPDFPost("user", "packetid", request)
 
         assertThat(htmlOutput.captured).isEqualTo("<p>Hello <span style='background-color:yellow;'>text</span></p>")
     }
@@ -65,9 +67,11 @@ class PacketRequestHandlerTests {
     fun approvalPDFPostHighlightWordsIsCaseInsensitive() {
         every { pdfHelper.getTextFromPDF(any()) } returns "Hello tEXt"
         every { pdfHelper.htmlToPDF(any(), capture(htmlOutput)) } just Runs
+        every { packetDao.set(any(), any(), capture(packetOutput)) } just Runs
+        every { packetDao.get(any(), any()) } returns Packet("a", "b", "c", "d")
         var packetHandler = getHandler()
-        val request = ApprovalPDFPostRequest("packetId", "outputName", ByteArray(0), arrayOf("text"))
-        packetHandler.approvalPDFPost(request)
+        val request = ApprovalPDFPostRequest("outputName", ByteArray(0), arrayOf("text"))
+        packetHandler.approvalPDFPost("user", "packetid", request)
 
         assertThat(htmlOutput.captured).isEqualTo("<p>Hello <span style='background-color:yellow;'>text</span></p>")
     }
@@ -76,9 +80,11 @@ class PacketRequestHandlerTests {
     fun approvalPDFPostPartialWordHighlightWorks() {
         every { pdfHelper.getTextFromPDF(any()) } returns "texting texted textbook"
         every { pdfHelper.htmlToPDF(any(), capture(htmlOutput)) } just Runs
+        every { packetDao.set(any(), any(), capture(packetOutput)) } just Runs
+        every { packetDao.get(any(), any()) } returns Packet("a", "b", "c", "d")
         var packetHandler = getHandler()
-        val request = ApprovalPDFPostRequest("packetId", "outputName", ByteArray(0), arrayOf("text"))
-        packetHandler.approvalPDFPost(request)
+        val request = ApprovalPDFPostRequest("outputName", ByteArray(0), arrayOf("text"))
+        packetHandler.approvalPDFPost("user", "packetid", request)
 
         assertThat(htmlOutput.captured).isEqualTo("<p><span style='background-color:yellow;'>text</span>ing <span style='background-color:yellow;'>text</span>ed <span style='background-color:yellow;'>text</span>book</p>")
     }
@@ -86,9 +92,11 @@ class PacketRequestHandlerTests {
     @Test
     fun invoicePDFPostWorks() {
         every { pdfHelper.writeFile(any(), capture(byteOutput)) } just Runs
+        every { packetDao.set(any(), any(), capture(packetOutput)) } just Runs
+        every { packetDao.get(any(), any()) } returns Packet("a", "b", "c", "d")
         var packetHandler = getHandler()
-        val request = InvoicePDFPostRequest("packetId", "outputName", ByteArray(0))
-        packetHandler.invoicePDFPost(request)
+        val request = InvoicePDFPostRequest("outputName", ByteArray(0))
+        packetHandler.invoicePDFPost("user", "packetid", request)
 
         assertThat(byteOutput.captured).isEqualTo(ByteArray(0))
     }
