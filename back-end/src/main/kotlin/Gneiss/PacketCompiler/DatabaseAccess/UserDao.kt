@@ -31,14 +31,15 @@ class UserDao {
 
         val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'user')"
 
-        val validateHashedCredentialsQuery = "SELECT id, password, first_name, last_name, role_id WHERE email = ?"
+        val validateCredentialsQuery = "SELECT id, password, first_name, last_name, role_id FROM users WHERE email = ?"
     }
 
     fun validateCredentials(email: String, password: String): CredentialsResponse {
         getConnection()
-        var prepStatement = connection!!.prepareStatement(validateHashedCredentialsQuery, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
+        var prepStatement = connection!!.prepareStatement(validateCredentialsQuery, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
         prepStatement.setString(1, email)
         var resultSet = prepStatement.executeQuery()
+        resultSet.next()
         val hashedPassword = resultSet.getString(2)
         val roleId = resultSet.getString(5)
         connection!!.close()
@@ -66,7 +67,7 @@ class UserDao {
     fun createAccount(email: String, password: String, firstName: String, lastName: String) {
         getConnection()
         val prepStatement = connection!!.prepareStatement(createAccountQuery)
-        val passwordHash: String = BCrypt.hashpw(password, BCrypt.gensalt())
+        val passwordHash = BCrypt.hashpw(password, BCrypt.gensalt())
         prepStatement.setString(1, email)
         prepStatement.setString(2, passwordHash)
         prepStatement.setString(3, firstName)
