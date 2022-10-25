@@ -25,33 +25,32 @@ const theme = createTheme({
 //     isExpired = true;
 
 
-export function ProtectedWrapper({ children }: any) {
-  //Grab the existing jwt out of local storage, if there isn't one default to redirecting to login page
-  let localJWT = localStorage.getItem("jwt")
+// export function ProtectedWrapper({ children }: any) {
+//   //Grab the existing jwt out of local storage, if there isn't one default to redirecting to login page
+//   let localJWT = localStorage.getItem("jwt")
   
-  //If localJWT doesn't exist redirect to login page
-  if(localJWT === null){
-    return <Navigate to="/" replace />;
-  }
+//   //If localJWT doesn't exist redirect to login page
+//   if(localJWT === null){
+//     return <Navigate to="/" replace />;
+//   }
 
-  axios
-    .post("/api/user/auth", {jwt: localJWT})
-      .then((authRes) => {
-        const authData = JSON.stringify(authRes.data);
-        const authJSON = JSON.parse(authData);
-        const validFlag = authJSON.validJWT;
+//   axios
+//     .post("/api/user/auth", {jwt: localJWT})
+//       .then((authRes) => {
+//         const authData = JSON.stringify(authRes.data);
+//         const authJSON = JSON.parse(authData);
+//         const validFlag = authJSON.validJWT;
 
-        if (validFlag) { // True - work as normal. False - Redirect to sign in. Check if there's a JWT in Local storage.
-          return children;
-        } else {
-          return <Navigate to="/" replace />;
-        }
-      })
-      .catch((e: any) => {
-        return <Navigate to="/" replace />;
-      });
-  return <Navigate to="/" replace />;
-}
+//         if (validFlag) { // True - work as normal. False - Redirect to sign in. Check if there's a JWT in Local storage.
+//           history.push("home");
+//         } else {
+//           history.push("/");
+//         }
+//       })
+//       .catch((e: any) => {
+//         history.push("/");
+//       });
+// }
 
 function App() {
   return (
@@ -63,7 +62,7 @@ function App() {
             <Route path="/newuser" element={<NewAccountPage />} />
             <Route
               path="/home"
-              element={<ProtectedWrapper><MainPage pageContent={<p>Welcome home :)</p>} /></ProtectedWrapper>}
+              element={<MainPage pageContent={<p>Welcome home :)</p>} />}
             />
             <Route
               path="/createpacket/:id"
