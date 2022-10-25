@@ -3,6 +3,7 @@ import { ChangeEvent, useState } from "react";
 import { Alert, Link, FormGroup, Snackbar, TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import history from "./history";
+import axios from "axios";
 
 export interface newAcccountFormProps {}
 
@@ -64,12 +65,6 @@ export function NewAccountForm(props: newAcccountFormProps) {
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,50}$/;
 
   const handleSubmit = () => {
-    console.log(`First Name: ${firstNameField}`);
-    console.log(`Last Name: ${lastNameField}`);
-    console.log(`Email: ${emailField}`);
-    console.log(`Password: ${passwordField}`);
-    console.log(`Check Password: ${passwordField2}`);
-
     //All fields must be filled
     if (
       firstNameField === "" ||
@@ -113,8 +108,30 @@ export function NewAccountForm(props: newAcccountFormProps) {
     }
 
     //console.log info should be passed to the backend here.
-
-    history.push("home");
+    axios
+      .post("/api/user/create", {
+        email: emailField,
+        password: passwordField,
+        firstName: firstNameField,
+        lastName: lastNameField,
+      })
+      .then((res) => {
+        //User Login endpoint connection
+        axios
+        .post("/api/user/login", {
+        username: emailField,
+        password: passwordField,
+        })
+        .then((loginRes) => {
+          history.push("home");
+        })
+        .catch(() => {
+          setAlertReason("Account created successfully, but login failed.");
+        })
+      })
+      .catch(() => {
+        setAlertReason("Server error creating user account.");
+      });
   };
 
   const handleAlertClose = (
