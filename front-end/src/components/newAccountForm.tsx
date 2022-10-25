@@ -64,7 +64,8 @@ export function NewAccountForm(props: newAcccountFormProps) {
   const checkPassSignage =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,50}$/;
 
-  const handleSubmit = () => { //may want to remove async later
+  const handleSubmit = () => {
+    //may want to remove async later
     //All fields must be filled
     if (
       firstNameField === "" ||
@@ -118,21 +119,21 @@ export function NewAccountForm(props: newAcccountFormProps) {
       .then((res) => {
         //User Login endpoint connection
         axios
-        .post("/api/user/login", {
-        username: emailField,
-        password: passwordField,
-        })
-        .then((loginRes) => {
-          //Checking the status of the response
-          const loginJSON = JSON.stringify(loginRes.data);
-          const jwt = JSON.parse(loginJSON);
-          localStorage.setItem('jwt', jwt.jwt);
-          
-          history.push("home");
-        })
-        .catch(() => {
-          setAlertReason("Account created successfully, but login failed.");
-        })
+          .post("/api/user/login", {
+            username: emailField,
+            password: passwordField,
+          })
+          .then((loginRes) => {
+            //Checking the status of the response
+            const loginJSON = JSON.stringify(loginRes.data);
+            const jwt = JSON.parse(loginJSON);
+            localStorage.setItem("jwt", jwt.jwt);
+
+            history.push("home");
+          })
+          .catch(() => {
+            setAlertReason("Account created successfully, but login failed.");
+          });
       })
       .catch(() => {
         setAlertReason("Server error creating user account.");
