@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { unstable_HistoryRouter as Router } from "react-router-dom";
 import { SignInPage } from "./pages/signInPage";
 import { NewAccountPage } from "./pages/newAccountPage";
