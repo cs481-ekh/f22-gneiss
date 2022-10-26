@@ -119,15 +119,13 @@ export function NewAccountForm(props: newAcccountFormProps) {
       .then((res) => {
         //User Login endpoint connection
         axios
-          .post("/api/user/login", {
+          .post<any>("/api/user/login", {
             username: emailField,
             password: passwordField,
           })
           .then((loginRes) => {
             //Checking the status of the response
-            const loginJSON = JSON.stringify(loginRes.data);
-            const jwt = JSON.parse(loginJSON);
-            localStorage.setItem("jwt", jwt.jwt);
+            localStorage.setItem("jwt", loginRes.data.jwt);
 
             history.push("home");
           })
