@@ -21,7 +21,7 @@ test("Email and password fields must be filled", () => {
 });
 
 test("If error response, tell user credentials are invalid", async () => {
-  makeServerBeforeTest(400)
+  makeServerBeforeTest(400);
   const result = render(<SignInForm />);
   fireEvent.change(screen.getByLabelText("Email"), {
     target: { value: "email" },
@@ -36,7 +36,7 @@ test("If error response, tell user credentials are invalid", async () => {
 });
 
 test("If input validation succeeds, go to landing page", async () => {
-  makeServerBeforeTest(200)
+  makeServerBeforeTest(200);
   const result = render(<SignInForm />);
   fireEvent.change(screen.getByLabelText("Email"), {
     target: { value: "email" },
@@ -45,7 +45,5 @@ test("If input validation succeeds, go to landing page", async () => {
     target: { value: "password" },
   });
   fireEvent.click(screen.getByText("Sign in"));
-  await waitFor(() =>
-    expect(() => screen.getByRole("alert")).toThrow()
-  );
+  await waitFor(() => expect(() => screen.getByRole("alert")).toThrow());
 });

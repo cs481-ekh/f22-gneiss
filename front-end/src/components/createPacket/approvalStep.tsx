@@ -25,8 +25,8 @@ export function ApprovalStep(props: IStepProps) {
   const [file, setFile] = useState<File>();
   const [alertActive, setAlertActive] = useState(false);
   const [alertReason, setAlertReason] = useState("");
-  const { id } = useParams()
-  const httpService = getHttpService()
+  const { id } = useParams();
+  const httpService = getHttpService();
 
   const startAlert = (reason: string) => {
     setAlertActive(true);

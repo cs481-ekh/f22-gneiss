@@ -10,9 +10,8 @@ export interface MainPageProps {
 }
 
 export function MainPage(props: MainPageProps) {
-
   useEffect(() => {
-    const httpService = getHttpService()
+    const httpService = getHttpService();
     httpService.axios
       .post<any>("/api/user/auth")
       .then((authRes) => {

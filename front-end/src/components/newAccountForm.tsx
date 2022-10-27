@@ -30,7 +30,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
   const [passwordField, setPasswordField] = useState("");
   const [passwordField2, setPasswordField2] = useState("");
   const [alertReason, setAlertReason] = useState("");
-  const httpService = getHttpService()
+  const httpService = getHttpService();
 
   const handleFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFirstNameField(e.target.value);
@@ -124,7 +124,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
             password: passwordField,
           })
           .then((loginRes) => {
-            httpService.setAuth(loginRes.data.jwt)
+            httpService.setAuth(loginRes.data.jwt);
             history.push("home");
           })
           .catch(() => {
