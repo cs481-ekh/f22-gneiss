@@ -54,16 +54,13 @@ export function SignInForm(props: SignInFormProps) {
   };
 
   const handleSubmit = () => {
-    console.log(`Email: ${emailField}`);
-    console.log(`Password: ${passwordField}`);
-
     if (emailField === "" || passwordField === "") {
       setAlertReason("Enter your email and password.");
       return;
     }
 
     httpService.axios.post<any>("/api/user/login", {"username": emailField, "password": passwordField}).then((res) => {
-      httpService.setAuth(res.data)
+      httpService.setAuth(res.data.jwt)
       history.push("home");
     });
 

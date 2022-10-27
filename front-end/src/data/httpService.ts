@@ -19,9 +19,13 @@ export const getHttpService = () => {
   };
 
 
-  if (cookies.get("Authorization") != null) {
-    setAuthorization(cookies.get("Authorization"));
+  const currentAuth = cookies.get("Authorization")
+  if (currentAuth != null) {
+    setAuthorization(currentAuth);
   }
 
-  return {axios: axios, setAuth: setAuthorization}
+  return {
+    axios: axios,
+    setAuth: setAuthorization
+  }
 }

@@ -3,7 +3,6 @@ package Gneiss.PacketCompiler.Controller
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
 import Gneiss.PacketCompiler.Helpers.JWTHelper
 import Gneiss.PacketCompiler.Service.Auth
-import Gneiss.PacketCompiler.Service.AuthRequest
 import Gneiss.PacketCompiler.Service.AuthResponse
 import Gneiss.PacketCompiler.Service.CreateTestRequest
 import Gneiss.PacketCompiler.Service.CreateTestResponse
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.RequestHeader
 
 @RestController
 @RequestMapping("/api/user")
@@ -46,7 +46,7 @@ class UserManagementController {
     }
 
     @PostMapping("/auth")
-    fun AuthenticateJWT(@RequestBody req: AuthRequest): ResponseEntity<AuthResponse> {
-        return auth.authenticateJWT(req)
+    fun AuthenticateJWT(@RequestHeader headers: Map<String, String>): ResponseEntity<AuthResponse> {
+        return auth.authenticateJWT(headers.getOrDefault("authorization", ""))
     }
 }

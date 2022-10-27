@@ -2,30 +2,24 @@ import { useTheme } from "@mui/material";
 import React from "react";
 import { useEffect } from "react";
 import { NavBar, NavInfo } from "../components/navBar";
-import axios from "axios";
 import history from "../components/history";
+import { getHttpService } from "../data/httpService";
 
 export interface MainPageProps {
   pageContent: React.ReactNode;
 }
 
 export function MainPage(props: MainPageProps) {
-  useEffect(() => {
-    let localJWT = localStorage.getItem("jwt");
 
-    //If localJWT doesn't exist redirect to login page
-    if (localJWT === null) {
-      history.push("/");
-    }
-    axios
-      .post("/api/user/auth", { jwt: localJWT })
+  useEffect(() => {
+    const httpService = getHttpService()
+    httpService.axios
+      .post<any>("/api/user/auth")
       .then((authRes) => {
-        const authData = JSON.stringify(authRes.data);
-        const authJSON = JSON.parse(authData);
-        const validFlag = authJSON.validJWT;
+        const validFlag = authRes.data.validJWT;
 
         if (validFlag) {
-          // True - work as normal. False - Redirect to sign in. Check if there's a JWT in Local storage.
+          // True - work as normal. False - Redirect to sign in.
           history.push("home");
         } else {
           history.push("/");
@@ -35,6 +29,7 @@ export function MainPage(props: MainPageProps) {
         history.push("/");
       });
   }, []);
+
   const theme = useTheme();
   const styles = {
     outerBox: {

@@ -6,17 +6,18 @@ import Gneiss.PacketCompiler.Helpers.JWTHelper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
-class AuthRequest(val jwt: String)
-
 class AuthResponse(val validJWT: Boolean)
 
 class Auth(jwtHelper: JWTHelper, userDao: UserDao) {
     var jwtHelper = jwtHelper
     var userDao = userDao
 
-    fun authenticateJWT(req: AuthRequest): ResponseEntity<AuthResponse> {
-        // Parse the JWT passed in into the body
-        val jwtBody: JWTBody? = jwtHelper.parseJWT(req.jwt)
+    fun authenticateJWT(jwt: String): ResponseEntity<AuthResponse> {
+        if (jwt.equals("")) {
+            return ResponseEntity<AuthResponse>(AuthResponse(false), HttpStatus.UNAUTHORIZED)
+        }
+
+        val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
 
         var validFlag = false
         var response = AuthResponse(validFlag)
