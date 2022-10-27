@@ -1,4 +1,3 @@
-import * as React from "react";
 import { NewAccountForm } from "../components/newAccountForm";
 import logo from "../images/logo.png";
 import image from "../images/bsu.jpg";

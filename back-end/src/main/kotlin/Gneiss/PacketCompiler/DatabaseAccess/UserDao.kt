@@ -1,5 +1,6 @@
 package Gneiss.PacketCompiler.DatabaseAccess
 
+import org.springframework.security.crypto.bcrypt.BCrypt
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -30,31 +31,22 @@ class UserDao {
 
         val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'user')"
 
-        val validateCredentialsQuery = "SELECT id, first_name, last_name, role_id FROM users WHERE email = ? AND password = ?"
+        val validateCredentialsQuery = "SELECT id, password, first_name, last_name, role_id FROM users WHERE email = ?"
     }
 
     fun validateCredentials(email: String, password: String): CredentialsResponse {
         getConnection()
-        var prepStatement = connection!!.prepareStatement(validateCredentialsQuery)
+        var prepStatement = connection!!.prepareStatement(validateCredentialsQuery, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
         prepStatement.setString(1, email)
-        prepStatement.setString(2, password)
         var resultSet = prepStatement.executeQuery()
-
-        // Check how many rows are in the result set, if it equal to one it is a valid set of credentials
-        var rowCount = getRowCount(resultSet)
+        resultSet.next()
+        val hashedPassword = resultSet.getString(2)
+        val roleId = resultSet.getString(5)
         connection!!.close()
-
-        // If the credentials are valid, we need to get the role_id out of the result
-        // To do this, we reset the result set pointer to the first row with beforeFirst() and next()
-        // And then get the int in the fourth position, where role_id is the query
-        if (rowCount == 1) {
-            resultSet.beforeFirst()
-            resultSet.next()
-            val roleId = resultSet.getInt(4)
-            return CredentialsResponse(true, roleId.toString())
-        } else {
-            return CredentialsResponse(false, (-1).toString())
+        if (BCrypt.checkpw(password, hashedPassword)) {
+            return CredentialsResponse(true, roleId)
         }
+        return CredentialsResponse(false, "invalidRole")
     }
 
     fun checkAccountExists(email: String): Boolean {
@@ -75,8 +67,9 @@ class UserDao {
     fun createAccount(email: String, password: String, firstName: String, lastName: String) {
         getConnection()
         val prepStatement = connection!!.prepareStatement(createAccountQuery)
+        val passwordHash = BCrypt.hashpw(password, BCrypt.gensalt())
         prepStatement.setString(1, email)
-        prepStatement.setString(2, password)
+        prepStatement.setString(2, passwordHash)
         prepStatement.setString(3, firstName)
         prepStatement.setString(4, lastName)
 
