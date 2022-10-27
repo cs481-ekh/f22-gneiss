@@ -62,6 +62,10 @@ export function SignInForm(props: SignInFormProps) {
     httpService.axios.post<any>("/api/user/login", {"username": emailField, "password": passwordField}).then((res) => {
       httpService.setAuth(res.data.jwt)
       history.push("home");
+    })
+    .catch(() => {
+      setAlertReason("Credentials are invalid. Try again.")
+      setPasswordField("")
     });
 
   };
@@ -88,6 +92,7 @@ export function SignInForm(props: SignInFormProps) {
       />
       <TextField
         onChange={handlePasswordChange}
+        value={passwordField}
         style={styles.input}
         id="password"
         label="Password"
