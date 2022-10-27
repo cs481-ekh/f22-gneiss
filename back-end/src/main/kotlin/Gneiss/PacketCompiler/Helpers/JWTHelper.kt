@@ -4,13 +4,11 @@ import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
-import java.util.Date
 
 class JWTHelper() : IJWTHelper {
     val key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
 
     override fun createJWT(body: JWTBody): String {
-                
         val jwt = Jwts.builder()
             .setSubject(body.user)
             .claim("role", body.role)

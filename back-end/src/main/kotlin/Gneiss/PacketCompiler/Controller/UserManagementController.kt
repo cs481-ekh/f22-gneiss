@@ -2,15 +2,15 @@ package Gneiss.PacketCompiler.Controller
 
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
 import Gneiss.PacketCompiler.Helpers.JWTHelper
+import Gneiss.PacketCompiler.Service.Auth
+import Gneiss.PacketCompiler.Service.AuthRequest
+import Gneiss.PacketCompiler.Service.AuthResponse
 import Gneiss.PacketCompiler.Service.CreateTestRequest
 import Gneiss.PacketCompiler.Service.CreateTestResponse
 import Gneiss.PacketCompiler.Service.CreateUserRequest
 import Gneiss.PacketCompiler.Service.Login
 import Gneiss.PacketCompiler.Service.LoginRequest
 import Gneiss.PacketCompiler.Service.LoginResponse
-import Gneiss.PacketCompiler.Service.Auth
-import Gneiss.PacketCompiler.Service.AuthRequest
-import Gneiss.PacketCompiler.Service.AuthResponse
 import Gneiss.PacketCompiler.Service.Test
 import Gneiss.PacketCompiler.Service.Users
 import org.springframework.http.ResponseEntity
