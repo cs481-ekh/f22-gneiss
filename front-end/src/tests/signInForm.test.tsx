@@ -18,3 +18,5 @@ test("If input validation succeeds, go to landing page", () => {
   fireEvent.click(screen.getByText("Sign in"));
   expect(() => screen.getByRole("alert")).toThrow();
 });
+
+//Expand test for sign in with valid/invalid JWT
