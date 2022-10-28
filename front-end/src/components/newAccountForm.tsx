@@ -3,7 +3,7 @@ import { ChangeEvent, useState } from "react";
 import { Alert, Link, FormGroup, Snackbar, TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import history from "./history";
-import axios from "axios";
+import { getHttpService } from "../data/httpService";
 
 export interface newAcccountFormProps {}
 
@@ -30,6 +30,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
   const [passwordField, setPasswordField] = useState("");
   const [passwordField2, setPasswordField2] = useState("");
   const [alertReason, setAlertReason] = useState("");
+  const httpService = getHttpService();
 
   const handleFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFirstNameField(e.target.value);
@@ -108,8 +109,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
       return;
     }
 
-    //console.log info should be passed to the backend here.
-    axios
+    httpService.axios
       .post("/api/user/create", {
         email: emailField,
         password: passwordField,
@@ -118,15 +118,13 @@ export function NewAccountForm(props: newAcccountFormProps) {
       })
       .then((res) => {
         //User Login endpoint connection
-        axios
+        httpService.axios
           .post<any>("/api/user/login", {
             username: emailField,
             password: passwordField,
           })
           .then((loginRes) => {
-            //Checking the status of the response
-            localStorage.setItem("jwt", loginRes.data.jwt);
-
+            httpService.setAuth(loginRes.data.jwt);
             history.push("home");
           })
           .catch(() => {
