@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { Button } from "@mui/material";
 import history from "./history";
+import { getHttpService } from "../data/httpService";
 
 export interface newAcccountFormProps {}
 
@@ -35,6 +36,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
   const [passwordField, setPasswordField] = useState("");
   const [passwordField2, setPasswordField2] = useState("");
   const [alertReason, setAlertReason] = useState("");
+  const httpService = getHttpService();
 
   const handleFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFirstNameField(e.target.value);
@@ -70,12 +72,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,50}$/;
 
   const handleSubmit = () => {
-    console.log(`First Name: ${firstNameField}`);
-    console.log(`Last Name: ${lastNameField}`);
-    console.log(`Email: ${emailField}`);
-    console.log(`Password: ${passwordField}`);
-    console.log(`Check Password: ${passwordField2}`);
-
+    //may want to remove async later
     //All fields must be filled
     if (
       firstNameField === "" ||
@@ -118,9 +115,31 @@ export function NewAccountForm(props: newAcccountFormProps) {
       return;
     }
 
-    //console.log info should be passed to the backend here.
-
-    history.push("home");
+    httpService.axios
+      .post("/api/user/create", {
+        email: emailField,
+        password: passwordField,
+        firstName: firstNameField,
+        lastName: lastNameField,
+      })
+      .then((res) => {
+        //User Login endpoint connection
+        httpService.axios
+          .post<any>("/api/user/login", {
+            username: emailField,
+            password: passwordField,
+          })
+          .then((loginRes) => {
+            httpService.setAuth(loginRes.data.jwt);
+            history.push("home");
+          })
+          .catch(() => {
+            setAlertReason("Account created successfully, but login failed.");
+          });
+      })
+      .catch(() => {
+        setAlertReason("Server error creating user account.");
+      });
   };
 
   const handleAlertClose = (

@@ -1,5 +1,21 @@
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { NewAccountForm } from "../components/newAccountForm";
+import { rest } from "msw";
+import { setupServer, SetupServerApi } from "msw/node";
+
+let serverResponse = 0; //setting up fake server to send requests to.
+const server: SetupServerApi = setupServer(
+  rest.post("/api/user/create", async (req, res, ctx) => {
+    return res(ctx.status(serverResponse));
+  })
+);
+const makeServerBeforeTest = (response: number) => {
+  serverResponse = response;
+  server.listen();
+};
+
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close);
 
 test("First Name, Last Name, Email, Password, and Confirm Password fields must be filled", () => {
   render(<NewAccountForm />);
@@ -325,9 +341,11 @@ test("Passwords must be correct format (Passwords Don't Match)", () => {
   expect(screen.getByText("Your passwords must match.")).toBeTruthy();
 });
 
-//If account info is valid, go to landing page.
-test("If new account validation succeeds, go to landing page", () => {
+//If account info is valid, go to landing page. Expect accepting (200) message from backend.
+test("If new account validation succeeds, go to landing page. Account is created with 200 response", async () => {
+  makeServerBeforeTest(200);
   const result = render(<NewAccountForm />);
+
   fireEvent.change(screen.getByLabelText("First Name"), {
     target: { value: "Lucas" },
   });
@@ -344,5 +362,31 @@ test("If new account validation succeeds, go to landing page", () => {
     target: { value: "1A$a12345_789012345!" },
   });
   fireEvent.click(screen.getByText("Create Account"));
-  expect(() => screen.getByRole("alert")).toThrow();
+  await waitFor(() => expect(() => screen.getByRole("alert")).toThrow());
+});
+
+//If account info is invalid, expect rejecting (400) message from backend.
+test("Account is not created with 400 response", async () => {
+  makeServerBeforeTest(400);
+  const result = render(<NewAccountForm />);
+
+  fireEvent.change(screen.getByLabelText("First Name"), {
+    target: { value: "Lucas" },
+  });
+  fireEvent.change(screen.getByLabelText("Last Name"), {
+    target: { value: "Rinsler" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "valid@boisestate.edu" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "1A$a12345_789012345!" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    target: { value: "1A$a12345_789012345!" },
+  });
+  fireEvent.click(screen.getByText("Create Account"));
+  await waitFor(() =>
+    expect(screen.getByText("Server error creating user account.")).toBeTruthy()
+  );
 });

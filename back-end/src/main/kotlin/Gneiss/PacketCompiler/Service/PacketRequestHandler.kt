@@ -1,8 +1,11 @@
 package Gneiss.PacketCompiler.Service
 
+import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
+import Gneiss.PacketCompiler.Models.Packet
 
 class PacketPostRequest(
+    val name: String,
     val invoicePDFPath: String,
     val approvalPDFPath: String,
     val csvPDFPath: String,
@@ -10,6 +13,7 @@ class PacketPostRequest(
 )
 
 class PacketPatchRequest(
+    val name: String?,
     val invoicePDFPath: String?,
     val approvalPDFPath: String?,
     val csvPDFPath: String?,
@@ -17,14 +21,12 @@ class PacketPatchRequest(
 )
 
 class ApprovalPDFPostRequest(
-    val packetId: String,
     val outputName: String,
     val fileBytes: ByteArray,
     val highlightWords: Array<String>
 )
 
 class InvoicePDFPostRequest(
-    val packetId: String,
     val outputName: String,
     val fileBytes: ByteArray
 )
@@ -37,31 +39,39 @@ class ApprovalPDFPostResponse()
 
 class InvoicePDFPostResponse()
 
-class PacketRequestHandler(pdfHelper: IPDFHelper) {
+class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
     var pdfHelper = pdfHelper
+    var packetDao = packetDao
 
-    fun packetPost(req: PacketPostRequest): PacketPostResponse {
+    fun packetPost(user: String, id: String, req: PacketPostRequest): PacketPostResponse {
+        var packet = Packet(req.name, req.invoicePDFPath, req.approvalPDFPath, req.csvPDFPath, req.compiledPDFPath)
+        packetDao.set(user, id, packet)
         return PacketPostResponse()
     }
 
-    fun packetPatch(req: PacketPatchRequest): PacketPatchResponse {
-        // if (req.invoicePDFPath != null) {
-        //     setInvoicePDFPath = req.invoicePDFPath
-        // }
-        // if (req.approvalPDFPath != null) {
-        //     setApprovalPDFPath = req.approvalPDFPath
-        // }
-        // if (req.csvPDFPath != null) {
-        //     setCsvPDFPath = req.csvPDFPath
-        // }
-        // if (req.compiledPDFPath != null) {
-        //     setCompiledPDFPath = req.compiledPDFPath
-        // }
+    fun packetPatch(user: String, id: String, req: PacketPatchRequest): PacketPatchResponse {
+        val packet = packetDao.get(user, id)
+        if (req.name != null) {
+            packet.name = req.name
+        }
+        if (req.invoicePDFPath != null) {
+            packet.invoicePDFPath = req.invoicePDFPath
+        }
+        if (req.approvalPDFPath != null) {
+            packet.approvalPDFPath = req.approvalPDFPath
+        }
+        if (req.csvPDFPath != null) {
+            packet.csvPDFPath = req.csvPDFPath
+        }
+        if (req.compiledPDFPath != null) {
+            packet.compiledPDFPath = req.compiledPDFPath
+        }
+        packetDao.set(user, id, packet)
         return PacketPatchResponse()
     }
 
-    fun approvalPDFPost(req: ApprovalPDFPostRequest): ApprovalPDFPostResponse {
+    fun approvalPDFPost(user: String, id: String, req: ApprovalPDFPostRequest): ApprovalPDFPostResponse {
         var pdfText = pdfHelper.getTextFromPDF(req.fileBytes)
 
         var htmlBuilder = StringBuilder()
@@ -79,13 +89,13 @@ class PacketRequestHandler(pdfHelper: IPDFHelper) {
 
         pdfHelper.htmlToPDF(req.outputName, result)
 
+        packetPatch(user, id, PacketPatchRequest(null, null, req.outputName, null, null))
         return ApprovalPDFPostResponse()
-        // TODO PATCH
     }
 
-    fun invoicePDFPost(req: InvoicePDFPostRequest): InvoicePDFPostResponse {
+    fun invoicePDFPost(user: String, id: String, req: InvoicePDFPostRequest): InvoicePDFPostResponse {
         pdfHelper.writeFile(req.outputName, req.fileBytes)
+        packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
         return InvoicePDFPostResponse()
-        // TODO PATCH
     }
 }

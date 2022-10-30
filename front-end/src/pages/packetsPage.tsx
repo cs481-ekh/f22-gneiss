@@ -1,8 +1,9 @@
 import { AddCircle } from "@mui/icons-material";
-import { Button, Paper, TextField } from "@mui/material";
+import { Alert, Button, Paper, Snackbar, TextField } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { PacketListEntry } from "../components/packets/PacketListEntry";
 import { v4 as uuidv4 } from "uuid";
+import { getHttpService } from "../data/httpService";
 
 export interface PacketsPageProps {}
 
@@ -49,6 +50,24 @@ export function PacketsPage(props: PacketsPageProps) {
   const [packets, setPackets] = useState(dummyPackets);
   const [canCreatePacket, setCanCreatePacket] = useState(true);
   const [search, setSearch] = useState("");
+  const [alertActive, setAlertActive] = useState(false)
+  const [alertReason, setAlertReason] = useState("")
+  const httpService = getHttpService();
+
+  const startAlert = (reason: string) => {
+    setAlertActive(true);
+    setAlertReason(reason);
+  };
+
+  const handleAlertClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setAlertActive(false);
+  };
 
   const addPacket = () => {
     setSearch("");
@@ -72,6 +91,21 @@ export function PacketsPage(props: PacketsPageProps) {
     np[index].new = false;
     setPackets(np);
     setCanCreatePacket(true);
+
+    httpService.axios
+      .post(`/api/packet/${np[index].id}`, {
+        name: name,
+        invoicePDFPath: "",
+        approvalPDFPath: "",
+        csvPDFPath: "",
+        compiledPDFPath: "",
+      })
+      .catch(() => {
+        let np = packets.slice();
+        np.pop();
+        setPackets(np);
+        startAlert("Failed to create packet")
+      });
   };
 
   const listPackets = packets
@@ -111,6 +145,16 @@ export function PacketsPage(props: PacketsPageProps) {
         </div>
       </header>
       <Paper style={styles.packetList}>{listPackets}</Paper>
+      <Snackbar open={alertActive}>
+        <Alert
+          className="alert"
+          onClose={handleAlertClose}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {alertReason}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

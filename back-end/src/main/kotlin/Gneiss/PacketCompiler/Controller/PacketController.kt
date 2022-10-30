@@ -1,5 +1,7 @@
 package Gneiss.PacketCompiler.Controller
 
+import Gneiss.PacketCompiler.DatabaseAccess.PacketDao
+import Gneiss.PacketCompiler.Helpers.JsonSerializer
 import Gneiss.PacketCompiler.Helpers.PDFHelper
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostResponse
@@ -26,27 +28,29 @@ class PacketController {
 
     var outputPrefix = "output/"
     var pdfHelper = PDFHelper()
-    var packetHandler = PacketRequestHandler(pdfHelper)
+    var jsonSerializer = JsonSerializer()
+    var packetDao = PacketDao(jsonSerializer)
+    var packetHandler = PacketRequestHandler(pdfHelper, packetDao)
 
     @PostMapping("/approvalpdf/{id}")
     fun approvalPDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): ApprovalPDFPostResponse {
         var outputName = Date().getTime().toString()
-        return packetHandler.approvalPDFPost(ApprovalPDFPostRequest(id, outputPrefix + outputName + ".pdf", file.getBytes(), highlightWords))
+        return packetHandler.approvalPDFPost("user", id, ApprovalPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes(), highlightWords))
     }
 
     @PostMapping("/invoicepdf/{id}")
     fun invoicePDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile): InvoicePDFPostResponse {
         var outputName = Date().getTime().toString()
-        return packetHandler.invoicePDFPost(InvoicePDFPostRequest(id, outputPrefix + outputName + ".pdf", file.getBytes()))
+        return packetHandler.invoicePDFPost("user", id, InvoicePDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
     }
 
-    @PostMapping("/")
-    fun PacketPost(@RequestBody req: PacketPostRequest): PacketPostResponse {
-        return packetHandler.packetPost(req)
+    @PostMapping("/{id}")
+    fun PacketPost(@PathVariable id: String, @RequestBody req: PacketPostRequest): PacketPostResponse {
+        return packetHandler.packetPost("user", id, req)
     }
 
-    @PatchMapping("/")
-    fun PacketPatch(@RequestBody req: PacketPatchRequest): PacketPatchResponse {
-        return packetHandler.packetPatch(req)
+    @PatchMapping("/{id}")
+    fun PacketPatch(@PathVariable id: String, @RequestBody req: PacketPatchRequest): PacketPatchResponse {
+        return packetHandler.packetPatch("user", id, req)
     }
 }

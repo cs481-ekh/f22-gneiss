@@ -1,12 +1,31 @@
 import { Paper } from "@mui/material";
 import React from "react";
+import { useEffect } from "react";
 import { NavBar, NavInfo } from "../components/navBar";
+import history from "../components/history";
+import { getHttpService } from "../data/httpService";
 
 export interface MainPageProps {
   pageContent: React.ReactNode;
 }
 
 export function MainPage(props: MainPageProps) {
+  useEffect(() => {
+    const httpService = getHttpService();
+    httpService.axios
+      .post<any>("/api/user/auth")
+      .then((authRes) => {
+        const validFlag = authRes.data.validJWT;
+
+        if (!validFlag) {
+          history.push("/");
+        }
+      })
+      .catch((e: any) => {
+        history.push("/");
+      });
+  }, []);
+
   const styles = {
     outerBox: {
       display: "flex",
