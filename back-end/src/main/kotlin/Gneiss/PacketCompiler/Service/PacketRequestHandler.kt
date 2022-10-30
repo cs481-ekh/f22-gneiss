@@ -5,6 +5,7 @@ import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Models.Packet
 
 class PacketPostRequest(
+    val name: String,
     val invoicePDFPath: String,
     val approvalPDFPath: String,
     val csvPDFPath: String,
@@ -12,6 +13,7 @@ class PacketPostRequest(
 )
 
 class PacketPatchRequest(
+    val name: String?,
     val invoicePDFPath: String?,
     val approvalPDFPath: String?,
     val csvPDFPath: String?,
@@ -43,13 +45,16 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
     var packetDao = packetDao
 
     fun packetPost(user: String, id: String, req: PacketPostRequest): PacketPostResponse {
-        var packet = Packet(req.invoicePDFPath, req.approvalPDFPath, req.csvPDFPath, req.compiledPDFPath)
+        var packet = Packet(req.name, req.invoicePDFPath, req.approvalPDFPath, req.csvPDFPath, req.compiledPDFPath)
         packetDao.set(user, id, packet)
         return PacketPostResponse()
     }
 
     fun packetPatch(user: String, id: String, req: PacketPatchRequest): PacketPatchResponse {
         val packet = packetDao.get(user, id)
+        if (req.name != null) {
+            packet.name = req.name
+        }
         if (req.invoicePDFPath != null) {
             packet.invoicePDFPath = req.invoicePDFPath
         }
@@ -84,13 +89,13 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
         pdfHelper.htmlToPDF(req.outputName, result)
 
-        packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null))
+        packetPatch(user, id, PacketPatchRequest(null, null, req.outputName, null, null))
         return ApprovalPDFPostResponse()
     }
 
     fun invoicePDFPost(user: String, id: String, req: InvoicePDFPostRequest): InvoicePDFPostResponse {
         pdfHelper.writeFile(req.outputName, req.fileBytes)
-        packetPatch(user, id, PacketPatchRequest(req.outputName, null, null, null))
+        packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
         return InvoicePDFPostResponse()
     }
 }

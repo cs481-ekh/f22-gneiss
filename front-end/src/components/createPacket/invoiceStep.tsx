@@ -1,8 +1,8 @@
 import { Alert, Button, Snackbar } from "@mui/material";
-import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { CommaSeparatedList } from "./commaSeparatedList";
+import { getHttpService } from "../../data/httpService";
 import { FileSelectButton } from "./fileSelectButton";
 import { IStepProps } from "./IStepProps";
 
@@ -27,6 +27,7 @@ export function InvoiceStep(props: InvoiceStepProps) {
   const [alertActive, setAlertActive] = useState(false);
   const [alertReason, setAlertReason] = useState("");
   const { id } = useParams();
+  const httpService = getHttpService();
 
   const startAlert = (reason: string) => {
     setAlertActive(true);
@@ -66,8 +67,8 @@ export function InvoiceStep(props: InvoiceStepProps) {
     formData.append("file", file!);
     formData.append("highlightWords", Array.from(wordSet).join(","));
 
-    axios
-      .post(`/api/packet/invoicepdf/${id}`, formData, {
+    httpService.axios
+      .post("/api/invoice", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

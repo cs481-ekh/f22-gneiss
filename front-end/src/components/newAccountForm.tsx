@@ -1,9 +1,16 @@
 import * as React from "react";
 import { ChangeEvent, useState } from "react";
-import { Alert, Link, FormGroup, Snackbar, TextField } from "@mui/material";
+import {
+  Alert,
+  Link,
+  FormGroup,
+  Snackbar,
+  TextField,
+  Paper,
+} from "@mui/material";
 import { Button } from "@mui/material";
 import history from "./history";
-import axios from "axios";
+import { getHttpService } from "../data/httpService";
 
 export interface newAcccountFormProps {}
 
@@ -12,7 +19,6 @@ export function NewAccountForm(props: newAcccountFormProps) {
     signIn: {
       display: "flex",
       flexDirection: "column",
-      backgroundColor: "rgba(255,255,255, 0.9)",
       borderRadius: "8px",
       padding: "25px 75px",
     } as const,
@@ -30,6 +36,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
   const [passwordField, setPasswordField] = useState("");
   const [passwordField2, setPasswordField2] = useState("");
   const [alertReason, setAlertReason] = useState("");
+  const httpService = getHttpService();
 
   const handleFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFirstNameField(e.target.value);
@@ -108,8 +115,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
       return;
     }
 
-    //console.log info should be passed to the backend here.
-    axios
+    httpService.axios
       .post("/api/user/create", {
         email: emailField,
         password: passwordField,
@@ -118,15 +124,13 @@ export function NewAccountForm(props: newAcccountFormProps) {
       })
       .then((res) => {
         //User Login endpoint connection
-        axios
+        httpService.axios
           .post<any>("/api/user/login", {
             username: emailField,
             password: passwordField,
           })
           .then((loginRes) => {
-            //Checking the status of the response
-            localStorage.setItem("jwt", loginRes.data.jwt);
-
+            httpService.setAuth(loginRes.data.jwt);
             history.push("home");
           })
           .catch(() => {
@@ -150,62 +154,64 @@ export function NewAccountForm(props: newAcccountFormProps) {
   };
 
   return (
-    <FormGroup style={styles.signIn}>
-      <TextField
-        onChange={handleFirstNameChange}
-        style={styles.input}
-        id="firstName"
-        label="First Name"
-        variant="outlined"
-      />
-      <TextField
-        onChange={handleLastNameChange}
-        style={styles.input}
-        id="lastName"
-        label="Last Name"
-        variant="outlined"
-      />
-      <TextField
-        onChange={handleEmailChange}
-        style={styles.input}
-        id="email"
-        label="Email"
-        variant="outlined"
-      />
-      <TextField
-        onChange={handlePasswordChange}
-        style={styles.input}
-        id="password"
-        label="Password"
-        variant="outlined"
-        type="password"
-      />
-      <TextField
-        onChange={handlePassword2Change}
-        style={styles.input}
-        id="checkpassword"
-        label="Confirm Password"
-        variant="outlined"
-        type="password"
-      />
-      <div>
-        <Button onClick={handleSubmit} variant="contained">
-          Create Account
-        </Button>
-      </div>
-      <Link style={styles.navLink} href="/" underline="always">
-        Back
-      </Link>
-      <Snackbar open={alertReason !== ""}>
-        <Alert
-          className="alert"
-          onClose={handleAlertClose}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {alertReason}
-        </Alert>
-      </Snackbar>
-    </FormGroup>
+    <Paper>
+      <FormGroup style={styles.signIn}>
+        <TextField
+          onChange={handleFirstNameChange}
+          style={styles.input}
+          id="firstName"
+          label="First Name"
+          variant="outlined"
+        />
+        <TextField
+          onChange={handleLastNameChange}
+          style={styles.input}
+          id="lastName"
+          label="Last Name"
+          variant="outlined"
+        />
+        <TextField
+          onChange={handleEmailChange}
+          style={styles.input}
+          id="email"
+          label="Email"
+          variant="outlined"
+        />
+        <TextField
+          onChange={handlePasswordChange}
+          style={styles.input}
+          id="password"
+          label="Password"
+          variant="outlined"
+          type="password"
+        />
+        <TextField
+          onChange={handlePassword2Change}
+          style={styles.input}
+          id="checkpassword"
+          label="Confirm Password"
+          variant="outlined"
+          type="password"
+        />
+        <div>
+          <Button onClick={handleSubmit} variant="contained">
+            Create Account
+          </Button>
+        </div>
+        <Link style={styles.navLink} href="/" underline="always">
+          Back
+        </Link>
+        <Snackbar open={alertReason !== ""}>
+          <Alert
+            className="alert"
+            onClose={handleAlertClose}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            {alertReason}
+          </Alert>
+        </Snackbar>
+      </FormGroup>
+    </Paper>
   );
 }

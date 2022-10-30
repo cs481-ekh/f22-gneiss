@@ -1,9 +1,9 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import { IStepProps } from "./IStepProps";
+import { Link, Paper } from "@mui/material";
 
 export type StepFC = React.FC<IStepProps>;
 
@@ -22,11 +22,9 @@ export default function CreatePacketStepper(props: CreatePacketStepperProps) {
     outerBox: {
       display: "flex",
       flexDirection: "column",
-      backgroundColor: "rgba(255,255,255, 0.9)",
       borderRadius: "8px",
       padding: "25px 75px",
-      height: "50vh",
-      width: "50vw",
+      gap: "32px",
     } as const,
     stepper: {
       display: "flex",
@@ -35,9 +33,14 @@ export default function CreatePacketStepper(props: CreatePacketStepperProps) {
     stepContent: {
       display: "flex",
       flexDirection: "column",
-      height: "100vh",
       alignItems: "center",
       justifyContent: "center",
+    } as const,
+    header: {
+      display: "flex",
+      gap: "16px",
+      padding: "16px",
+      alignItems: "center",
     } as const,
   };
 
@@ -92,7 +95,11 @@ export default function CreatePacketStepper(props: CreatePacketStepperProps) {
   });
 
   return (
-    <Box style={styles.outerBox}>
+    <Paper style={styles.outerBox}>
+      <header style={styles.header}>
+        <Link href={"/home"}>Back</Link>
+        <h1>Edit Packet</h1>
+      </header>
       <Stepper nonLinear activeStep={activeStep}>
         {props.steps.map((step, index) => (
           <Step
@@ -112,6 +119,6 @@ export default function CreatePacketStepper(props: CreatePacketStepperProps) {
       </Stepper>
       <div style={styles.stepContent}>{stepComponents[activeStep]}</div>
       {allStepsCompleted() && <props.stepsFinishedComponent />}
-    </Box>
+    </Paper>
   );
 }
