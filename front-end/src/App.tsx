@@ -7,15 +7,17 @@ import { createTheme, Divider, ThemeProvider } from "@mui/material";
 import { MainPage } from "./pages/mainPage";
 import CreatePacketStepper from "./components/createPacket/createPacketStepper";
 import { createPacketSteps } from "./data/createPacketSteps";
+import { PacketsPage } from "./pages/packetsPage";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#424242",
+      main: "#ff8a65",
     },
     secondary: {
       main: "#ff8a65",
     },
+    mode: "dark",
   },
 });
 
@@ -29,10 +31,10 @@ function App() {
             <Route path="/newuser" element={<NewAccountPage />} />
             <Route
               path="/home"
-              element={<MainPage pageContent={<p>Welcome home :)</p>} />}
+              element={<MainPage pageContent={<PacketsPage />} />}
             />
             <Route
-              path="/createpacket/:id"
+              path="/packet/:id"
               element={
                 <MainPage
                   pageContent={

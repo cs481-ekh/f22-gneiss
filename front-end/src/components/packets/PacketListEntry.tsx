@@ -1,5 +1,4 @@
 import { Divider, Link, Paper, TextField } from "@mui/material";
-import * as React from "react";
 import { ChangeEvent, useState } from "react";
 
 export interface PacketListEntryProps {
@@ -31,13 +30,6 @@ export function PacketListEntry(props: PacketListEntryProps) {
     }
   };
 
-  const handleNameEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.code)
-    if (e.key === "Enter") {
-      handleNameInputBlur()
-    }
-  }
-
   const validateName = (name: string) => {
     if (name.length < 3) {
       return "Must be at least 3 characters";
@@ -59,7 +51,6 @@ export function PacketListEntry(props: PacketListEntryProps) {
           helperText={validateName(name)}
           onChange={handleNameInputChange}
           onBlur={handleNameInputBlur}
-          onKeyDown={handleNameEnter}
         />
       )}
       {!nameInputActive && <Link href={`/packet/${props.id}`}>{name}</Link>}
