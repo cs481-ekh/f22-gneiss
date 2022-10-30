@@ -1,4 +1,5 @@
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { createMemoryHistory } from "history";
 //import { NewAccountForm } from "../components/newAccountForm";
 import { rest } from "msw";
 import { setupServer, SetupServerApi } from "msw/node";
@@ -23,10 +24,13 @@ afterAll(() => server.close);
 //If the JWT registers as valid, mainPage should history.push to itself.
 test("Valid JWT pushes to Main Page", () => {
   makeServerBeforeTest(200);
+  const history = createMemoryHistory();
+  const mockHistoryPush = jest.fn();
   const Route = () => {
     //const history = useHistory();
     
   };
+  expect(history.location.pathname).toBe("home");
 });
 
 //If the JWT does NOT register as valid, mainPage should history.push back to signIn "/".
