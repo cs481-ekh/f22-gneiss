@@ -8,6 +8,7 @@ import {
   FormGroup,
   Snackbar,
   TextField,
+  Paper,
 } from "@mui/material";
 import { Button } from "@mui/material";
 import history from "./history";
@@ -20,7 +21,6 @@ export function SignInForm(props: SignInFormProps) {
     signIn: {
       display: "flex",
       flexDirection: "column",
-      backgroundColor: "rgba(255,255,255, 0.9)",
       borderRadius: "8px",
       padding: "25px 75px",
     } as const,
@@ -86,47 +86,48 @@ export function SignInForm(props: SignInFormProps) {
   };
 
   return (
-    <FormGroup style={styles.signIn}>
-      <TextField
-        onChange={handleEmailChange}
-        style={styles.input}
-        id="email"
-        label="Email"
-        variant="outlined"
-      />
-      <TextField
-        onChange={handlePasswordChange}
-        value={passwordField}
-        style={styles.input}
-        id="password"
-        label="Password"
-        variant="outlined"
-        type="password"
-      />
-      <div>
-        <FormControlLabel
-          control={
-            <Checkbox checked={checked} onChange={handleCheckedChange} />
-          }
-          label="keep me logged in"
+    <Paper style={styles.signIn}>
+      <FormGroup>
+        <TextField
+          onChange={handleEmailChange}
+          style={styles.input}
+          id="email"
+          label="Email"
+          variant="outlined"
         />
-        <Button onClick={handleSubmit} variant="contained">
-          Sign in
-        </Button>
-      </div>
-      <Link style={styles.navLink} href="/newuser" underline="always">
-        Need account?
-      </Link>
-      <Snackbar open={alertReason !== ""}>
-        <Alert
-          className="alert"
-          onClose={handleAlertClose}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {alertReason}
-        </Alert>
-      </Snackbar>
-    </FormGroup>
+        <TextField
+          onChange={handlePasswordChange}
+          style={styles.input}
+          id="password"
+          label="Password"
+          variant="outlined"
+          type="password"
+        />
+        <div>
+          <FormControlLabel
+            control={
+              <Checkbox checked={checked} onChange={handleCheckedChange} />
+            }
+            label="keep me logged in"
+          />
+          <Button onClick={handleSubmit} variant="contained">
+            Sign in
+          </Button>
+        </div>
+        <Link style={styles.navLink} href="/newuser" underline="always">
+          Need account?
+        </Link>
+        <Snackbar open={alertReason !== ""}>
+          <Alert
+            className="alert"
+            onClose={handleAlertClose}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            {alertReason}
+          </Alert>
+        </Snackbar>
+      </FormGroup>
+    </Paper>
   );
 }
