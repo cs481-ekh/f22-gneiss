@@ -1,6 +1,8 @@
 import { Alert, Button, Snackbar } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { CommaSeparatedList } from "./commaSeparatedList";
 import { FileSelectButton } from "./fileSelectButton";
 import { IStepProps } from "./IStepProps";
 
@@ -20,9 +22,11 @@ export function InvoiceStep(props: InvoiceStepProps) {
     } as const,
   };
 
+  const [wordSet, setWordSet] = useState(new Set<string>());
   const [file, setFile] = useState<File>();
   const [alertActive, setAlertActive] = useState(false);
   const [alertReason, setAlertReason] = useState("");
+  const { id } = useParams();
 
   const startAlert = (reason: string) => {
     setAlertActive(true);
@@ -60,9 +64,10 @@ export function InvoiceStep(props: InvoiceStepProps) {
     }
     let formData = new FormData();
     formData.append("file", file!);
+    formData.append("highlightWords", Array.from(wordSet).join(","));
 
     axios
-      .post("/api/invoice", formData, {
+      .post(`/api/packet/invoicepdf/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -77,7 +82,8 @@ export function InvoiceStep(props: InvoiceStepProps) {
 
   return (
     <div style={styles.outerBox}>
-      <h1>Invoice File Upload</h1>
+      <h3>Invoice File Upload</h3>
+      <CommaSeparatedList wordSet={wordSet} setWordSet={setWordSet} />
       <div style={styles.buttons}>
         <FileSelectButton
           buttonLabel="Upload File"
