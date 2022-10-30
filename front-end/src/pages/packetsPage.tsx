@@ -104,7 +104,7 @@ export function PacketsPage(props: PacketsPageProps) {
         let np = packets.slice();
         np.pop();
         setPackets(np);
-        startAlert("Failed to create packet")
+        startAlert("Failed to create packet. Try again.")
       });
   };
 
