@@ -50,8 +50,8 @@ export function PacketsPage(props: PacketsPageProps) {
   const [packets, setPackets] = useState(dummyPackets);
   const [canCreatePacket, setCanCreatePacket] = useState(true);
   const [search, setSearch] = useState("");
-  const [alertActive, setAlertActive] = useState(false)
-  const [alertReason, setAlertReason] = useState("")
+  const [alertActive, setAlertActive] = useState(false);
+  const [alertReason, setAlertReason] = useState("");
   const httpService = getHttpService();
 
   const startAlert = (reason: string) => {
@@ -104,7 +104,7 @@ export function PacketsPage(props: PacketsPageProps) {
         let np = packets.slice();
         np.pop();
         setPackets(np);
-        startAlert("Failed to create packet. Try again.")
+        startAlert("Failed to create packet. Try again.");
       });
   };
 

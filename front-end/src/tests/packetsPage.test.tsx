@@ -50,24 +50,30 @@ test("New packet must be no more than 20 characters", () => {
 });
 
 test("Clicking off input when packet name is valid creates new packet", async () => {
-  makeServerBeforeTest(200)
+  makeServerBeforeTest(200);
   render(<PacketsPage />);
   fireEvent.click(screen.getByText("Create"));
   fireEvent.change(screen.getByLabelText("New packet"), {
     target: { value: "Demo Packet" },
   });
   fireEvent.blur(screen.getByLabelText("New packet"));
-  await waitFor(() => expect(() => screen.getByText("Demo Packet")).toBeTruthy());
+  await waitFor(() =>
+    expect(() => screen.getByText("Demo Packet")).toBeTruthy()
+  );
 });
 
 test("Server error on packet creation deletes packet and shows error text", async () => {
-  makeServerBeforeTest(400)
+  makeServerBeforeTest(400);
   render(<PacketsPage />);
   fireEvent.click(screen.getByText("Create"));
   fireEvent.change(screen.getByLabelText("New packet"), {
     target: { value: "Demo Packet" },
   });
   fireEvent.blur(screen.getByLabelText("New packet"));
-  await waitFor(() => expect(() => screen.getByText("Failed to create packet. Try again.")).toBeTruthy());
+  await waitFor(() =>
+    expect(() =>
+      screen.getByText("Failed to create packet. Try again.")
+    ).toBeTruthy()
+  );
   await waitFor(() => expect(() => screen.getByText("Demo Packet")).toThrow());
 });
