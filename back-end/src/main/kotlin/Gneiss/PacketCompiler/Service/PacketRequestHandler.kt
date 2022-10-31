@@ -39,6 +39,11 @@ class ApprovalPDFPostResponse()
 
 class InvoicePDFPostResponse()
 
+class PacketGetResponse(
+    val numKeys: Int,
+    val allKeys: Set<String>
+)
+
 class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
     var pdfHelper = pdfHelper
@@ -97,5 +102,11 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
         pdfHelper.writeFile(req.outputName, req.fileBytes)
         packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
         return InvoicePDFPostResponse()
+    }
+
+    fun getAllPackets(): PacketGetResponse {
+        val allKeys = packetDao.getAllKeys()
+        val numKeys = allKeys.size
+        return PacketGetResponse(numKeys, allKeys)
     }
 }
