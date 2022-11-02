@@ -3,18 +3,22 @@ import { createMemoryHistory } from "history";
 //import { NewAccountForm } from "../components/newAccountForm";
 import { rest } from "msw";
 import { setupServer, SetupServerApi } from "msw/node";
-//import { SignInForm } from "../components/signInForm";
+import { MainPage } from "../pages/mainPage";
 //import { useHistory } from 'react-router-dom'; //Module '"react-router-dom"' has no exported member 'useHistory'.
 
 
-let serverResponse = 0; //setting up fake server to send requests to, may or may not need this
+let serverResponse = false; //setting up fake server to send requests to, may or may not need this
 const server: SetupServerApi = setupServer(
   rest.post("/api/user/create", async (req, res, ctx) => {
     console.log("string " + serverResponse);
-    return res(ctx.status(serverResponse));
+    return res(
+        ctx.json({
+          validJWT: true,
+        }),
+      )
   })
 );
-const makeServerBeforeTest = (response: number) => {
+const makeServerBeforeTest = (response: boolean) => {
   serverResponse = response;
   server.listen();
 };
@@ -23,19 +27,15 @@ afterAll(() => server.close);
 
 //If the JWT registers as valid, mainPage should history.push to itself.
 test("Valid JWT pushes to Main Page", () => {
-  makeServerBeforeTest(200);
+  makeServerBeforeTest(true);
   const history = createMemoryHistory();
-  const mockHistoryPush = jest.fn();
-  const Route = () => {
-    //const history = useHistory();
-    
-  };
+  const result = render(<MainPage pageContent={<p>Welcome home :)</p>} />);
   expect(history.location.pathname).toBe("home");
 });
 
 //If the JWT does NOT register as valid, mainPage should history.push back to signIn "/".
 test("No JWT redirects to Sign In", () => {
-  makeServerBeforeTest(200);
+  makeServerBeforeTest(false);
   const Route = () => {
     //const history = useHistory();
     
