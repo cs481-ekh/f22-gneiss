@@ -4,6 +4,13 @@ import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Models.Packet
 
+class PacketDeleteRequest(
+    val invoicePDFPath: String,
+    val approvalPDFPath: String,
+    val csvPDFPath: String,
+    val compiledPDFPath: String
+)
+
 class PacketPostRequest(
     val name: String,
     val invoicePDFPath: String,
@@ -31,6 +38,8 @@ class InvoicePDFPostRequest(
     val fileBytes: ByteArray
 )
 
+class PacketDeleteResponse()
+
 class PacketPostResponse()
 
 class PacketPatchResponse()
@@ -43,6 +52,12 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
     var pdfHelper = pdfHelper
     var packetDao = packetDao
+
+    fun packetDelete(user: String, id: String, req: PacketPostRequest): PacketDeleteResponse {
+        var packet = Packet(req.invoicePDFPath, req.approvalPDFPath, req.csvPDFPath, req.compiledPDFPath)
+        packetDao.delete(user, id, packet)
+        return PacketDeleteResponse()
+    }
 
     fun packetPost(user: String, id: String, req: PacketPostRequest): PacketPostResponse {
         var packet = Packet(req.name, req.invoicePDFPath, req.approvalPDFPath, req.csvPDFPath, req.compiledPDFPath)

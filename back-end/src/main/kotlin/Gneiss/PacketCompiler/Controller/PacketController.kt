@@ -12,6 +12,7 @@ import Gneiss.PacketCompiler.Service.PacketPatchResponse
 import Gneiss.PacketCompiler.Service.PacketPostRequest
 import Gneiss.PacketCompiler.Service.PacketPostResponse
 import Gneiss.PacketCompiler.Service.PacketRequestHandler
+import Gneiss.PacketCompiler.Service.PacketDeleteResponse
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.multipart.MultipartFile
 import java.util.Date
 
@@ -31,6 +33,11 @@ class PacketController {
     var jsonSerializer = JsonSerializer()
     var packetDao = PacketDao(jsonSerializer)
     var packetHandler = PacketRequestHandler(pdfHelper, packetDao)
+
+    @DeleteMapping("/{id}")
+    fun PacketDelete(@PathVariable id: String, @RequestBody req: PacketPostRequest): PacketDeleteResponse {
+        return packetHandler.packetDelete("user", id, req)
+    }
 
     @PostMapping("/approvalpdf/{id}")
     fun approvalPDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): ApprovalPDFPostResponse {
