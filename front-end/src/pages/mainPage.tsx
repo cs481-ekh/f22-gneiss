@@ -22,7 +22,10 @@ export function MainPage(props: MainPageProps) {
         }
       })
       .catch((e: any) => {
-        history.push("/");
+        // Refreshing the page as fast as you can shouldn't send you to login
+        if (!e.message.includes("abort")) {
+          history.push("/");
+        }
       });
   }, []);
 
