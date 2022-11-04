@@ -32,11 +32,10 @@ export function PacketListEntry(props: PacketListEntryProps) {
   };
 
   const handleNameEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.code)
     if (e.key === "Enter") {
-      handleNameInputBlur()
+      handleNameInputBlur();
     }
-  }
+  };
 
   const validateName = (name: string) => {
     if (name.length < 3) {

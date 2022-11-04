@@ -46,7 +46,7 @@ export function MainPage(props: MainPageProps) {
     },
     {
       label: "Sign out",
-      href: "/",
+      href: "/logout",
     },
   ];
 

@@ -6,11 +6,15 @@ export const getHttpService = () => {
   const setAuthorization = (token: string) => {
     cookies.set("Authorization", token, { sameSite: "strict" });
   };
+  const removeAuthorization = () => {
+    cookies.remove("Authorization", { sameSite: "strict" });
+  };
 
   return {
     axios: axios.create({
-      headers: {'Authorization': cookies.get("Authorization")}
+      headers: { Authorization: cookies.get("Authorization") },
     }),
     setAuth: setAuthorization,
+    removeAuth: removeAuthorization,
   };
 };
