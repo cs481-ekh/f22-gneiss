@@ -31,6 +31,11 @@ class InvoicePDFPostRequest(
     val fileBytes: ByteArray
 )
 
+class csvPDFPostRequest(
+    val outputName: String,
+    val fileBytes: ByteArray
+)
+
 class PacketPostResponse()
 
 class PacketPatchResponse()
@@ -38,6 +43,8 @@ class PacketPatchResponse()
 class ApprovalPDFPostResponse()
 
 class InvoicePDFPostResponse()
+
+class csvPDFPostResponse()
 
 class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
@@ -97,5 +104,11 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
         pdfHelper.writeFile(req.outputName, req.fileBytes)
         packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
         return InvoicePDFPostResponse()
+    }
+
+    fun csvPDFPost(user: String, id: String, req: csvPDFPostRequest): csvPDFPostResponse {
+        pdfHelper.writeFile(req.outputName, req.fileBytes)
+        packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
+        return csvPDFPostResponse()
     }
 }
