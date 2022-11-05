@@ -50,6 +50,12 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
         return packetHandler.invoicePDFPost("USER#" + "user", id, InvoicePDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
     }
 
+    @PostMapping("/csvpdf/{id}")
+    fun csvPDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile): csvPDFPostResponse {
+        var outputName = Date().getTime().toString()
+        return packetHandler.invoicePDFPost("user", id, csvPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
+    }
+
     @PostMapping("/{id}")
     fun PacketPost(@PathVariable id: String, @RequestBody req: PacketPostRequest): PacketPostResponse {
         return packetHandler.packetPost("USER#" + "user", id, req)
