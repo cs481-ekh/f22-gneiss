@@ -3,6 +3,9 @@ package Gneiss.PacketCompiler.Service
 import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Models.Packet
+import java.io.File
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 
 class PacketPostRequest(
     val name: String,
@@ -38,6 +41,8 @@ class PacketPatchResponse()
 class ApprovalPDFPostResponse()
 
 class InvoicePDFPostResponse()
+
+class SinglePacketGetResponse()
 
 class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
@@ -97,5 +102,19 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
         pdfHelper.writeFile(req.outputName, req.fileBytes)
         packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
         return InvoicePDFPostResponse()
+    }
+
+    fun getSinglePacket(jwt: String, id: String) /* Response Type TBD */ {
+        // Parse the jwt to get the users username and role, if null return a Unauthorized http response
+        
+        // Do something to get the file location via the packetDao (get user from jwt for key and id is field)
+        // If the user is an admin there is additional work to do, as they may not be the user who owns the packet
+        
+        // Get the pdf file as a byte array
+        val pdfByteArray = File("someFile"/* Packet Location */).readBytes()
+
+        // Define the headers needed to specify we are returning a pdf
+        val headers: HttpHeaders = HttpHeaders()
+        headers.setContentType(MediaType.APPLICATION_PDF)
     }
 }
