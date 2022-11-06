@@ -106,9 +106,15 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
         return InvoicePDFPostResponse()
     }
 
-    fun csvPDFPost(user: String, id: String, req: csvPDFPostRequest): csvPDFPostResponse {
-        pdfHelper.writeFile(req.outputName, req.fileBytes)
-        packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
+    fun csvPDFPost(csv: String): csvPDFPostResponse {
+        //pdfHelper.writeFile(req.outputName, req.fileBytes)
+        //packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
+        // Load source file CSV for conversion
+        var converter = Converter(csv);
+        // Prepare conversion options for target format PDF
+        var convertOptions = FileType().fromExtension("pdf").getConvertOptions();
+        // Convert to PDF format
+        converter.convert("output.pdf", convertOptions);
         return csvPDFPostResponse()
     }
 }
