@@ -110,15 +110,15 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
     }
 
     fun getAllPackets(jwt: String): ResponseEntity<PacketGetResponse> {
-        //Get the user from the jwt using the parse method and dereferencing from the JWTBody
+        // Get the user from the jwt using the parse method and dereferencing from the JWTBody
         val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
 
-        //If there is no auth header return an empty response
+        // If there is no auth header return an empty response
         if (jwtBody == null) {
             return ResponseEntity<PacketGetResponse>(PacketGetResponse(0, emptySet()), HttpStatus.UNAUTHORIZED)
         }
         
-        //If the user has higher permissions than user return all the packets, else return only those made by that specific user
+        // If the user has higher permissions than user return all the packets, else return only those made by that specific user
         var allKeys: Set<String>
         if (jwtBody.role == "user") {
             allKeys = packetDao.getUserKeys(jwtBody.user)
