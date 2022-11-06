@@ -8,7 +8,8 @@ import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostResponse
 import Gneiss.PacketCompiler.Service.InvoicePDFPostRequest
 import Gneiss.PacketCompiler.Service.InvoicePDFPostResponse
-import Gneiss.PacketCompiler.Service.PacketGetAllResponse
+import Gneiss.PacketCompiler.Service.csvPDFPostRequest
+import Gneiss.PacketCompiler.Service.csvPDFPostResponse
 import Gneiss.PacketCompiler.Service.PacketPatchRequest
 import Gneiss.PacketCompiler.Service.PacketPatchResponse
 import Gneiss.PacketCompiler.Service.PacketPostRequest
@@ -53,7 +54,7 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
     @PostMapping("/csvpdf/{id}")
     fun csvPDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile): csvPDFPostResponse {
         var outputName = Date().getTime().toString()
-        return packetHandler.invoicePDFPost("user", id, csvPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
+        return packetHandler.csvPDFPost("user", id, csvPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
     }
 
     @PostMapping("/{id}")
