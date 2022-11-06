@@ -1,6 +1,5 @@
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { createMemoryHistory } from "history";
-//import { NewAccountForm } from "../components/newAccountForm";
 import { rest } from "msw";
 import { setupServer, SetupServerApi } from "msw/node";
 import { MainPage } from "../pages/mainPage";
@@ -36,8 +35,9 @@ test("Valid JWT pushes to Main Page", () => {
 //If the JWT does NOT register as valid, mainPage should history.push back to signIn "/".
 test("No JWT redirects to Sign In", () => {
   makeServerBeforeTest(false);
-  const Route = () => {
-    //const history = useHistory();
+  //const history = useHistory();
+  const history = createMemoryHistory();
+  const result = render(<MainPage pageContent={<p>Welcome home :)</p>} />);
+  expect(history.location.pathname).toBe("home");
     
-  };
 });
