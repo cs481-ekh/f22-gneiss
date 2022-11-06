@@ -25,18 +25,17 @@ class CSVHelper() : ICSVHelper {
         var pdfparser = PDFParser(); pdfparser.parse(inputStream, handler, metadata, pcontext)
         return handler.toString()
     }
-
-    public static void readCsv2(final String fileName) throws IOException {
+    fun readCsv2(filename: String) {
         var path = Paths.get(fileName);
         Stream<String> lines = Files.lines(path).skip(1); // skipping the header
     
-        lines.forEach(line -> {
-            String[] info = line.split(",");
+        //lines.forEach(line -> {
+            var info = listOf(line.split(","));
     
-            String sl = info[0];
-            String id = info[1];
-            String name = info[2];
-            String manager = info[3];
+            var sl = info.get(0);
+            var id = info.get(1);
+            var name = info.get(2);
+            var manager = info.get(3);
     
             System.out.println("Sl No: " + sl + ", ID: " + id + ", Name: " + name + ", Manager: " + manager);
         });
