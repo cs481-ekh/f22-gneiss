@@ -112,8 +112,6 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
     fun getAllPackets(jwt: String): ResponseEntity<PacketGetResponse> {
         //Get the user from the jwt using the parse method and dereferencing from the JWTBody
         val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
-        println(jwtBody)
-        println(jwtBody?.user + " " + jwtBody?.role)
 
         //If there is no auth header return an empty response
         if (jwtBody == null) {

@@ -64,7 +64,6 @@ class PacketController {
     fun getAllPackets(request: HttpServletRequest): ResponseEntity<PacketGetResponse> {
         //Get the jwt included in the headers - should be the Authorization header
         val jwt: String = request.getHeader("Authorization")
-        println(jwt)
 
         return packetHandler.getAllPackets(jwt)
     }

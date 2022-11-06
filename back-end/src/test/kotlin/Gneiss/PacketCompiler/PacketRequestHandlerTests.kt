@@ -3,9 +3,11 @@ package Gneiss.PacketCompiler
 import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
 import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
+import Gneiss.PacketCompiler.Helpers.JWTBody
 import Gneiss.PacketCompiler.Models.Packet
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
 import Gneiss.PacketCompiler.Service.InvoicePDFPostRequest
+import Gneiss.PacketCompiler.Service.PacketGetResponse
 import Gneiss.PacketCompiler.Service.PacketPatchRequest
 import Gneiss.PacketCompiler.Service.PacketPostRequest
 import Gneiss.PacketCompiler.Service.PacketRequestHandler
@@ -17,6 +19,8 @@ import io.mockk.slot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 
 @SpringBootTest
 class PacketRequestHandlerTests {
@@ -105,16 +109,33 @@ class PacketRequestHandlerTests {
 
     @Test
     fun getAllPacketsTest() {
+        every { packetDao.getAllKeys() } returns mutableSetOf<String>("somePacketId1", "somePacketId2")
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("username", "admin")
 
+        var packetHandler = getHandler()
+        val getAllPacketsResponse = packetHandler.getAllPackets("someJWT")
+        val expectedResponse = ResponseEntity<PacketGetResponse>(PacketGetResponse(2, mutableSetOf<String>("somePacketId1", "somePacketId2")), HttpStatus.OK)
+        assertThat(getAllPacketsResponse.equals(expectedResponse))
     }
 
     @Test
     fun getAllPacketsForUserTest() {
+        every { packetDao.getUserKeys(any()) } returns mutableSetOf<String>("somePacketId1", "somePacketId2")
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("username", "user")
 
+        var packetHandler = getHandler()
+        val getUserPacketsResponse = packetHandler.getAllPackets("someJWT")
+        val expectedResponse = ResponseEntity<PacketGetResponse>(PacketGetResponse(2, mutableSetOf<String>("somePacketId1", "somePacketId2")), HttpStatus.OK)
+        assertThat(getUserPacketsResponse.equals(expectedResponse))
     }
 
     @Test
     fun getAllPacketsNoAuthTest() {
-        
+        every { jwtHelper.parseJWT(any()) } returns null
+
+        var packetHandler = getHandler()
+        val getAllPacketsAuthFailResponse = packetHandler.getAllPackets("someJWT")
+        val expectedResponse = ResponseEntity<PacketGetResponse>(PacketGetResponse(0, emptySet()), HttpStatus.UNAUTHORIZED)
+        assertThat(getAllPacketsAuthFailResponse.equals(expectedResponse))
     }
 }
