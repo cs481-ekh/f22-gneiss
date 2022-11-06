@@ -1,8 +1,12 @@
 package Gneiss.PacketCompiler.Service
 
 import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
+import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
+import Gneiss.PacketCompiler.Helpers.JWTBody
 import Gneiss.PacketCompiler.Models.Packet
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 
 class PacketPostRequest(
     val name: String,
@@ -44,10 +48,11 @@ class PacketGetResponse(
     val allKeys: Set<String>
 )
 
-class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
+class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelper: IJWTHelper) {
 
     var pdfHelper = pdfHelper
     var packetDao = packetDao
+    var jwtHelper = jwtHelper
 
     fun packetPost(user: String, id: String, req: PacketPostRequest): PacketPostResponse {
         var packet = Packet(req.name, req.invoicePDFPath, req.approvalPDFPath, req.csvPDFPath, req.compiledPDFPath)
@@ -104,9 +109,26 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
         return InvoicePDFPostResponse()
     }
 
-    fun getAllPackets(): PacketGetResponse {
-        val allKeys = packetDao.getAllKeys()
+    fun getAllPackets(jwt: String): ResponseEntity<PacketGetResponse> {
+        //Get the user from the jwt using the parse method and dereferencing from the JWTBody
+        val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
+        println(jwtBody)
+        println(jwtBody?.user + " " + jwtBody?.role)
+
+        //If there is no auth header return an empty response
+        if (jwtBody == null) {
+            return ResponseEntity<PacketGetResponse>(PacketGetResponse(0, emptySet()), HttpStatus.UNAUTHORIZED)
+        }
+        
+        //If the user has higher permissions than user return all the packets, else return only those made by that specific user
+        var allKeys: Set<String>
+        if (jwtBody.role == "user") {
+            allKeys = packetDao.getUserKeys(jwtBody.user)
+        } else {
+            allKeys = packetDao.getAllKeys()
+        }
         val numKeys = allKeys.size
-        return PacketGetResponse(numKeys, allKeys)
+
+        return ResponseEntity<PacketGetResponse>(PacketGetResponse(numKeys, allKeys), HttpStatus.OK)
     }
 }

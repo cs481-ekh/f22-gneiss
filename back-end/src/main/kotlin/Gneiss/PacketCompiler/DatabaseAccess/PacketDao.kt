@@ -36,24 +36,23 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
 
     override fun getAllKeys(): Set<String> {
         val jedis = pool.getResource()
-        return jedis.keys("*")
+        val allKeys: Set<String> = jedis.keys("*")
         
+        var allPackets = mutableSetOf<String>()
+        for (key in allKeys) {
+            val allPacketsForUser = jedis.hkeys(key)
+            allPackets.addAll(allPacketsForUser)
+        }
+
+        return allPackets
+    }
+
+    override fun getUserKeys(user: String): Set<String> {
+        val jedis = pool.getResource()
         
-        // //Setting up needed variables for scanning
-        // var scanParams: ScanParams = ScanParams()
-        // var cursor: String = "0"
-        // var i = 0
+        //Get a set of all the fields (packets) for a corresponding key (user)
+        val allPacketsForUser = jedis.hkeys(user)
 
-        // //match function used for matching the key to some string (regex like)
-        // //count used to set the amount of keys returned/scanned each iteration
-        // scanParams.match("*")
-        // //scanParams.count()
-
-        // //
-        // while (!"0".equals(cursor))
-
-
-        // //temp return for verification
-        // return setOf("something1", "something2")
+        return allPacketsForUser
     }
 }

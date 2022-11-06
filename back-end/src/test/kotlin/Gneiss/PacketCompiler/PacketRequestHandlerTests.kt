@@ -1,6 +1,7 @@
 package Gneiss.PacketCompiler
 
 import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
+import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Models.Packet
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
@@ -22,13 +23,14 @@ class PacketRequestHandlerTests {
 
     var pdfHelper = mockk<IPDFHelper>()
     var packetDao = mockk<IPacketDao>()
+    var jwtHelper = mockk<IJWTHelper>()
 
     var packetOutput = slot<Packet>()
     var htmlOutput = slot<String>()
     var byteOutput = slot<ByteArray>()
 
     fun getHandler(): PacketRequestHandler {
-        return PacketRequestHandler(pdfHelper, packetDao)
+        return PacketRequestHandler(pdfHelper, packetDao, jwtHelper)
     }
 
     @Test
@@ -99,5 +101,20 @@ class PacketRequestHandlerTests {
         packetHandler.invoicePDFPost("user", "packetid", request)
 
         assertThat(byteOutput.captured).isEqualTo(ByteArray(0))
+    }
+
+    @Test
+    fun getAllPacketsTest() {
+
+    }
+
+    @Test
+    fun getAllPacketsForUserTest() {
+
+    }
+
+    @Test
+    fun getAllPacketsNoAuthTest() {
+        
     }
 }
