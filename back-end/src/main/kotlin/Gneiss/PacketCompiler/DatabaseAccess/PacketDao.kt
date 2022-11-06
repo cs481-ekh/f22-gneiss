@@ -32,12 +32,15 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
         return ret
     }
 
-    override fun delete(key: String, field: String, packet: Packet): Long {
+    override fun delete(key: String, field: String): Boolean {
         val jedis = pool.getResource()
         var ret: Long
         jedis.use {
-            ret = jedis.hdel(key, field, jsonSerializer.serializePacket(packet))
+            ret = jedis.hdel(key, field)
         }
-        return ret
+        if (ret == 1L) {
+            return true
+        }
+        return false
     }
 }
