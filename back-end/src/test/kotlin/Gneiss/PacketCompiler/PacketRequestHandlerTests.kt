@@ -1,9 +1,10 @@
 package Gneiss.PacketCompiler
 
+import com.ninjasquad.springmockk.MockkBean
 import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
-import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
+import Gneiss.PacketCompiler.Helpers.JWTHelper
 import Gneiss.PacketCompiler.Models.Packet
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
 import Gneiss.PacketCompiler.Service.InvoicePDFPostRequest
@@ -27,7 +28,9 @@ class PacketRequestHandlerTests {
 
     var pdfHelper = mockk<IPDFHelper>()
     var packetDao = mockk<IPacketDao>()
-    var jwtHelper = mockk<IJWTHelper>()
+
+    @MockkBean
+    lateinit var jwtHelper: JWTHelper // = mockk<IJWTHelper>()
 
     var packetOutput = slot<Packet>()
     var htmlOutput = slot<String>()

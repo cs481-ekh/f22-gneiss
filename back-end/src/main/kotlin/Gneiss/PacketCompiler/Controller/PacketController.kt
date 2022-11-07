@@ -14,12 +14,14 @@ import Gneiss.PacketCompiler.Service.PacketPatchResponse
 import Gneiss.PacketCompiler.Service.PacketPostRequest
 import Gneiss.PacketCompiler.Service.PacketPostResponse
 import Gneiss.PacketCompiler.Service.PacketRequestHandler
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -31,10 +33,13 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("/api/packet")
 class PacketController {
 
+    // Autowired annotation to get access to the JWTHelper component using Dependency Injection
+    @Autowired
+    lateinit var jwtHelper: JWTHelper
+
     var outputPrefix = "output/"
     var pdfHelper = PDFHelper()
     var jsonSerializer = JsonSerializer()
-    var jwtHelper = JWTHelper()
     var packetDao = PacketDao(jsonSerializer)
     var packetHandler = PacketRequestHandler(pdfHelper, packetDao, jwtHelper)
 
@@ -61,9 +66,9 @@ class PacketController {
     }
 
     @GetMapping("/retrieve")
-    fun getAllPackets(request: HttpServletRequest): ResponseEntity<PacketGetResponse> {
+    fun getAllPackets(@RequestHeader headers: Map<String, String>): ResponseEntity<PacketGetResponse> {
         // Get the jwt included in the headers - should be the Authorization header
-        val jwt: String = request.getHeader("Authorization")
+        val jwt: String = headers.getOrDefault("authorization", "")
 
         return packetHandler.getAllPackets(jwt)
     }

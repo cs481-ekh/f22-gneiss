@@ -1,9 +1,9 @@
 package Gneiss.PacketCompiler.Service
 
 import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
-import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
+import Gneiss.PacketCompiler.Helpers.JWTHelper
 import Gneiss.PacketCompiler.Models.Packet
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -48,7 +48,7 @@ class PacketGetResponse(
     val allKeys: Set<String>
 )
 
-class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelper: IJWTHelper) {
+class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelper: JWTHelper) {
 
     var pdfHelper = pdfHelper
     var packetDao = packetDao
