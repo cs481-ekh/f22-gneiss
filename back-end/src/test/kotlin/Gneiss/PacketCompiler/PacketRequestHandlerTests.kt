@@ -89,6 +89,47 @@ class PacketRequestHandlerTests {
         assertThat(htmlOutput.captured).isEqualTo("<p><span style='background-color:yellow;'>text</span>ing <span style='background-color:yellow;'>text</span>ed <span style='background-color:yellow;'>text</span>book</p>")
     }
 
+    //New
+    @Test
+    fun invoicePDFPostTextIsHighlighted() {
+        every { pdfHelper.getTextFromPDF(any()) } returns "Hello text"
+        every { pdfHelper.htmlToPDF(any(), capture(htmlOutput)) } just Runs
+        every { packetDao.set(any(), any(), capture(packetOutput)) } just Runs
+        every { packetDao.get(any(), any()) } returns Packet("name", "a", "b", "c", "d")
+        var packetHandler = getHandler()
+        val request = InvoicePDFPostRequest("outputName", ByteArray(0), arrayOf("text"))
+        packetHandler.invoicePDFPost("user", "packetid", request)
+
+        assertThat(htmlOutput.captured).isEqualTo("<p>Hello <span style='background-color:yellow;'>text</span></p>")
+    }
+
+    @Test
+    fun invoicePDFPostHighlightWordsIsCaseInsensitive() {
+        every { pdfHelper.getTextFromPDF(any()) } returns "Hello tEXt"
+        every { pdfHelper.htmlToPDF(any(), capture(htmlOutput)) } just Runs
+        every { packetDao.set(any(), any(), capture(packetOutput)) } just Runs
+        every { packetDao.get(any(), any()) } returns Packet("name", "a", "b", "c", "d")
+        var packetHandler = getHandler()
+        val request = InvoicePDFPostRequest("outputName", ByteArray(0), arrayOf("text"))
+        packetHandler.invoicePDFPost("user", "packetid", request)
+
+        assertThat(htmlOutput.captured).isEqualTo("<p>Hello <span style='background-color:yellow;'>text</span></p>")
+    }
+
+    @Test
+    fun invoicePDFPostPartialWordHighlightWorks() {
+        every { pdfHelper.getTextFromPDF(any()) } returns "texting texted textbook"
+        every { pdfHelper.htmlToPDF(any(), capture(htmlOutput)) } just Runs
+        every { packetDao.set(any(), any(), capture(packetOutput)) } just Runs
+        every { packetDao.get(any(), any()) } returns Packet("name", "a", "b", "c", "d")
+        var packetHandler = getHandler()
+        val request = InvoicePDFPostRequest("outputName", ByteArray(0), arrayOf("text"))
+        packetHandler.invoicePDFPost("user", "packetid", request)
+
+        assertThat(htmlOutput.captured).isEqualTo("<p><span style='background-color:yellow;'>text</span>ing <span style='background-color:yellow;'>text</span>ed <span style='background-color:yellow;'>text</span>book</p>")
+    }
+    // /new
+
     @Test
     fun invoicePDFPostWorks() {
         every { pdfHelper.writeFile(any(), capture(byteOutput)) } just Runs
