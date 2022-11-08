@@ -27,4 +27,13 @@ class PDFHelper() : IPDFHelper {
         var fileOutputStream = FileOutputStream(fileName)
         HtmlConverter.convertToPdf(htmlText, fileOutputStream)
     }
+    override fun csvToPDF(csvText: String) {
+        //Split comma seperate line
+        //Map the whole line that's been split into a string array
+        //Read file content/string array into byte array
+        //Convert array of string to a list of string with array.tostring
+        //Convert array.tostring into a pdf table
+        //Return PDF
+        var textCSV = csvText
+    }
 }
