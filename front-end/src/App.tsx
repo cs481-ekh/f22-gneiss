@@ -8,6 +8,7 @@ import { MainPage } from "./pages/mainPage";
 import CreatePacketStepper from "./components/createPacket/createPacketStepper";
 import { createPacketSteps } from "./data/createPacketSteps";
 import { PacketsPage } from "./pages/packetsPage";
+import { LogoutPage } from "./pages/logoutPage";
 
 const theme = createTheme({
   palette: {
@@ -51,6 +52,7 @@ function App() {
                 />
               }
             />
+            <Route path="/logout" element={<LogoutPage />} />
           </Routes>
         </div>
       </Router>
