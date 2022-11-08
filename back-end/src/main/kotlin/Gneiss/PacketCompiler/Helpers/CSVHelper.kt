@@ -10,26 +10,16 @@ import java.util.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.util.stream.Stream;
+//import java.nio.file.Path;
+import java.nio.file.Paths;
 
-class CSVHelper() : ICSVHelper {
-    fun writeFile(fileName: String, bytes: ByteArray) {
-        var file = File(fileName)
-        file.writeBytes(bytes)
-    }
-    fun getTextFromPDF(pdfBytes: ByteArray): String {
-        var handler = BodyContentHandler()
-        var metadata = Metadata()
-        var inputStream = ByteArrayInputStream(pdfBytes)
-        var pcontext = ParseContext()
-
-        var pdfparser = PDFParser(); pdfparser.parse(inputStream, handler, metadata, pcontext)
-        return handler.toString()
-    }
-    fun readCsv2(filename: String) {
+class CSVHelper {
+    //
+    fun readCSV(filename: String) {
         var path = Paths.get(fileName);
         Stream<String> lines = Files.lines(path).skip(1); // skipping the header
     
-        //lines.forEach(line -> {
+        for line in lines {
             var info = listOf(line.split(","));
     
             var sl = info.get(0);
@@ -38,13 +28,8 @@ class CSVHelper() : ICSVHelper {
             var manager = info.get(3);
     
             System.out.println("Sl No: " + sl + ", ID: " + id + ", Name: " + name + ", Manager: " + manager);
-        });
+        };
     
         lines.close();
     }
-
-    /*fun csvToPDF(fileName: String, csvFile: String) {
-        var fileOutputStream = FileOutputStream(fileName)
-        HtmlConverter.convertToPdf(csvFile, fileOutputStream)
-    }*/
 }

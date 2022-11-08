@@ -36,10 +36,7 @@ class InvoicePDFPostRequest(
     val fileBytes: ByteArray
 )
 
-class csvPDFPostRequest(
-    val outputName: String,
-    val fileBytes: ByteArray
-)
+class csvPDFPostRequest()
 
 class PacketPostResponse()
 
@@ -107,6 +104,7 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
     }
 
     fun invoicePDFPost(user: String, id: String, req: InvoicePDFPostRequest): InvoicePDFPostResponse {
+        //When given a json, its in a package of a string, it writes to file
         pdfHelper.writeFile(req.outputName, req.fileBytes)
         packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
         return InvoicePDFPostResponse()
@@ -120,6 +118,12 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
            //var convertOptions = FileType().fromExtension("pdf").getConvertOptions();
         // Convert to PDF format
            //converter.convert("output.pdf", convertOptions);
+        
+                   //receives a csv string, and it writes to a pdf file
+        //id refers to packet, pdf will be put in packet
+        //read pdf helper, see if it can help
+        //convert csv to pdf using csvToPDF in pdf helper
+        //after pdf is created send it off to packet id
         return csvPDFPostResponse()
     }
 }
