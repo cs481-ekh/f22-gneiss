@@ -28,7 +28,8 @@ class ApprovalPDFPostRequest(
 
 class InvoicePDFPostRequest(
     val outputName: String,
-    val fileBytes: ByteArray
+    val fileBytes: ByteArray,
+    val highlightWords: Array<String>
 )
 
 class PacketPostResponse()
@@ -94,6 +95,20 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
     }
 
     fun invoicePDFPost(user: String, id: String, req: InvoicePDFPostRequest): InvoicePDFPostResponse {
+         var invText = pdfHelper.getTextFromPDF(req.fileBytes)
+
+        var htmlBuilder = StringBuilder()
+        invText.split("\n").forEach { htmlBuilder.append(String.format("<p>%s</p>", it)) }
+        var result = htmlBuilder.toString()
+
+        req.highlightWords.forEach {
+            result =
+                result.replace(
+                    it,
+                    String.format("<span style='background-color:yellow;'>%s</span>", it),
+                    true
+                )
+        }
         pdfHelper.writeFile(req.outputName, req.fileBytes)
         packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
         return InvoicePDFPostResponse()
