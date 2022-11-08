@@ -29,8 +29,10 @@ afterAll(() => server.close);
 test("Valid JWT pushes to Main Page", () => {
   makeServerBeforeTest(true);
   const history = createMemoryHistory();
-  const result = render(<MainPage pageContent={<p>Welcome home :)</p>} />);
-  expect(history.location.pathname).toBe("home");
+  const historyMock = { push: jest.fn(MainPage) };
+  //const historyMock = { MainPage : render(<MainPage pageContent={<p>Welcome home :)</p>} />)};
+  //const result = render(<MainPage pageContent={<p>Welcome home :)</p>} />);
+  expect(historyMock.push.mock.calls[0]).toEqual([ ("Main") ]);
 });
 
 //If the JWT does NOT register as valid, mainPage should history.push back to signIn "/".
