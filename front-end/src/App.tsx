@@ -25,7 +25,7 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router history={history}>
+      <Router history={history} basename="f22-gneiss">
         <div className="min-vh-75 d-flex justify-content-center align-items-center">
           <Routes>
             <Route path="/" element={<SignInPage />} />
