@@ -5,6 +5,7 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.SQLException
+import Gneiss.PacketCompiler.Models.User
 
 class CredentialsResponse(val validFlag: Boolean, val roleId: String)
 
@@ -32,6 +33,14 @@ class UserDao {
         val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'user')"
 
         val validateCredentialsQuery = "SELECT id, password, first_name, last_name, role_id FROM users WHERE email = ?"
+
+        val getUsers = "SELECT email, role_id, banned FROM users"
+
+        val promoteUser = "UPDATE users SET role_id = 'admin' WHERE email = ?"
+
+        val demoteUser = "UPDATE users SET role_id = 'user' WHERE email = ?"
+
+        val setBanUser = "UPDATE users SET banned = ? WHERE email = ?"
     }
 
     fun validateCredentials(email: String, password: String): CredentialsResponse {
@@ -83,5 +92,18 @@ class UserDao {
             size++
         }
         return size
+    }
+
+    fun getUsers(): List<User> {
+        getConnection()
+        val ret = mutableListOf<User>()
+        connection.use {
+            val prepStatement = connection!!.prepareStatement(getUsers)
+            var resultSet = prepStatement.executeQuery()
+            while (resultSet!!.next()) {
+                ret.add(User(resultSet.getString(1), resultSet.getString(2), resultSet.getBoolean(3)))
+            }
+        }
+        return ret
     }
 }

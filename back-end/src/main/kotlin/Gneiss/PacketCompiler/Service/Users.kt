@@ -1,6 +1,7 @@
 package Gneiss.PacketCompiler.Service
 
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
+import Gneiss.PacketCompiler.Models.User
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
@@ -9,6 +10,10 @@ class CreateUserRequest(
     var password: String,
     var firstName: String,
     var lastName: String
+)
+
+class GetUsersResponse(
+    var users: List<User>
 )
 
 class Users(userDao: UserDao) {
@@ -27,5 +32,9 @@ class Users(userDao: UserDao) {
             userDao.createAccount(req.email, req.password, req.firstName, req.lastName)
             return ResponseEntity<String>("User account created successfully", HttpStatus.OK)
         }
+    }
+
+    fun getUsers(): GetUsersResponse {
+        return GetUsersResponse(userDao.getUsers())
     }
 }
