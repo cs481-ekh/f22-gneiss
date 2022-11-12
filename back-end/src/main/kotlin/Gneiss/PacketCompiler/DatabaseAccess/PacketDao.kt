@@ -3,9 +3,11 @@ package Gneiss.PacketCompiler.DatabaseAccess
 import Gneiss.PacketCompiler.Helpers.IJsonSerializer
 import Gneiss.PacketCompiler.Models.Packet
 import redis.clients.jedis.JedisPool
+import org.springframework.stereotype.Component
 //import redis.clients.jedis.ScanParams
 //import redis.clients.jedis.ScanResult
 
+@Component
 class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
 
     var jsonSerializer = jsonSerializer

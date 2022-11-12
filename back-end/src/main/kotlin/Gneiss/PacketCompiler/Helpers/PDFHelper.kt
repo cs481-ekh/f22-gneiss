@@ -8,7 +8,9 @@ import org.apache.tika.sax.BodyContentHandler
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
+import org.springframework.stereotype.Component
 
+@Component
 class PDFHelper() : IPDFHelper {
     override fun writeFile(fileName: String, bytes: ByteArray) {
         var file = File(fileName)

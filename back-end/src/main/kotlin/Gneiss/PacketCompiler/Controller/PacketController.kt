@@ -31,11 +31,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("/api/packet")
-class PacketController {
-
-    // Autowired annotation to get access to the JWTHelper component using Dependency Injection
-    @Autowired
-    lateinit var jwtHelper: JWTHelper
+class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
 
     var outputPrefix = "output/"
     var pdfHelper = PDFHelper()

@@ -22,11 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/user")
-class UserManagementController {
-
-    // Autowired annotation to get access to the JWTHelper component using Dependency Injection
-    @Autowired
-    lateinit var jwtHelper: JWTHelper
+class UserManagementController @Autowired constructor(var jwtHelper: JWTHelper) {
     
     val userManagementDao = UserDao()
     val userService = Users(userManagementDao)

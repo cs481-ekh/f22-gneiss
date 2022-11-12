@@ -7,7 +7,6 @@ import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-
 @Component
 class JWTHelper() : IJWTHelper {
     val key = Keys.secretKeyFor(SignatureAlgorithm.HS256)

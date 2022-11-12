@@ -2,7 +2,9 @@ package Gneiss.PacketCompiler.Helpers
 
 import Gneiss.PacketCompiler.Models.Packet
 import com.google.gson.Gson
+import org.springframework.stereotype.Component
 
+@Component
 class JsonSerializer() : IJsonSerializer {
     override fun serializePacket(packet: Packet): String {
         val gson = Gson()
