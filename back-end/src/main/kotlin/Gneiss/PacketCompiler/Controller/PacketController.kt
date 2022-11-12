@@ -1,22 +1,30 @@
 package Gneiss.PacketCompiler.Controller
 
 import Gneiss.PacketCompiler.DatabaseAccess.PacketDao
+import Gneiss.PacketCompiler.Helpers.JWTHelper
 import Gneiss.PacketCompiler.Helpers.JsonSerializer
 import Gneiss.PacketCompiler.Helpers.PDFHelper
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostResponse
 import Gneiss.PacketCompiler.Service.InvoicePDFPostRequest
 import Gneiss.PacketCompiler.Service.InvoicePDFPostResponse
+import Gneiss.PacketCompiler.Service.PacketGetResponse
 import Gneiss.PacketCompiler.Service.PacketPatchRequest
 import Gneiss.PacketCompiler.Service.PacketPatchResponse
 import Gneiss.PacketCompiler.Service.PacketPostRequest
 import Gneiss.PacketCompiler.Service.PacketPostResponse
 import Gneiss.PacketCompiler.Service.PacketRequestHandler
+<<<<<<< HEAD
+=======
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
+>>>>>>> 178-read-packet-from-back-end-all
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -26,13 +34,13 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("/api/packet")
-class PacketController {
+class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
 
     var outputPrefix = "output/"
     var pdfHelper = PDFHelper()
     var jsonSerializer = JsonSerializer()
     var packetDao = PacketDao(jsonSerializer)
-    var packetHandler = PacketRequestHandler(pdfHelper, packetDao)
+    var packetHandler = PacketRequestHandler(pdfHelper, packetDao, jwtHelper)
 
     @PostMapping("/approvalpdf/{id}")
     fun approvalPDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): ApprovalPDFPostResponse {
@@ -56,8 +64,18 @@ class PacketController {
         return packetHandler.packetPatch("user", id, req)
     }
 
-    @GetMapping("/retrieve/{id}")
+
+    @GetMapping("/retrieve/{id}") 
     fun getSinglePacket(@PathVariable id: String, request: HttpServletRequest) /* Response Type TBD */ {
         val jwt = request.getHeader("Authorization")
+    }
+    
+    @GetMapping("/retrieve")
+    fun getAllPackets(@RequestHeader headers: Map<String, String>): ResponseEntity<PacketGetResponse> {
+        // Get the jwt included in the headers - should be the Authorization header
+        val jwt: String = headers.getOrDefault("authorization", "")
+
+        return packetHandler.getAllPackets(jwt)
+
     }
 }
