@@ -40,8 +40,11 @@ class CSVHelper {
         //make sure to return
     
         var path = Paths.get("yomama.csv");
+
 		var bytes = Files.readAllBytes(path);
+
 		var str = String(bytes);
+
         println(str);
 
 		// String[] splitted = Arrays.stream(str.split("\n")).map(String::trim).toArray(String[]::new);
@@ -77,7 +80,7 @@ class CSVHelper {
     
             // System.out.println("Sl No: " + sl + ", ID: " + id + ", Name: " + name + ", Manager: " + manager);
             
-        };
+    };
     
         //lines.close();
         //no returning, just converting
