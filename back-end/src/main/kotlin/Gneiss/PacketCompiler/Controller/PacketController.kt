@@ -14,11 +14,8 @@ import Gneiss.PacketCompiler.Service.PacketPatchResponse
 import Gneiss.PacketCompiler.Service.PacketPostRequest
 import Gneiss.PacketCompiler.Service.PacketPostResponse
 import Gneiss.PacketCompiler.Service.PacketRequestHandler
-<<<<<<< HEAD
-=======
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
->>>>>>> 178-read-packet-from-back-end-all
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -69,7 +66,7 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
     fun getSinglePacket(@PathVariable id: String, request: HttpServletRequest) /* Response Type TBD */ {
         val jwt = request.getHeader("Authorization")
     }
-    
+
     @GetMapping("/retrieve")
     fun getAllPackets(@RequestHeader headers: Map<String, String>): ResponseEntity<PacketGetResponse> {
         // Get the jwt included in the headers - should be the Authorization header

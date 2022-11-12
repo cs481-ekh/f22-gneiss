@@ -5,15 +5,13 @@ import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
 import Gneiss.PacketCompiler.Models.Packet
-<<<<<<< HEAD
 import java.io.File
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-=======
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
->>>>>>> 178-read-packet-from-back-end-all
+
 
 class PacketPostRequest(
     val name: String,
@@ -50,19 +48,19 @@ class ApprovalPDFPostResponse()
 
 class InvoicePDFPostResponse()
 
-<<<<<<< HEAD
 class SinglePacketGetResponse()
 
 class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
-=======
+
 class PacketGetResponse(
     val numKeys: Int,
     val allKeys: Set<String>
 )
 
+class PacketGetSingleResponse()
+
 @Service
 class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelper: IJWTHelper) {
->>>>>>> 178-read-packet-from-back-end-all
 
     var pdfHelper = pdfHelper
     var packetDao = packetDao
@@ -136,7 +134,7 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
         val headers: HttpHeaders = HttpHeaders()
         headers.setContentType(MediaType.APPLICATION_PDF)
     }
-    
+
     fun getAllPackets(jwt: String): ResponseEntity<PacketGetResponse> {
         // Get the user from the jwt using the parse method and dereferencing from the JWTBody
         val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
