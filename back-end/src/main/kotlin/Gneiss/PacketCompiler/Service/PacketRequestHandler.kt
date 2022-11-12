@@ -45,7 +45,7 @@ class ApprovalPDFPostResponse()
 
 class InvoicePDFPostResponse()
 
-class csvPDFPostResponse()
+class CsvPDFPostResponse()
 
 class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
@@ -124,6 +124,6 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
         //read pdf helper, see if it can help
         //convert csv to pdf using csvToPDF in pdf helper
         //after pdf is created send it off to packet id
-        return csvPDFPostResponse()
+        return CsvPDFPostResponse()
     }
 }
