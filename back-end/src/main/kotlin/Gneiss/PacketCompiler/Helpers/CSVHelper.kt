@@ -5,7 +5,6 @@ import org.apache.tika.parser.ParseContext
 import org.apache.tika.parser.pdf.PDFParser
 import org.apache.tika.sax.BodyContentHandler
 import java.io.*;
-import au.com.bytecode.opencsv.CSVReader;
 import java.util.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
