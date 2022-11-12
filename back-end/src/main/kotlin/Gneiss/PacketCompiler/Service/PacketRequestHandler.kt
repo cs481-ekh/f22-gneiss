@@ -114,9 +114,8 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
     fun csvPDFPost(user: String, id: String, req: CsvPDFPostRequest): CsvPDFPostResponse {
         var pdfText = pdfHelper.getTextFromPDF(req.fileBytes)
-        var urmom = ""
-        pdfHelper.csvToPDF(pdfText, urmom)
-        packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
+        var stringText = pdfHelper.csvToPDF(pdfText)
+        packetPatch(user, id, PacketPatchRequest(null, null, null, stringText, null))
         // Load source file CSV for conversion
            //var converter = Converter(csv);
         // Prepare conversion options for target format PDF

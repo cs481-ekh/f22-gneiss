@@ -54,7 +54,7 @@ class PDFHelper() : IPDFHelper {
         var fileOutputStream = FileOutputStream(fileName)
         HtmlConverter.convertToPdf(htmlText, fileOutputStream)
     }
-    override fun csvToPDF(filename: String, csvText: String) {
+    override fun csvToPDF(filename: String): String {
             //var path = Paths.get(fileName);
             //Stream<String> lines = Files.lines(path).skip(1); // skipping the header
             //Need to decide how much this function carries, if I want it to both read and convert
@@ -66,7 +66,7 @@ class PDFHelper() : IPDFHelper {
     
             var str = String(bytes);
     
-            println(str);
+            return str
     
             // String[] splitted = Arrays.stream(str.split("\n")).map(String::trim).toArray(String[]::new);
     
