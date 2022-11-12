@@ -51,7 +51,7 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
     @PostMapping("/csvpdf/{id}")
     fun csvPDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile): csvPDFPostResponse {
         var outputName = Date().getTime().toString()
-        return packetHandler.csvPDFPost("user", id, csvPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
+        return packetHandler.csvPDFPost("user", id, CsvPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
     }
 
     //http://localhost:8080/api/packet/csvpdf/{id}

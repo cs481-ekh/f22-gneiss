@@ -36,7 +36,7 @@ class InvoicePDFPostRequest(
     val fileBytes: ByteArray
 )
 
-class csvPDFPostRequest(
+class CsvPDFPostRequest(
     val outputName: String,
     val fileBytes: ByteArray
 )
@@ -113,7 +113,7 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
         return InvoicePDFPostResponse()
     }
 
-    fun csvPDFPost(user: String, id: String, req: csvPDFPostRequest): csvPDFPostResponse {
+    fun csvPDFPost(user: String, id: String, req: CsvPDFPostRequest): csvPDFPostResponse {
         pdfHelper.writeFile(req.outputName, req.fileBytes)
         packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
         // Load source file CSV for conversion
