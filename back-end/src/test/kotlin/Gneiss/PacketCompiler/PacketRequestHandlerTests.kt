@@ -1,11 +1,9 @@
 package Gneiss.PacketCompiler
 
-import com.ninjasquad.springmockk.MockkBean
 import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
 import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
-import Gneiss.PacketCompiler.Helpers.JWTHelper
 import Gneiss.PacketCompiler.Models.Packet
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
 import Gneiss.PacketCompiler.Service.InvoicePDFPostRequest
@@ -20,9 +18,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
@@ -31,7 +27,7 @@ class PacketRequestHandlerTests {
 
     var pdfHelper = mockk<IPDFHelper>()
     var packetDao = mockk<IPacketDao>()
-    var jwtHelper: JWTHelper = mockk<JWTHelper>()
+    var jwtHelper = mockk<IJWTHelper>()
 
     var packetOutput = slot<Packet>()
     var htmlOutput = slot<String>()

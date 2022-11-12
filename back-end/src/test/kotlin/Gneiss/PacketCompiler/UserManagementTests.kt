@@ -1,9 +1,8 @@
 package Gneiss.PacketCompiler
 
-import com.ninjasquad.springmockk.MockkBean
 import Gneiss.PacketCompiler.DatabaseAccess.CredentialsResponse
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
-import Gneiss.PacketCompiler.Helpers.JWTHelper
+import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Service.CreateUserRequest
 import Gneiss.PacketCompiler.Service.Login
 import Gneiss.PacketCompiler.Service.LoginRequest
@@ -12,7 +11,6 @@ import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -21,7 +19,7 @@ import org.springframework.http.ResponseEntity
 class UserManagementTests() {
 
     var databaseAccess = mockk<UserDao>()
-    var jwtHelper: JWTHelper = mockk<JWTHelper>()
+    var jwtHelper = mockk<IJWTHelper>()
 
     @Test
     fun validLoginCredentials() {

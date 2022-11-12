@@ -39,7 +39,7 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
     override fun getAllKeys(): Set<String> {
         val jedis = pool.getResource()
         val allKeys: Set<String> = jedis.keys("*")
-        
+
         var allPackets = mutableSetOf<String>()
         for (key in allKeys) {
             val allPacketsForUser = jedis.hkeys(key)
@@ -51,7 +51,7 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
 
     override fun getUserKeys(user: String): Set<String> {
         val jedis = pool.getResource()
-        
+
         //Get a set of all the fields (packets) for a corresponding key (user)
         val allPacketsForUser = jedis.hkeys(user)
 

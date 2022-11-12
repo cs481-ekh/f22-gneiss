@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/user")
 class UserManagementController @Autowired constructor(var jwtHelper: JWTHelper) {
-    
+
     val userManagementDao = UserDao()
     val userService = Users(userManagementDao)
 

@@ -4,7 +4,6 @@ import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
 import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
-import Gneiss.PacketCompiler.Helpers.JWTHelper
 import Gneiss.PacketCompiler.Models.Packet
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -120,7 +119,7 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
         if (jwtBody == null) {
             return ResponseEntity<PacketGetResponse>(PacketGetResponse(0, emptySet()), HttpStatus.UNAUTHORIZED)
         }
-        
+
         // If the user has higher permissions than user return all the packets, else return only those made by that specific user
         var allKeys: Set<String>
         if (jwtBody.role == "user") {
