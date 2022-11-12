@@ -2,7 +2,6 @@ package Gneiss.PacketCompiler.Service
 
 import Gneiss.PacketCompiler.DatabaseAccess.IPacketDao
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
-import Gneiss.PacketCompiler.Helpers.ICSVHelper
 import Gneiss.PacketCompiler.Models.Packet
 
 class PacketPostRequest(
@@ -110,7 +109,8 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
 
     fun csvPDFPost(user: String, id: String, req: CsvPDFPostRequest): CsvPDFPostResponse {
         var pdfText = pdfHelper.getTextFromPDF(req.fileBytes)
-        pdfHelper.csvToPDF(user)
+        var urmom = ""
+        pdfHelper.csvToPDF(pdfText, urmom)
         packetPatch(user, id, PacketPatchRequest(null, req.outputName, null, null, null))
         // Load source file CSV for conversion
            //var converter = Converter(csv);
