@@ -38,7 +38,7 @@ class CSVHelper {
         //Need to decide how much this function carries, if I want it to both read and convert
         //make sure to return
     
-        var path = Paths.get("yomama.csv");
+        var path = Paths.get(filename);
 
 		var bytes = Files.readAllBytes(path);
 
