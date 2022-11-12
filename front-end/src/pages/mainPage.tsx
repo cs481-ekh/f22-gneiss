@@ -22,7 +22,10 @@ export function MainPage(props: MainPageProps) {
         }
       })
       .catch((e: any) => {
-        history.push("/");
+        // Refreshing the page as fast as you can shouldn't send you to login
+        if (!e.message.includes("abort")) {
+          history.push("/");
+        }
       });
   }, []);
 
@@ -43,13 +46,13 @@ export function MainPage(props: MainPageProps) {
     },
     {
       label: "Sign out",
-      href: "/",
+      href: "/logout",
     },
   ];
 
   return (
     <Paper style={styles.outerBox}>
-      <NavBar content={navItems} barWidth="20vw" />
+      <NavBar content={navItems} basePath="f22-gneiss" barWidth="20vw" />
       <div style={styles.centerBox}>{props.pageContent}</div>
     </Paper>
   );

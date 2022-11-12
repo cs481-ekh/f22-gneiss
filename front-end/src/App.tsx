@@ -8,6 +8,7 @@ import { MainPage } from "./pages/mainPage";
 import CreatePacketStepper from "./components/createPacket/createPacketStepper";
 import { createPacketSteps } from "./data/createPacketSteps";
 import { PacketsPage } from "./pages/packetsPage";
+import { LogoutPage } from "./pages/logoutPage";
 
 const theme = createTheme({
   palette: {
@@ -24,7 +25,7 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router history={history}>
+      <Router history={history} basename="f22-gneiss">
         <div className="min-vh-75 d-flex justify-content-center align-items-center">
           <Routes>
             <Route path="/" element={<SignInPage />} />
@@ -51,6 +52,7 @@ function App() {
                 />
               }
             />
+            <Route path="/logout" element={<LogoutPage />} />
           </Routes>
         </div>
       </Router>
