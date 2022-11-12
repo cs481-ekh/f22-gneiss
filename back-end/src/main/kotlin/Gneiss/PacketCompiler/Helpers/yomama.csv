@@ -1,0 +1,13 @@
+Invoice number,Billing Date,Bill To:,C/O,Mail or email.  If Email include email address,Contact Info,Address Line 1,Address Line 2,City,State,Zip Code,Zip Code Extension,Date of Service,Description,"Enter the Accounting String here (no spaces,separated by periods, and all the zeros entered) : Fund.Department.CostCenter.Account.Supplemental.Interfund.Project.Future1", Amount , Total 
+,,,,,,,,,,,,,,,,
+,,Woodgrain Doors,"Derek Laudal
+Quality/CI & Engr Mngr",dlaudal@woodgrain.com,209.467.5221 ext.313,1201 West Karcher Road,,Nampa,ID,88888,,,Initial Project Fee for Senior Design Project - RWRK,3010.13000.2741003.391700.0000000000.000.0000000000.0000000000,"  1,000.00 "," $ 1,000.00 "
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,ABC Co.,Jon Doe Manager,jonDoe@email.com,208.123.4567,123 North St,,Boise,ID,83706,,,Initial Project Fee for Senior Design Project - TEAM1,3010.13000.2741003.391700.0000000000.000.0000000000.0000000000,"  1,000.00 "," $ 1,000.00 "
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,Woodgrain Doors,"Derek Laudal
+Quality/CI & Engr Mngr",dlaudal@woodgrain.com,209.467.5221 ext.313,1201 West Karcher Road,,Nampa,ID,83725,,,Initial Project Fee for Senior Design Project - TEAM2,3010.13000.2741003.391700.0000000000.000.0000000000.0000000000,"  1,000.00 "," $ 1,000.00 "
