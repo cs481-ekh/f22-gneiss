@@ -47,10 +47,6 @@ class ApprovalPDFPostResponse()
 
 class InvoicePDFPostResponse()
 
-class SinglePacketGetResponse()
-
-class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
-
 class PacketGetAllResponse(
     val allKeys: Set<Packet>
 )
@@ -123,17 +119,17 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
 
         // If there is no auth header return an empty response
         if (jwtBody == null) {
-            return ResponseEntity<PacketGetResponse>(PacketGetAllResponse(emptySet()), HttpStatus.UNAUTHORIZED)
+            return ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(emptySet()), HttpStatus.UNAUTHORIZED)
         }
 
         // If the user has higher permissions than user return all the packets, else return only those made by that specific user
-        var allKeys: Set<String>
+        var allKeys: Set<Packet>
         if (jwtBody.role == "user") {
             allKeys = packetDao.getUserKeys(jwtBody.user)
         } else {
             allKeys = packetDao.getAllKeys()
         }
 
-        return ResponseEntity<PacketGetResponse>(PacketGetAllResponse(allKeys), HttpStatus.OK)
+        return ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(allKeys), HttpStatus.OK)
     }
 }

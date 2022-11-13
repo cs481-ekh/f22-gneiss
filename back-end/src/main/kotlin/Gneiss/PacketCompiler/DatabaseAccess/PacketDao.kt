@@ -36,12 +36,15 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
 
     override fun getAllKeys(): Set<Packet> {
         val jedis = pool.getResource()
-        val allKeys: Set<String> = jedis.keys("USER:*")
+        val allKeys: Set<String> = jedis.keys("USER#*")
 
         var allPackets = mutableSetOf<Packet>()
         for (key in allKeys) {
-            val allPacketsForUser = jedis.hgetall(key)
-            allPackets.addAll(allPacketsForUser)
+            val allPacketsForUser = jedis.hgetAll(key)
+
+            for (hash in allPacketsForUser) {
+                allPackets.add(jsonSerializer.deserializePacket(hash))
+            }
         }
 
         return allPackets
@@ -51,7 +54,13 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
         val jedis = pool.getResource()
 
         // Get a set of all the fields (packets) for a corresponding key (user)
-        val allPacketsForUser = jedis.hgetall("USER:" + user)
+        val allPacketsHash = jedis.hgetAll("USER#" + user)
+        
+        // Deserialize all the hashes back into packets
+        val allPacketsForUser = mutableSetOf<Packet>()
+        for (hash in allPacketsHash) {
+            allPacketsForUser.add(jsonSerializer.deserializePacket(hash))
+        }
 
         return allPacketsForUser
     }

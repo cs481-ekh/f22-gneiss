@@ -6,6 +6,6 @@ interface IPacketDao {
     fun set(key: String, field: String, packet: Packet)
     fun get(key: String, field: String): Packet
 
-    fun getAllKeys(): Set<String>
-    fun getUserKeys(user: String): Set<String>
+    fun getAllKeys(): Set<Packet>
+    fun getUserKeys(user: String): Set<Packet>
 }
