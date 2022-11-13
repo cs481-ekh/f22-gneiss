@@ -20,19 +20,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.List;
+import kotlin.collections.List;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.BaseColor
+import com.itextpdf.text.Document
+import com.itextpdf.text.DocumentException
+import com.itextpdf.text.Font
+import com.itextpdf.text.FontFactory
+import com.itextpdf.text.PageSize
+import com.itextpdf.text.Paragraph
+import com.itextpdf.text.Phrase
+import com.itextpdf.text.pdf.PdfPCell
+import com.itextpdf.text.pdf.PdfPTable
+import com.itextpdf.text.pdf.PdfWriter
 
 class PDFHelper() : IPDFHelper {
     override fun writeFile(fileName: String, bytes: ByteArray) {
@@ -57,16 +57,15 @@ class PDFHelper() : IPDFHelper {
             //Stream<String> lines = Files.lines(path).skip(1); // skipping the header
             //Need to decide how much this function carries, if I want it to both read and convert
             //make sure to return
-        
+
             var path = Paths.get(filename);
-    
             var bytes = Files.readAllBytes(path);
-    
             var str = String(bytes);
-    
+            // var splitted = Arrays.stream(str.split("\n")).map(String::trim).toArray(String[]::new);
+            
             return str
     
-            // String[] splitted = Arrays.stream(str.split("\n")).map(String::trim).toArray(String[]::new);
+            
     
             // // System.out.println(Arrays.toString(splitted));
     
