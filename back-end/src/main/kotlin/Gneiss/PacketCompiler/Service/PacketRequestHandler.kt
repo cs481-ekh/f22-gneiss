@@ -5,6 +5,9 @@ import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
 import Gneiss.PacketCompiler.Models.Packet
+import java.io.File
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -44,9 +47,12 @@ class ApprovalPDFPostResponse()
 
 class InvoicePDFPostResponse()
 
-class PacketGetResponse(
-    val numKeys: Int,
-    val allKeys: Set<String>
+class SinglePacketGetResponse()
+
+class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
+
+class PacketGetAllResponse(
+    val allKeys: Set<Packet>
 )
 
 @Service
@@ -111,13 +117,13 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
         return InvoicePDFPostResponse()
     }
 
-    fun getAllPackets(jwt: String): ResponseEntity<PacketGetResponse> {
+    fun getAllPackets(jwt: String): ResponseEntity<PacketGetAllResponse> {
         // Get the user from the jwt using the parse method and dereferencing from the JWTBody
         val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
 
         // If there is no auth header return an empty response
         if (jwtBody == null) {
-            return ResponseEntity<PacketGetResponse>(PacketGetResponse(0, emptySet()), HttpStatus.UNAUTHORIZED)
+            return ResponseEntity<PacketGetResponse>(PacketGetAllResponse(emptySet()), HttpStatus.UNAUTHORIZED)
         }
 
         // If the user has higher permissions than user return all the packets, else return only those made by that specific user
@@ -127,8 +133,7 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
         } else {
             allKeys = packetDao.getAllKeys()
         }
-        val numKeys = allKeys.size
 
-        return ResponseEntity<PacketGetResponse>(PacketGetResponse(numKeys, allKeys), HttpStatus.OK)
+        return ResponseEntity<PacketGetResponse>(PacketGetAllResponse(allKeys), HttpStatus.OK)
     }
 }
