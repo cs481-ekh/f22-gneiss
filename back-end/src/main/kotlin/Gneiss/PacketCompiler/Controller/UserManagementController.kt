@@ -13,6 +13,9 @@ import Gneiss.PacketCompiler.Service.LoginResponse
 import Gneiss.PacketCompiler.Service.Test
 import Gneiss.PacketCompiler.Service.Users
 import Gneiss.PacketCompiler.Service.GetUsersResponse
+import Gneiss.PacketCompiler.Service.PromoteUserRequest
+import Gneiss.PacketCompiler.Service.DemoteUserRequest
+import Gneiss.PacketCompiler.Service.SetBanUserRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -50,6 +53,21 @@ class UserManagementController {
     @PostMapping("/auth")
     fun AuthenticateJWT(@RequestHeader headers: Map<String, String>): ResponseEntity<AuthResponse> {
         return auth.authenticateJWT(headers.getOrDefault("authorization", ""))
+    }
+
+    @PostMapping("/promote")
+    fun PromoteUser(@RequestBody req: PromoteUserRequest): ResponseEntity<Void> {
+        return userService.promoteUser(req)
+    }
+
+    @PostMapping("/demote")
+    fun PromoteUser(@RequestBody req: DemoteUserRequest): ResponseEntity<Void> {
+        return userService.demoteUser(req)
+    }
+
+    @PostMapping("/ban")
+    fun PromoteUser(@RequestBody req: SetBanUserRequest): ResponseEntity<Void> {
+        return userService.setBanUser(req)
     }
 
     @GetMapping("/")

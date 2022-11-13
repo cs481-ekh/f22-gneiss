@@ -9,13 +9,9 @@ CREATE TABLE users (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     role_id VARCHAR(50) NOT NULL,
-    banned BOOLEAN,
+    banned BOOLEAN default 0,
     FOREIGN KEY(role_id) REFERENCES roles(role_id)
 );
-
-CREATE TABLE tasdfa (
-    id INT
-)
 
 INSERT INTO roles (role_id) VALUES ("user");
 INSERT INTO roles (role_id) VALUES ("admin");

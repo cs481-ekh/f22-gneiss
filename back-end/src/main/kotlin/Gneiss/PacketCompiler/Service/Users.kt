@@ -12,6 +12,19 @@ class CreateUserRequest(
     var lastName: String
 )
 
+class PromoteUserRequest(
+    var email: String
+)
+
+class DemoteUserRequest(
+    var email: String
+)
+
+class SetBanUserRequest(
+    var email: String,
+    var banned: Boolean
+)
+
 class GetUsersResponse(
     var users: List<User>
 )
@@ -32,6 +45,30 @@ class Users(userDao: UserDao) {
             userDao.createAccount(req.email, req.password, req.firstName, req.lastName)
             return ResponseEntity<String>("User account created successfully", HttpStatus.OK)
         }
+    }
+
+    fun promoteUser(req: PromoteUserRequest): ResponseEntity<Void> {
+        val res = userDao.promoteUser(req.email)
+        if (!res) {
+            return ResponseEntity<Void>(HttpStatus.NOT_FOUND)
+        }
+        return ResponseEntity<Void>(HttpStatus.OK)
+    }
+
+    fun demoteUser(req: DemoteUserRequest): ResponseEntity<Void> {
+        val res = userDao.demoteUser(req.email)
+        if (!res) {
+            return ResponseEntity<Void>(HttpStatus.NOT_FOUND)
+        }
+        return ResponseEntity<Void>(HttpStatus.OK)
+    }
+
+    fun setBanUser(req: SetBanUserRequest): ResponseEntity<Void> {
+        val res = userDao.setBanUser(req.email, req.banned)
+        if (!res) {
+            return ResponseEntity<Void>(HttpStatus.NOT_FOUND)
+        }
+        return ResponseEntity<Void>(HttpStatus.OK)
     }
 
     fun getUsers(): GetUsersResponse {
