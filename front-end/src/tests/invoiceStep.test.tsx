@@ -84,6 +84,9 @@ test("Step is completed with 200 response", async () => {
     type: "application/pdf",
   });
   userEvent.upload(screen.getByTestId("fileSelect"), file);
+  fireEvent.change(screen.getByLabelText("Highlight Words"), {
+    target: { value: "broken" },
+  });
   fireEvent.click(screen.getByText("Save & Continue"));
   await waitFor(() => expect(completed).toBe(true));
 });

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { FileSelectButton } from "./fileSelectButton";
+import { CommaSeparatedList } from "./commaSeparatedList";
 import { IStepProps } from "./IStepProps";
 
 export interface InvoiceStepProps extends IStepProps {}
@@ -21,6 +22,7 @@ export function InvoiceStep(props: InvoiceStepProps) {
     } as const,
   };
 
+  const [wordSet, setWordSet] = useState(new Set<string>());
   const [file, setFile] = useState<File>();
   const [alertActive, setAlertActive] = useState(false);
   const [alertReason, setAlertReason] = useState("");
@@ -80,6 +82,7 @@ export function InvoiceStep(props: InvoiceStepProps) {
   return (
     <div style={styles.outerBox}>
       <h1>Invoice File Upload</h1>
+      <CommaSeparatedList wordSet={wordSet} setWordSet={setWordSet} />
       <div style={styles.buttons}>
         <FileSelectButton
           buttonLabel="Upload File"
