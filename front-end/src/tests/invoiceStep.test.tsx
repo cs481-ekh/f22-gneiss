@@ -6,7 +6,7 @@ import userEvent from "@testing-library/user-event";
 
 let serverResponse = 0;
 const server: SetupServerApi = setupServer(
-  rest.post("/api/invoice", async (req, res, ctx) => {
+  rest.post("/api/packet/invoicepdf/:id", async (req, res, ctx) => {
     return res(ctx.status(serverResponse));
   })
 );
