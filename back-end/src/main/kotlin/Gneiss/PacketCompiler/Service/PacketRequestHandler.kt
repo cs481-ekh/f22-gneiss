@@ -48,7 +48,7 @@ class ApprovalPDFPostResponse()
 class InvoicePDFPostResponse()
 
 class PacketGetAllResponse(
-    val allKeys: Set<Packet>
+    val allKeys: MutableSet<Packet>
 )
 
 @Service
@@ -119,11 +119,11 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
 
         // If there is no auth header return an empty response
         if (jwtBody == null) {
-            return ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(emptySet()), HttpStatus.UNAUTHORIZED)
+            return ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mutableSetOf<Packet>()), HttpStatus.UNAUTHORIZED)
         }
 
         // If the user has higher permissions than user return all the packets, else return only those made by that specific user
-        var allKeys: Set<Packet>
+        var allKeys: MutableSet<Packet>
         if (jwtBody.role == "user") {
             allKeys = packetDao.getUserKeys(jwtBody.user)
         } else {
