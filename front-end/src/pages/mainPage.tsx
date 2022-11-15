@@ -52,7 +52,7 @@ export function MainPage(props: MainPageProps) {
 
   return (
     <Paper style={styles.outerBox}>
-      <NavBar content={navItems} barWidth="20vw" />
+      <NavBar content={navItems} basePath="f22-gneiss" barWidth="20vw" />
       <div style={styles.centerBox}>{props.pageContent}</div>
     </Paper>
   );

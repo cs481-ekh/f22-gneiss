@@ -13,6 +13,7 @@ export type NavInfo = {
 
 export interface INavBarProps {
   content: NavInfo[];
+  basePath: string;
   barWidth: string;
 }
 
@@ -25,7 +26,7 @@ export function NavBar(props: INavBarProps) {
 
   const mapLinks = props.content.map((v) => (
     <ListItem key={v.label} disablePadding>
-      <ListItemButton component="a" href={v.href}>
+      <ListItemButton component="a" href={`${props.basePath}${v.href}`}>
         <ListItemText primary={v.label} />
       </ListItemButton>
     </ListItem>
