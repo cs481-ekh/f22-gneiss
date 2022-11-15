@@ -54,7 +54,7 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
         // Get a set of all the fields (packets) for a corresponding key (user)
         // allPacketsHash will be a map<String, String> with the first string being the field and the second being a packet
         val allPacketsHash = jedis.hgetAll("USER#" + user)
-        
+
         // Deserialize all the hashes back into packets
         val allPacketsForUser = mapToPacket(allPacketsHash)
 
