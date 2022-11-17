@@ -2,8 +2,8 @@ package Gneiss.PacketCompiler.Service
 
 import Gneiss.PacketCompiler.DatabaseAccess.CredentialsResponse
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
+import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
-import Gneiss.PacketCompiler.Helpers.JWTHelper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
@@ -11,7 +11,7 @@ class LoginRequest(val username: String, val password: String)
 
 class LoginResponse(val jwt: String)
 
-class Login(jwtHelper: JWTHelper, userDao: UserDao) {
+class Login(jwtHelper: IJWTHelper, userDao: UserDao) {
     var jwtHelper = jwtHelper
     var userDao = userDao
 

@@ -1,6 +1,6 @@
 package Gneiss.PacketCompiler.Models
 
-class Packet(
+data class Packet(
     var name: String,
     var invoicePDFPath: String,
     var approvalPDFPath: String,

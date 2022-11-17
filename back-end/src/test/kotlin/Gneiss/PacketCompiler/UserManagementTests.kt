@@ -2,7 +2,7 @@ package Gneiss.PacketCompiler
 
 import Gneiss.PacketCompiler.DatabaseAccess.CredentialsResponse
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
-import Gneiss.PacketCompiler.Helpers.JWTHelper
+import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Service.CreateUserRequest
 import Gneiss.PacketCompiler.Service.Login
 import Gneiss.PacketCompiler.Service.LoginRequest
@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity
 class UserManagementTests() {
 
     var databaseAccess = mockk<UserDao>()
-    var jwtHelper = mockk<JWTHelper>()
+    var jwtHelper = mockk<IJWTHelper>()
 
     @Test
     fun validLoginCredentials() {
