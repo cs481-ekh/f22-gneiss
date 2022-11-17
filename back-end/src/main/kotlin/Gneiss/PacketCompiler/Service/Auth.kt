@@ -1,14 +1,14 @@
 package Gneiss.PacketCompiler.Service
 
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
+import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
-import Gneiss.PacketCompiler.Helpers.JWTHelper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
 class AuthResponse(val validJWT: Boolean)
 
-class Auth(jwtHelper: JWTHelper, userDao: UserDao) {
+class Auth(jwtHelper: IJWTHelper, userDao: UserDao) {
     var jwtHelper = jwtHelper
     var userDao = userDao
 
