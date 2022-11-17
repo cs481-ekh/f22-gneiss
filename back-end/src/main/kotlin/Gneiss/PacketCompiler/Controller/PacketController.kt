@@ -39,7 +39,7 @@ class PacketController {
     }
 
     @PostMapping("/invoicepdf/{id}")
-    fun invoicePDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile): InvoicePDFPostResponse {
+    fun invoicePDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): InvoicePDFPostResponse {
         var outputName = Date().getTime().toString()
         return packetHandler.invoicePDFPost("user", id, InvoicePDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
     }
