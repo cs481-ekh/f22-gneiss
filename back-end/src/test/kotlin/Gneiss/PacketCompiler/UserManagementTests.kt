@@ -3,6 +3,7 @@ package Gneiss.PacketCompiler
 import Gneiss.PacketCompiler.DatabaseAccess.CredentialsResponse
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
 import Gneiss.PacketCompiler.Helpers.IJWTHelper
+import Gneiss.PacketCompiler.Helpers.JWTBody
 import Gneiss.PacketCompiler.Service.CreateUserRequest
 import Gneiss.PacketCompiler.Service.Login
 import Gneiss.PacketCompiler.Service.LoginRequest
@@ -57,7 +58,7 @@ class UserManagementTests() {
         every { databaseAccess.checkAccountExists(any()) } returns false
         every { databaseAccess.createAccount(any(), any(), any(), any()) } returns Unit
 
-        val userService = Users(databaseAccess)
+        val userService = Users(jwtHelper, databaseAccess)
 
         val userRequest = CreateUserRequest("someEmail@email.com", "somePassword", "firstName", "lastName")
         val responseExpected = ResponseEntity<String>("User account created successfully", HttpStatus.OK)
@@ -70,7 +71,7 @@ class UserManagementTests() {
     fun userAccountNotCreated() {
         every { databaseAccess.checkAccountExists(any()) } returns true
 
-        val userService = Users(databaseAccess)
+        val userService = Users(jwtHelper, databaseAccess)
 
         val userRequest = CreateUserRequest("someEmail@email.com", "somePassword", "firstName", "lastName")
         val responseExpected = ResponseEntity<String>("Account already exists for this email", HttpStatus.NOT_ACCEPTABLE)
@@ -83,64 +84,113 @@ class UserManagementTests() {
     fun getUsersReturnsListOfUsers() {
         val user = User("CharlieKelly@gmail.com", "user", true)
         every { databaseAccess.getUsers() } returns mutableListOf<User>(user)
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "admin")
 
-        val userService = Users(databaseAccess)
+        val userService = Users(jwtHelper, databaseAccess)
         val responseExpected = mutableListOf<User>(user)
-        val responseActual = userService.getUsers()
-        assertThat(responseActual.users).isEqualTo(responseExpected)
+        val responseActual = userService.getUsers("jwt")
+        assertThat(responseActual.body!!.users).isEqualTo(responseExpected)
+    }
+
+    @Test
+    fun nonAdminsCannotgetUsers() {
+        val user = User("CharlieKelly@gmail.com", "user", true)
+        every { databaseAccess.getUsers() } returns mutableListOf<User>(user)
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "user")
+
+        val userService = Users(jwtHelper, databaseAccess)
+        val responseActual = userService.getUsers("jwt")
+        assertThat(responseActual.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED)
     }
 
     @Test
     fun promoteUserSucceedsIfDaoOperationSucceeds() {
         every { databaseAccess.promoteUser(any()) } returns true
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "admin")
 
-        val userService = Users(databaseAccess)
-        val response = userService.promoteUser(PromoteUserRequest("DennisReynolds@gmail.com"))
+        val userService = Users(jwtHelper, databaseAccess)
+        val response = userService.promoteUser("jwt", PromoteUserRequest("DennisReynolds@gmail.com"))
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK)
     }
 
     @Test
     fun promoteUserFailsIfDaoOperationFails() {
         every { databaseAccess.promoteUser(any()) } returns false
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "admin")
 
-        val userService = Users(databaseAccess)
-        val response = userService.promoteUser(PromoteUserRequest("DeeReynolds@gmail.com"))
+        val userService = Users(jwtHelper, databaseAccess)
+        val response = userService.promoteUser("jwt", PromoteUserRequest("DeeReynolds@gmail.com"))
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND)
+    }
+    
+    @Test
+    fun nonAdminCannotpromoteUser() {
+        every { databaseAccess.promoteUser(any()) } returns false
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "user")
+
+        val userService = Users(jwtHelper, databaseAccess)
+        val response = userService.promoteUser("jwt", PromoteUserRequest("DeeReynolds@gmail.com"))
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED)
     }
 
     @Test
     fun demoteUserSucceedsIfDaoOperationSucceeds() {
         every { databaseAccess.demoteUser(any()) } returns true
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "admin")
 
-        val userService = Users(databaseAccess)
-        val response = userService.demoteUser(DemoteUserRequest("FrankReynolds@gmail.com"))
+        val userService = Users(jwtHelper, databaseAccess)
+        val response = userService.demoteUser("jwt", DemoteUserRequest("FrankReynolds@gmail.com"))
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK)
     }
 
     @Test
     fun demoteUserFailsIfDaoOperationFails() {
         every { databaseAccess.demoteUser(any()) } returns false
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "admin")
 
-        val userService = Users(databaseAccess)
-        val response = userService.demoteUser(DemoteUserRequest("RonaldMacdonald@gmail.com"))
+        val userService = Users(jwtHelper, databaseAccess)
+        val response = userService.demoteUser("jwt", DemoteUserRequest("RonaldMacdonald@gmail.com"))
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND)
     }
 
     @Test
+    fun nonAdminCannotdemoteUser() {
+        every { databaseAccess.demoteUser(any()) } returns false
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "user")
+
+        val userService = Users(jwtHelper, databaseAccess)
+        val response = userService.demoteUser("jwt", DemoteUserRequest("RonaldMacdonald@gmail.com"))
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+
+    @Test
     fun setBanUserSucceedsIfDaoOperationSucceeds() {
         every { databaseAccess.setBanUser(any(), any()) } returns true
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "admin")
 
-        val userService = Users(databaseAccess)
-        val response = userService.setBanUser(SetBanUserRequest("BooRadley@gmail.com", true))
+        val userService = Users(jwtHelper, databaseAccess)
+        val response = userService.setBanUser("jwt", SetBanUserRequest("BooRadley@gmail.com", true))
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK)
     }
 
     @Test
     fun setBanUserFailsIfDaoOperationFails() {
         every { databaseAccess.setBanUser(any(), any()) } returns false
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "admin")
 
-        val userService = Users(databaseAccess)
-        val response = userService.setBanUser(SetBanUserRequest("ScoutFinch@gmail.com", true))
+        val userService = Users(jwtHelper, databaseAccess)
+        val response = userService.setBanUser("jwt", SetBanUserRequest("ScoutFinch@gmail.com", true))
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND)
+    }
+
+    @Test
+    fun nonAdminCannotsetBanUser() {
+        every { databaseAccess.setBanUser(any(), any()) } returns false
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "user")
+
+        val userService = Users(jwtHelper, databaseAccess)
+        val response = userService.setBanUser("jwt", SetBanUserRequest("ScoutFinch@gmail.com", true))
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED)
     }
 }

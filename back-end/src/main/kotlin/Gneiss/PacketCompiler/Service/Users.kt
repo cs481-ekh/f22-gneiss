@@ -2,8 +2,10 @@ package Gneiss.PacketCompiler.Service
 
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
 import Gneiss.PacketCompiler.Models.User
+import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import com.sun.net.httpserver.HttpsParameters
 
 class CreateUserRequest(
     var email: String,
@@ -29,7 +31,8 @@ class GetUsersResponse(
     var users: List<User>
 )
 
-class Users(userDao: UserDao) {
+class Users(jwtHelper: IJWTHelper, userDao: UserDao) {
+    var jwtHelper = jwtHelper
     var userDao = userDao
 
     fun createUser(req: CreateUserRequest): ResponseEntity<String> {
@@ -47,7 +50,10 @@ class Users(userDao: UserDao) {
         }
     }
 
-    fun promoteUser(req: PromoteUserRequest): ResponseEntity<Void> {
+    fun promoteUser(jwt: String, req: PromoteUserRequest): ResponseEntity<Void> {
+        if (jwtHelper.parseJWT(jwt)?.role != "admin") {
+            return ResponseEntity<Void>(HttpStatus.UNAUTHORIZED)
+        }
         val res = userDao.promoteUser(req.email)
         if (!res) {
             return ResponseEntity<Void>(HttpStatus.NOT_FOUND)
@@ -55,7 +61,10 @@ class Users(userDao: UserDao) {
         return ResponseEntity<Void>(HttpStatus.OK)
     }
 
-    fun demoteUser(req: DemoteUserRequest): ResponseEntity<Void> {
+    fun demoteUser(jwt: String, req: DemoteUserRequest): ResponseEntity<Void> {
+        if (jwtHelper.parseJWT(jwt)?.role != "admin") {
+            return ResponseEntity<Void>(HttpStatus.UNAUTHORIZED)
+        }
         val res = userDao.demoteUser(req.email)
         if (!res) {
             return ResponseEntity<Void>(HttpStatus.NOT_FOUND)
@@ -63,7 +72,10 @@ class Users(userDao: UserDao) {
         return ResponseEntity<Void>(HttpStatus.OK)
     }
 
-    fun setBanUser(req: SetBanUserRequest): ResponseEntity<Void> {
+    fun setBanUser(jwt: String, req: SetBanUserRequest): ResponseEntity<Void> {
+        if (jwtHelper.parseJWT(jwt)?.role != "admin") {
+            return ResponseEntity<Void>(HttpStatus.UNAUTHORIZED)
+        }
         val res = userDao.setBanUser(req.email, req.banned)
         if (!res) {
             return ResponseEntity<Void>(HttpStatus.NOT_FOUND)
@@ -71,7 +83,10 @@ class Users(userDao: UserDao) {
         return ResponseEntity<Void>(HttpStatus.OK)
     }
 
-    fun getUsers(): GetUsersResponse {
-        return GetUsersResponse(userDao.getUsers())
+    fun getUsers(jwt: String): ResponseEntity<GetUsersResponse> {
+        if (jwtHelper.parseJWT(jwt)?.role != "admin") {
+            return ResponseEntity<GetUsersResponse>(GetUsersResponse(mutableListOf<User>()), HttpStatus.UNAUTHORIZED)
+        }
+        return ResponseEntity<GetUsersResponse>(GetUsersResponse(userDao.getUsers()), HttpStatus.OK)
     }
 }
