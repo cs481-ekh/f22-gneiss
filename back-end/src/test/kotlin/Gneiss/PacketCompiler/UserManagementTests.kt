@@ -4,14 +4,14 @@ import Gneiss.PacketCompiler.DatabaseAccess.CredentialsResponse
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
 import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
+import Gneiss.PacketCompiler.Models.User
 import Gneiss.PacketCompiler.Service.CreateUserRequest
+import Gneiss.PacketCompiler.Service.DemoteUserRequest
 import Gneiss.PacketCompiler.Service.Login
 import Gneiss.PacketCompiler.Service.LoginRequest
-import Gneiss.PacketCompiler.Service.Users
 import Gneiss.PacketCompiler.Service.PromoteUserRequest
-import Gneiss.PacketCompiler.Service.DemoteUserRequest
 import Gneiss.PacketCompiler.Service.SetBanUserRequest
-import Gneiss.PacketCompiler.Models.User
+import Gneiss.PacketCompiler.Service.Users
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -122,7 +122,7 @@ class UserManagementTests() {
         val response = userService.promoteUser("jwt", PromoteUserRequest("DeeReynolds@gmail.com"))
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND)
     }
-    
+
     @Test
     fun nonAdminCannotpromoteUser() {
         every { databaseAccess.promoteUser(any()) } returns false
@@ -162,7 +162,6 @@ class UserManagementTests() {
         val response = userService.demoteUser("jwt", DemoteUserRequest("RonaldMacdonald@gmail.com"))
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED)
     }
-
 
     @Test
     fun setBanUserSucceedsIfDaoOperationSucceeds() {

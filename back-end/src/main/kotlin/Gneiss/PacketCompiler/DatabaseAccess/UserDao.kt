@@ -1,11 +1,11 @@
 package Gneiss.PacketCompiler.DatabaseAccess
 
+import Gneiss.PacketCompiler.Models.User
 import org.springframework.security.crypto.bcrypt.BCrypt
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.SQLException
-import Gneiss.PacketCompiler.Models.User
 
 class CredentialsResponse(val validFlag: Boolean, val roleId: String)
 
@@ -134,7 +134,7 @@ class UserDao {
         }
         return true
     }
-    
+
     fun setBanUser(userEmail: String, banned: Boolean): Boolean {
         if (!checkAccountExists(userEmail)) {
             return false

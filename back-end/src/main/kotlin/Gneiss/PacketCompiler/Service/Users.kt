@@ -1,11 +1,10 @@
 package Gneiss.PacketCompiler.Service
 
 import Gneiss.PacketCompiler.DatabaseAccess.UserDao
-import Gneiss.PacketCompiler.Models.User
 import Gneiss.PacketCompiler.Helpers.IJWTHelper
+import Gneiss.PacketCompiler.Models.User
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import com.sun.net.httpserver.HttpsParameters
 
 class CreateUserRequest(
     var email: String,
