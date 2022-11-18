@@ -16,6 +16,7 @@ import Gneiss.PacketCompiler.Service.GetUsersResponse
 import Gneiss.PacketCompiler.Service.PromoteUserRequest
 import Gneiss.PacketCompiler.Service.DemoteUserRequest
 import Gneiss.PacketCompiler.Service.SetBanUserRequest
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -26,12 +27,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/user")
-class UserManagementController {
+class UserManagementController @Autowired constructor(var jwtHelper: JWTHelper) {
 
     val userManagementDao = UserDao()
-    val userService = Users(userManagementDao)
+    val userService = Users(jwtHelper, userManagementDao)
 
-    val jwtHelper = JWTHelper()
     val login = Login(jwtHelper, userManagementDao)
     val auth = Auth(jwtHelper, userManagementDao)
 
@@ -56,22 +56,22 @@ class UserManagementController {
     }
 
     @PostMapping("/promote")
-    fun PromoteUser(@RequestBody req: PromoteUserRequest): ResponseEntity<Void> {
-        return userService.promoteUser(req)
+    fun PromoteUser(@RequestHeader headers: Map<String, String>, @RequestBody req: PromoteUserRequest): ResponseEntity<Void> {
+        return userService.promoteUser(headers.getOrDefault("authorization", ""), req)
     }
 
     @PostMapping("/demote")
-    fun PromoteUser(@RequestBody req: DemoteUserRequest): ResponseEntity<Void> {
-        return userService.demoteUser(req)
+    fun PromoteUser(@RequestHeader headers: Map<String, String>, @RequestBody req: DemoteUserRequest): ResponseEntity<Void> {
+        return userService.demoteUser(headers.getOrDefault("authorization", ""), req)
     }
 
     @PostMapping("/ban")
-    fun PromoteUser(@RequestBody req: SetBanUserRequest): ResponseEntity<Void> {
-        return userService.setBanUser(req)
+    fun PromoteUser(@RequestHeader headers: Map<String, String>, @RequestBody req: SetBanUserRequest): ResponseEntity<Void> {
+        return userService.setBanUser(headers.getOrDefault("authorization", ""), req)
     }
 
     @GetMapping("/")
-    fun GetUsers(): GetUsersResponse {
-        return userService.getUsers()
+    fun GetUsers(@RequestHeader headers: Map<String, String>): ResponseEntity<GetUsersResponse> {
+        return userService.getUsers(headers.getOrDefault("authorization", ""))
     }
 }
