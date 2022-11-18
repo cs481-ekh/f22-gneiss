@@ -52,26 +52,26 @@ class UserManagementController @Autowired constructor(var jwtHelper: JWTHelper) 
 
     @PostMapping("/auth")
     fun AuthenticateJWT(@RequestHeader headers: Map<String, String>): ResponseEntity<AuthResponse> {
-        return auth.authenticateJWT(headers.getOrDefault("authorization", ""))
+        return auth.authenticateJWT(headers.getOrDefault("authorization", "invalid"))
     }
 
     @PostMapping("/promote")
     fun PromoteUser(@RequestHeader headers: Map<String, String>, @RequestBody req: PromoteUserRequest): ResponseEntity<Void> {
-        return userService.promoteUser(headers.getOrDefault("authorization", ""), req)
+        return userService.promoteUser(headers.getOrDefault("authorization", "invalid"), req)
     }
 
     @PostMapping("/demote")
     fun PromoteUser(@RequestHeader headers: Map<String, String>, @RequestBody req: DemoteUserRequest): ResponseEntity<Void> {
-        return userService.demoteUser(headers.getOrDefault("authorization", ""), req)
+        return userService.demoteUser(headers.getOrDefault("authorization", "invalid"), req)
     }
 
     @PostMapping("/ban")
     fun PromoteUser(@RequestHeader headers: Map<String, String>, @RequestBody req: SetBanUserRequest): ResponseEntity<Void> {
-        return userService.setBanUser(headers.getOrDefault("authorization", ""), req)
+        return userService.setBanUser(headers.getOrDefault("authorization", "invalid"), req)
     }
 
     @GetMapping("/")
     fun GetUsers(@RequestHeader headers: Map<String, String>): ResponseEntity<GetUsersResponse> {
-        return userService.getUsers(headers.getOrDefault("authorization", ""))
+        return userService.getUsers(headers.getOrDefault("authorization", "invalid"))
     }
 }
