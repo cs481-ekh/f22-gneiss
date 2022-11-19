@@ -9,6 +9,7 @@ CREATE TABLE users (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     role_id VARCHAR(50) NOT NULL,
+    banned BOOLEAN default 0,
     FOREIGN KEY(role_id) REFERENCES roles(role_id)
 );
 
