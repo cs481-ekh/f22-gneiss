@@ -131,7 +131,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
           })
           .then((loginRes) => {
             httpService.setAuth(loginRes.data.jwt);
-            history.push("home");
+            history.push("/f22-gneiss/home");
           })
           .catch(() => {
             setAlertReason("Account created successfully, but login failed.");
