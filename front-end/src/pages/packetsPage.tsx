@@ -1,9 +1,10 @@
 import { AddCircle } from "@mui/icons-material";
 import { Alert, Button, Paper, Snackbar, TextField } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { PacketListEntry } from "../components/packets/PacketListEntry";
 import { v4 as uuidv4 } from "uuid";
 import { getHttpService } from "../data/httpService";
+import { Packet } from "../data/Models";
 
 export interface PacketsPageProps {}
 
@@ -29,30 +30,27 @@ export function PacketsPage(props: PacketsPageProps) {
     } as const,
   };
 
-  const dummyPackets = [
-    {
-      name: "Packet 1",
-      id: "id1",
-      new: false,
-    },
-    {
-      name: "Packet 2",
-      id: "id2",
-      new: false,
-    },
-    {
-      name: "Packet 3",
-      id: "id3",
-      new: false,
-    },
-  ];
-
-  const [packets, setPackets] = useState(dummyPackets);
+  const [packets, setPackets] = useState<Packet[]>([]);
   const [canCreatePacket, setCanCreatePacket] = useState(true);
   const [search, setSearch] = useState("");
   const [alertActive, setAlertActive] = useState(false);
   const [alertReason, setAlertReason] = useState("");
   const httpService = getHttpService();
+
+  useEffect(() => {
+    const httpService = getHttpService();
+    httpService.axios.get<any>("/api/packet/retrieve").then((res) => {
+      let np: Packet[] = [];
+      Object.entries(res.data.allKeys).forEach((v: any) => {
+        np.push({
+          name: v[1].name,
+          id: v[0],
+          new: false,
+        });
+        setPackets(np);
+      });
+    });
+  }, []);
 
   const startAlert = (reason: string) => {
     setAlertActive(true);

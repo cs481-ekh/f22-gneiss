@@ -54,7 +54,7 @@ export function MainPage(props: MainPageProps) {
   const httpService = getHttpService();
   const userRole = (jwt_decode(httpService.getAuth()) as any).role;
 
-  if (userRole === 'admin') {
+  if (userRole === "admin") {
     navItems.splice(navItems.length - 1, 0, {
       label: "Admin",
       href: "/admin",

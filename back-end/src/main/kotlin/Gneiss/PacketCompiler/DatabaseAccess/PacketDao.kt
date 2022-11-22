@@ -34,43 +34,34 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
         return ret
     }
 
-    override fun getAllKeys(): MutableSet<Packet> {
+    override fun getAllKeys(): Map<String, Packet> {
         val jedis = pool.getResource()
         val allKeys: Set<String> = jedis.keys("USER#*")
 
-        var allPackets = mutableSetOf<Packet>()
-        for (key in allKeys) {
-            val allPacketsForUser = mapToPacket(jedis.hgetAll(key))
-
-            allPackets.addAll(allPacketsForUser)
+        val res = mutableMapOf<String, Packet>() jedis.use {
+            for (key in allKeys) {
+                val allPacketsForUser = jedis.hgetAll(key)
+                allPacketsForUser.forEach { entry ->
+                    res[entry.key] = jsonSerializer.deserializePacket(entry.value)
+                }
+            }
         }
 
-        return allPackets
+        return res
     }
 
-    override fun getUserKeys(user: String): MutableSet<Packet> {
+    override fun getUserKeys(user: String): Map<String, Packet> {
         val jedis = pool.getResource()
+        val res = mutableMapOf<String, Packet>() jedis.use {
+            // Get a set of all the fields (packets) for a corresponding key (user)
+            // allPacketsHash will be a map<String, String> with the first string being the field and the second being a packet
+            val stringPacketMap = jedis.hgetAll("USER#" + user)
 
-        // Get a set of all the fields (packets) for a corresponding key (user)
-        // allPacketsHash will be a map<String, String> with the first string being the field and the second being a packet
-        val allPacketsHash = jedis.hgetAll("USER#" + user)
-
-        // Deserialize all the hashes back into packets
-        val allPacketsForUser = mapToPacket(allPacketsHash)
-
-        return allPacketsForUser
-    }
-
-    override fun mapToPacket(map: Map<String, String>): MutableSet<Packet> {
-        val allPackets = mutableSetOf<Packet>()
-
-        // Get all of the values from the map (each 'key' is a packet id but we want all of them so we can just grab all values)
-        val allPacketHashes = map.values
-
-        for (hash in allPacketHashes) {
-            allPackets.add(jsonSerializer.deserializePacket(hash))
+            stringPacketMap.forEach { entry ->
+                res[entry.key] = jsonSerializer.deserializePacket(entry.value)
+            }
         }
 
-        return allPackets
+        return res
     }
 }

@@ -61,9 +61,7 @@ export function PacketListEntry(props: PacketListEntryProps) {
           onKeyDown={handleNameEnter}
         />
       )}
-      {!nameInputActive && (
-        <Link href={`./packet/${props.id}`}>{name}</Link>
-      )}
+      {!nameInputActive && <Link href={`./packet/${props.id}`}>{name}</Link>}
       <Divider />
     </Paper>
   );

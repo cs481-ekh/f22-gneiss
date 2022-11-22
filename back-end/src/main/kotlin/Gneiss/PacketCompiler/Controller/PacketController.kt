@@ -39,32 +39,35 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
     var packetHandler = PacketRequestHandler(pdfHelper, packetDao, jwtHelper)
 
     @PostMapping("/approvalpdf/{id}")
-    fun approvalPDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): ApprovalPDFPostResponse {
-        var outputName = Date().getTime().toString()
-        return packetHandler.approvalPDFPost("USER#" + "user", id, ApprovalPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes(), highlightWords))
+    fun approvalPDF(@RequestHeader headers: Map<String, String>, @PathVariable id: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): ApprovalPDFPostResponse {
+        val outputName = Date().getTime().toString()
+        val user = jwtHelper.parseJWT(headers.getOrDefault("authorization", "invalid"))!!.user
+        return packetHandler.approvalPDFPost("USER#" + user, id, ApprovalPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes(), highlightWords))
     }
 
     @PostMapping("/invoicepdf/{id}")
-    fun invoicePDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile): InvoicePDFPostResponse {
-        var outputName = Date().getTime().toString()
-        return packetHandler.invoicePDFPost("USER#" + "user", id, InvoicePDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
+    fun invoicePDF(@RequestHeader headers: Map<String, String>, @PathVariable id: String, @RequestParam("file") file: MultipartFile): InvoicePDFPostResponse {
+        val outputName = Date().getTime().toString()
+        val user = jwtHelper.parseJWT(headers.getOrDefault("authorization", "invalid"))!!.user
+        return packetHandler.invoicePDFPost("USER#" + user, id, InvoicePDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
     }
 
     @PostMapping("/{id}")
-    fun PacketPost(@PathVariable id: String, @RequestBody req: PacketPostRequest): PacketPostResponse {
-        return packetHandler.packetPost("USER#" + "user", id, req)
+    fun PacketPost(@RequestHeader headers: Map<String, String>, @PathVariable id: String, @RequestBody req: PacketPostRequest): PacketPostResponse {
+        val user = jwtHelper.parseJWT(headers.getOrDefault("authorization", "invalid"))!!.user
+        return packetHandler.packetPost("USER#" + user, id, req)
     }
 
     @PatchMapping("/{id}")
-    fun PacketPatch(@PathVariable id: String, @RequestBody req: PacketPatchRequest): PacketPatchResponse {
-        return packetHandler.packetPatch("USER#" + "user", id, req)
+    fun PacketPatch(@RequestHeader headers: Map<String, String>, @PathVariable id: String, @RequestBody req: PacketPatchRequest): PacketPatchResponse {
+        val user = jwtHelper.parseJWT(headers.getOrDefault("authorization", "invalid"))!!.user
+        return packetHandler.packetPatch("USER#" + user, id, req)
     }
 
     @GetMapping("/retrieve")
     fun getAllPackets(@RequestHeader headers: Map<String, String>): ResponseEntity<PacketGetAllResponse> {
         // Get the jwt included in the headers - should be the Authorization header
         val jwt: String = headers.getOrDefault("authorization", "")
-
         return packetHandler.getAllPackets(jwt)
     }
 }
