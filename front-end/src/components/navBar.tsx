@@ -26,7 +26,7 @@ export function NavBar(props: INavBarProps) {
 
   const mapLinks = props.content.map((v) => (
     <ListItem key={v.label} disablePadding>
-      <ListItemButton component="a" href={`${props.basePath}${v.href}`}>
+      <ListItemButton component="a" href={`/f22-gneiss${v.href}`}>
         <ListItemText primary={v.label} />
       </ListItemButton>
     </ListItem>
