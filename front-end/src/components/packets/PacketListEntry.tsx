@@ -62,7 +62,7 @@ export function PacketListEntry(props: PacketListEntryProps) {
         />
       )}
       {!nameInputActive && (
-        <Link href={`f22-gneiss/packet/${props.id}`}>{name}</Link>
+        <Link href={`./packet/${props.id}`}>{name}</Link>
       )}
       <Divider />
     </Paper>
