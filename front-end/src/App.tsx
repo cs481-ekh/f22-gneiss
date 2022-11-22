@@ -24,6 +24,7 @@ const theme = createTheme({
 });
 
 function App() {
+  console.log("initiate function App")
   return (
     <ThemeProvider theme={theme}>
       <Router history={history} basename="f22-gneiss">

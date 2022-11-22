@@ -19,12 +19,14 @@ export function MainPage(props: MainPageProps) {
         const validFlag = authRes.data.validJWT;
 
         if (!validFlag) {
+          console.log("f22 push from .then")
           history.push("/f22-gneiss");
         }
       })
       .catch((e: any) => {
         // Refreshing the page as fast as you can shouldn't send you to login
         if (!e.message.includes("abort")) {
+          console.log("f22 push from .catch")
           history.push("/f22-gneiss");
         }
       });
