@@ -17,6 +17,6 @@ RUN mvn -f /home/app/pom.xml clean test package
 # Package stage
 FROM openjdk:latest
 COPY --from=build /home/app/target/*.jar app.jar
-COPY --from=build /home/app/src/main/resources/static /
+COPY --from=build /home/app/src/main/resources/static /build
 RUN mkdir output
 CMD ["java","-jar","app.jar"]
