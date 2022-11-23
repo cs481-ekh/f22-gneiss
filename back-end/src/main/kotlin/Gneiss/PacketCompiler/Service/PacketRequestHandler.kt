@@ -178,7 +178,7 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
     }
 
     fun readFile (File file): ByteBuffer {
-        DataInputStream dataInputStream = null;
+        DataInputStream dataInputStream = null
         try {
             var byteCount = file.length()
 
