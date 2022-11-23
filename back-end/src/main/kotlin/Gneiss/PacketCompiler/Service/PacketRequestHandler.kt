@@ -48,16 +48,11 @@ class ApprovalPDFPostResponse()
 
 class InvoicePDFPostResponse()
 
-class SinglePacketGetResponse()
-
-class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
-
-class PacketGetResponse(
-    val numKeys: Int,
-    val allKeys: Set<String>
+class PacketGetAllResponse(
+    val allKeys: MutableSet<Packet>
 )
 
-class PacketGetSingleResponse()
+class SinglePacketGetResponse()
 
 @Service
 class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelper: IJWTHelper) {
@@ -135,24 +130,23 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
         headers.setContentType(MediaType.APPLICATION_PDF)
     }
 
-    fun getAllPackets(jwt: String): ResponseEntity<PacketGetResponse> {
+    fun getAllPackets(jwt: String): ResponseEntity<PacketGetAllResponse> {
         // Get the user from the jwt using the parse method and dereferencing from the JWTBody
         val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
 
         // If there is no auth header return an empty response
         if (jwtBody == null) {
-            return ResponseEntity<PacketGetResponse>(PacketGetResponse(0, emptySet()), HttpStatus.UNAUTHORIZED)
+            return ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mutableSetOf<Packet>()), HttpStatus.UNAUTHORIZED)
         }
 
         // If the user has higher permissions than user return all the packets, else return only those made by that specific user
-        var allKeys: Set<String>
+        var allKeys: MutableSet<Packet>
         if (jwtBody.role == "user") {
             allKeys = packetDao.getUserKeys(jwtBody.user)
         } else {
             allKeys = packetDao.getAllKeys()
         }
-        val numKeys = allKeys.size
 
-        return ResponseEntity<PacketGetResponse>(PacketGetResponse(numKeys, allKeys), HttpStatus.OK)
+        return ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(allKeys), HttpStatus.OK)
     }
 }

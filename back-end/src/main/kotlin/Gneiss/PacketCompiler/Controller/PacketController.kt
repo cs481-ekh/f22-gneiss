@@ -8,7 +8,7 @@ import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostResponse
 import Gneiss.PacketCompiler.Service.InvoicePDFPostRequest
 import Gneiss.PacketCompiler.Service.InvoicePDFPostResponse
-import Gneiss.PacketCompiler.Service.PacketGetResponse
+import Gneiss.PacketCompiler.Service.PacketGetAllResponse
 import Gneiss.PacketCompiler.Service.PacketPatchRequest
 import Gneiss.PacketCompiler.Service.PacketPatchResponse
 import Gneiss.PacketCompiler.Service.PacketPostRequest
@@ -42,23 +42,23 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
     @PostMapping("/approvalpdf/{id}")
     fun approvalPDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): ApprovalPDFPostResponse {
         var outputName = Date().getTime().toString()
-        return packetHandler.approvalPDFPost("user", id, ApprovalPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes(), highlightWords))
+        return packetHandler.approvalPDFPost("USER#" + "user", id, ApprovalPDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes(), highlightWords))
     }
 
     @PostMapping("/invoicepdf/{id}")
     fun invoicePDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile): InvoicePDFPostResponse {
         var outputName = Date().getTime().toString()
-        return packetHandler.invoicePDFPost("user", id, InvoicePDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
+        return packetHandler.invoicePDFPost("USER#" + "user", id, InvoicePDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
     }
 
     @PostMapping("/{id}")
     fun PacketPost(@PathVariable id: String, @RequestBody req: PacketPostRequest): PacketPostResponse {
-        return packetHandler.packetPost("user", id, req)
+        return packetHandler.packetPost("USER#" + "user", id, req)
     }
 
     @PatchMapping("/{id}")
     fun PacketPatch(@PathVariable id: String, @RequestBody req: PacketPatchRequest): PacketPatchResponse {
-        return packetHandler.packetPatch("user", id, req)
+        return packetHandler.packetPatch("USER#" + "user", id, req)
     }
 
 
@@ -68,7 +68,7 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
     }
 
     @GetMapping("/retrieve")
-    fun getAllPackets(@RequestHeader headers: Map<String, String>): ResponseEntity<PacketGetResponse> {
+    fun getAllPackets(@RequestHeader headers: Map<String, String>): ResponseEntity<PacketGetAllResponse> {
         // Get the jwt included in the headers - should be the Authorization header
         val jwt: String = headers.getOrDefault("authorization", "")
 

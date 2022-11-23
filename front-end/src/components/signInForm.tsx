@@ -114,7 +114,7 @@ export function SignInForm(props: SignInFormProps) {
             Sign in
           </Button>
         </div>
-        <Link style={styles.navLink} href="/newuser" underline="always">
+        <Link style={styles.navLink} href="/f22-gneiss/newuser" underline="always">
           Need account?
         </Link>
         <Snackbar open={alertReason !== ""}>
