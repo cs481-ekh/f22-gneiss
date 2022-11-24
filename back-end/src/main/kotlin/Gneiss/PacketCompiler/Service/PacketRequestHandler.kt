@@ -10,6 +10,9 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.ByteBuffer  
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -43,6 +46,11 @@ class ApprovalPDFPostRequest(
 class InvoicePDFPostRequest(
     val outputName: String,
     val fileBytes: ByteArray
+)
+
+class SinglePacketRequest(
+    val name: String, 
+    val compiledPDFPath: String
 )
 
 class PacketPostResponse()
@@ -123,40 +131,6 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
         return InvoicePDFPostResponse()
     }
 
-    fun getSinglePacket(jwt: String, id: String): ResponseEntity<PacketGetSingleResponse> {
-        // Parse the jwt to get the users username and role, if null return a Unauthorized http response
-        val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
-
-        if (jwtBody == null) {
-            return ResponseEntity<PacketGetSingleResponse>(PacketGetSingleResponse(ByteBuffer.allocate(0)), HttpStatus.UNAUTHORIZED)
-        }
-
-        // Do something to get the file location via the packetDao (get user from jwt for key and id is field)
-        // If the user is an admin there is additional work to do, as they may not be the user who owns the packet
-        var packetToReturn: Packet
-        if (jwtBody.role == "user") {
-            packetToReturn = packetDao.get(jwtBody.user, id)
-        } else {
-            //TODO: WORK FOR ADMIN
-            packetToReturn = Packet("name", "invoice", "approval", "csv", "compiled")
-        }
-        
-        // Get the pdf file as a byte array
-        val packetFile = File(packetToReturn.compiledPDFPath)
-        val pdfByteBuffer = readFile(packetFile)
-
-        // Define the headers needed to specify we are returning a pdf
-        //TODO: LET THE USER CHANGE BETWEEN INLINE (browser view), AND ATTACHMENT (download)
-        val contentDisposition: ContentDisposition = ContentDisposition.builder("attachment").filename("Filename").build()
-
-        val headers: HttpHeaders = HttpHeaders()
-        headers.setContentType(MediaType.APPLICATION_PDF)
-        headers.setContentLength(pdfByteBuffer.limit())
-        headers.setContentDisposition(contentDisposition)
-
-        return ResponseEntity<PacketGetSingleResponse>(PacketGetSingleResponse(pdfByteBuffer), headers, HttpStatus.OK)
-    }
-
     fun getAllPackets(jwt: String): ResponseEntity<PacketGetAllResponse> {
         // Get the user from the jwt using the parse method and dereferencing from the JWTBody
         val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
@@ -177,23 +151,34 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
         return ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(allKeys), HttpStatus.OK)
     }
 
-    fun readFile (File file): ByteBuffer {
-        DataInputStream dataInputStream = null
-        try {
-            var byteCount = file.length()
+    fun getSinglePacket(jwt: String, id: String, req: SinglePacketRequest): ResponseEntity<ByteArray> {
+        // Parse the jwt to get the users username and role, if null return a Unauthorized http response
+        val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
 
-            var fileInputStream = FileInputStream(file)
-            var dataInputStream = DataInputStream(fileInputStream)
-            var bytes = ByteArray(byteCount)
-            dataInputStream.readFully(bytes)
+        if (jwtBody == null) {
+            return ResponseEntity<ByteArray>(ByteArray(0), HttpStatus.UNAUTHORIZED)
+        }
+        
+        //TESTING
+        val filename = "test.pdf"
+        val pathToFile: Path = Paths.get(filename)
+        println("Path string: " + pathToFile.toString())
+        println("Absolute path string: " + (pathToFile.toAbsolutePath()).toString())
 
-            return ByteBuffer.wrap(bytes)
-        } 
-        catch (e: IOException) {
-            return ByteBuffer.allocate(0)
-        }
-        finally {
-            dataInputStream.close()
-        }
+        // Get the pdf file as a byteBuffer
+        val packetFile = File(req.compiledPDFPath)
+        val packetSize = packetFile.length()
+        val pdfByteArray: ByteArray = Files.readAllBytes(packetFile.toPath())
+
+        // Define the headers needed to specify we are returning a pdf
+        // TODO: LET THE USER CHANGE BETWEEN INLINE (browser view), AND ATTACHMENT (download)
+        val contentDisposition: ContentDisposition = ContentDisposition.builder("attachment").filename(req.name).build()
+
+        val headers: HttpHeaders = HttpHeaders()
+        headers.setContentType(MediaType.APPLICATION_PDF)
+        headers.setContentLength(packetSize)
+        headers.setContentDisposition(contentDisposition)
+
+        return ResponseEntity<ByteArray>(pdfByteArray, headers, HttpStatus.OK)
     }
 }

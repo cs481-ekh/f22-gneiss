@@ -15,6 +15,8 @@ import Gneiss.PacketCompiler.Service.PacketPatchResponse
 import Gneiss.PacketCompiler.Service.PacketPostRequest
 import Gneiss.PacketCompiler.Service.PacketPostResponse
 import Gneiss.PacketCompiler.Service.PacketRequestHandler
+import Gneiss.PacketCompiler.Service.SinglePacketRequest
+import java.nio.ByteBuffer  
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -63,11 +65,14 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
 
 
     @GetMapping("/retrieve/{id}") 
-    fun getSinglePacket(@PathVariable id: String, @RequestHeader headers: Map<String, String>): ResponseEntity<PacketGetSingleResponse> {
+    fun getSinglePacket(@PathVariable id: String, @RequestHeader headers: Map<String, String>, @RequestBody req: SinglePacketRequest): ResponseEntity<ByteArray> {
         // Get the jwt included in the headers - should be the Authorization header
         val jwt: String = headers.getOrDefault("authorization", "")
 
-        return packetHandler.getSinglePacket(jwt, id)
+        println("Packet ID passed in via path variable: " + id)
+        println("Request passed to getSinglePacket name: " + req.name + ", and path: " + req.compiledPDFPath)
+
+        return packetHandler.getSinglePacket(jwt, id, req)
     }
 
     @GetMapping("/retrieve")
