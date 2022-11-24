@@ -63,14 +63,11 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
         return packetHandler.packetPatch("USER#" + "user", id, req)
     }
 
-
+    // ID for a packet should be its name, as this is what will be downloaded/shown as the pdf files name to the user.
     @GetMapping("/retrieve/{id}") 
     fun getSinglePacket(@PathVariable id: String, @RequestHeader headers: Map<String, String>, @RequestBody req: SinglePacketRequest): ResponseEntity<ByteArray> {
         // Get the jwt included in the headers - should be the Authorization header
         val jwt: String = headers.getOrDefault("authorization", "")
-
-        println("Packet ID passed in via path variable: " + id)
-        println("Request passed to getSinglePacket name: " + req.name + ", and path: " + req.compiledPDFPath)
 
         return packetHandler.getSinglePacket(jwt, id, req)
     }

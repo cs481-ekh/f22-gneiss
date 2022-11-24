@@ -49,7 +49,7 @@ class InvoicePDFPostRequest(
 )
 
 class SinglePacketRequest(
-    val name: String, 
+    val inlineFlag: Boolean,
     val compiledPDFPath: String
 )
 
@@ -158,12 +158,6 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
         if (jwtBody == null) {
             return ResponseEntity<ByteArray>(ByteArray(0), HttpStatus.UNAUTHORIZED)
         }
-        
-        //TESTING
-        val filename = "test.pdf"
-        val pathToFile: Path = Paths.get(filename)
-        println("Path string: " + pathToFile.toString())
-        println("Absolute path string: " + (pathToFile.toAbsolutePath()).toString())
 
         // Get the pdf file as a byteBuffer
         val packetFile = File(req.compiledPDFPath)
@@ -171,8 +165,12 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
         val pdfByteArray: ByteArray = Files.readAllBytes(packetFile.toPath())
 
         // Define the headers needed to specify we are returning a pdf
-        // TODO: LET THE USER CHANGE BETWEEN INLINE (browser view), AND ATTACHMENT (download)
-        val contentDisposition: ContentDisposition = ContentDisposition.builder("attachment").filename(req.name).build()
+        val contentDisposition: ContentDisposition
+        if (req.inlineFlag) {
+            contentDisposition = ContentDisposition.builder("inline").filename(id).build()
+        } else {
+            contentDisposition = ContentDisposition.builder("attachment").filename(id).build()
+        }
 
         val headers: HttpHeaders = HttpHeaders()
         headers.setContentType(MediaType.APPLICATION_PDF)
