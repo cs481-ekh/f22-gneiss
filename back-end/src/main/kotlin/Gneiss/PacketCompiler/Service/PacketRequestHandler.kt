@@ -5,21 +5,14 @@ import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
 import Gneiss.PacketCompiler.Models.Packet
-import java.io.DataInputStream
 import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
-import java.nio.ByteBuffer  
 import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-
 
 class PacketPostRequest(
     val name: String,

@@ -15,7 +15,6 @@ import Gneiss.PacketCompiler.Service.PacketPostRequest
 import Gneiss.PacketCompiler.Service.PacketPostResponse
 import Gneiss.PacketCompiler.Service.PacketRequestHandler
 import Gneiss.PacketCompiler.Service.SinglePacketRequest
-import java.nio.ByteBuffer  
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -63,7 +62,7 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
     }
 
     // ID for a packet should be its name, as this is what will be downloaded/shown as the pdf files name to the user.
-    @GetMapping("/retrieve/{id}") 
+    @GetMapping("/retrieve/{id}")
     fun getSinglePacket(@PathVariable id: String, @RequestHeader headers: Map<String, String>, @RequestBody req: SinglePacketRequest): ResponseEntity<ByteArray> {
         // Get the jwt included in the headers - should be the Authorization header
         val jwt: String = headers.getOrDefault("authorization", "")

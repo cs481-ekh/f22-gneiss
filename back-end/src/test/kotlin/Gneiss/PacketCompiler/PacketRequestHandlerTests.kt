@@ -150,14 +150,13 @@ class PacketRequestHandlerTests {
         val singlePacketRequst = SinglePacketRequest(false, "someFile.pdf")
         val getSinglePacketsAuthFailResponse = packetHandler.getSinglePacket("someJWT", "someFile.pdf", singlePacketRequst)
         val expectedResponse = ResponseEntity<ByteArray>(ByteArray(0), HttpStatus.UNAUTHORIZED)
-        
+
         assertThat(getSinglePacketsAuthFailResponse.equals(expectedResponse))
     }
 
-    @Test 
+    @Test
     fun getSinglePacketSuccess() {
         mockkStatic(Files::class)
-        //mockkStatic("kotlin.io")
         every { Files.readAllBytes(any()) } returns ByteArray(0)
         every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "user")
 
