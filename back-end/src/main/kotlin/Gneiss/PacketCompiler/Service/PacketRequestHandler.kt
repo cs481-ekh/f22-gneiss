@@ -65,10 +65,6 @@ class PacketGetAllResponse(
     val allKeys: MutableSet<Packet>
 )
 
-class PacketGetSingleResponse(
-    val packetBuffer: ByteBuffer
-)
-
 @Service
 class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelper: IJWTHelper) {
 
