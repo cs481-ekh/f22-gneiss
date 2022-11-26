@@ -8,6 +8,7 @@ import Gneiss.PacketCompiler.Service.ApprovalPDFPostRequest
 import Gneiss.PacketCompiler.Service.ApprovalPDFPostResponse
 import Gneiss.PacketCompiler.Service.InvoicePDFPostRequest
 import Gneiss.PacketCompiler.Service.InvoicePDFPostResponse
+import Gneiss.PacketCompiler.Service.PacketDeleteResponse
 import Gneiss.PacketCompiler.Service.PacketGetAllResponse
 import Gneiss.PacketCompiler.Service.PacketPatchRequest
 import Gneiss.PacketCompiler.Service.PacketPatchResponse
@@ -16,6 +17,7 @@ import Gneiss.PacketCompiler.Service.PacketPostResponse
 import Gneiss.PacketCompiler.Service.PacketRequestHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -37,6 +39,11 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
     var jsonSerializer = JsonSerializer()
     var packetDao = PacketDao(jsonSerializer)
     var packetHandler = PacketRequestHandler(pdfHelper, packetDao, jwtHelper)
+
+    @DeleteMapping("/{id}")
+    fun PacketDelete(@PathVariable id: String, @RequestBody req: PacketPostRequest): PacketDeleteResponse {
+        return packetHandler.packetDelete("user", id, req)
+    }
 
     @PostMapping("/approvalpdf/{id}")
     fun approvalPDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): ApprovalPDFPostResponse {
