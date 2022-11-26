@@ -47,7 +47,7 @@ class PacketController @Autowired constructor(var jwtHelper: JWTHelper) {
     @PostMapping("/invoicepdf/{id}")
     fun invoicePDF(@PathVariable id: String, @RequestParam("file") file: MultipartFile, @RequestParam("highlightWords") highlightWords: Array<String>): InvoicePDFPostResponse {
         var outputName = Date().getTime().toString()
-        return packetHandler.invoicePDFPost("USER#" + "user", id, InvoicePDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes()))
+        return packetHandler.invoicePDFPost("USER#" + "user", id, InvoicePDFPostRequest(outputPrefix + outputName + ".pdf", file.getBytes(), highlightWords))
     }
 
     @PostMapping("/{id}")
