@@ -54,8 +54,7 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao) {
     var packetDao = packetDao
 
     fun packetDelete(user: String, id: String, req: PacketPostRequest): PacketDeleteResponse {
-        var packet = Packet(req.invoicePDFPath, req.approvalPDFPath, req.csvPDFPath, req.compiledPDFPath)
-        packetDao.delete(user, id, packet)
+        packetDao.delete(user, id)
         return PacketDeleteResponse()
     }
 
