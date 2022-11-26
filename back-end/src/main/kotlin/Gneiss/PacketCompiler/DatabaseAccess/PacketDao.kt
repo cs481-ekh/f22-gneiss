@@ -44,6 +44,7 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
             return true
         }
         return false
+    }
     override fun getAllKeys(): MutableSet<Packet> {
         val jedis = pool.getResource()
         val allKeys: Set<String> = jedis.keys("USER#*")
