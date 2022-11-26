@@ -1,5 +1,6 @@
 package Gneiss.PacketCompiler.DatabaseAccess
 
+import Gneiss.PacketCompiler.Models.User
 import org.springframework.security.crypto.bcrypt.BCrypt
 import java.sql.Connection
 import java.sql.DriverManager
@@ -32,6 +33,14 @@ class UserDao {
         val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'user')"
 
         val validateCredentialsQuery = "SELECT id, password, first_name, last_name, role_id FROM users WHERE email = ?"
+
+        val getUsersQuery = "SELECT email, role_id, banned FROM users"
+
+        val promoteUserQuery = "UPDATE users SET role_id = 'admin' WHERE email = ?"
+
+        val demoteUserQuery = "UPDATE users SET role_id = 'user' WHERE email = ?"
+
+        val setBanUserQuery = "UPDATE users SET banned = ? WHERE email = ?"
     }
 
     fun validateCredentials(email: String, password: String): CredentialsResponse {
@@ -83,5 +92,61 @@ class UserDao {
             size++
         }
         return size
+    }
+
+    fun getUsers(): List<User> {
+        getConnection()
+        val ret = mutableListOf<User>()
+        connection.use {
+            val prepStatement = connection!!.prepareStatement(getUsersQuery)
+            var resultSet = prepStatement.executeQuery()
+            while (resultSet!!.next()) {
+                ret.add(User(resultSet.getString(1), resultSet.getString(2), resultSet.getBoolean(3)))
+            }
+        }
+        return ret
+    }
+
+    fun promoteUser(userEmail: String): Boolean {
+        if (!checkAccountExists(userEmail)) {
+            return false
+        }
+
+        getConnection()
+        connection.use {
+            val prepStatement = connection!!.prepareStatement(promoteUserQuery)
+            prepStatement.setString(1, userEmail)
+            prepStatement.executeUpdate()
+        }
+        return true
+    }
+
+    fun demoteUser(userEmail: String): Boolean {
+        if (!checkAccountExists(userEmail)) {
+            return false
+        }
+
+        getConnection()
+        connection.use {
+            val prepStatement = connection!!.prepareStatement(demoteUserQuery)
+            prepStatement.setString(1, userEmail)
+            prepStatement.executeUpdate()
+        }
+        return true
+    }
+
+    fun setBanUser(userEmail: String, banned: Boolean): Boolean {
+        if (!checkAccountExists(userEmail)) {
+            return false
+        }
+
+        getConnection()
+        connection.use {
+            val prepStatement = connection!!.prepareStatement(setBanUserQuery)
+            prepStatement.setBoolean(1, banned)
+            prepStatement.setString(2, userEmail)
+            prepStatement.executeUpdate()
+        }
+        return true
     }
 }

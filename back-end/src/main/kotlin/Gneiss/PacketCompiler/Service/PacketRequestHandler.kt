@@ -9,6 +9,13 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
+class PacketDeleteRequest(
+    val invoicePDFPath: String,
+    val approvalPDFPath: String,
+    val csvPDFPath: String,
+    val compiledPDFPath: String
+)
+
 class PacketPostRequest(
     val name: String,
     val invoicePDFPath: String,
@@ -37,6 +44,8 @@ class InvoicePDFPostRequest(
     val highlightWords: Array<String>
 )
 
+class PacketDeleteResponse()
+
 class PacketPostResponse()
 
 class PacketPatchResponse()
@@ -55,6 +64,11 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
     var pdfHelper = pdfHelper
     var packetDao = packetDao
     var jwtHelper = jwtHelper
+
+    fun packetDelete(user: String, id: String, req: PacketPostRequest): PacketDeleteResponse {
+        packetDao.delete(user, id)
+        return PacketDeleteResponse()
+    }
 
     fun packetPost(user: String, id: String, req: PacketPostRequest): PacketPostResponse {
         var packet = Packet(req.name, req.invoicePDFPath, req.approvalPDFPath, req.csvPDFPath, req.compiledPDFPath)
