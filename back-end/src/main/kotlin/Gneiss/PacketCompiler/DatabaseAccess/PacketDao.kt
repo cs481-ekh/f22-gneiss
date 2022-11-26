@@ -2,8 +2,10 @@ package Gneiss.PacketCompiler.DatabaseAccess
 
 import Gneiss.PacketCompiler.Helpers.IJsonSerializer
 import Gneiss.PacketCompiler.Models.Packet
+import org.springframework.stereotype.Component
 import redis.clients.jedis.JedisPool
 
+@Component
 class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
 
     var jsonSerializer = jsonSerializer
@@ -42,5 +44,43 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
             return true
         }
         return false
+    override fun getAllKeys(): MutableSet<Packet> {
+        val jedis = pool.getResource()
+        val allKeys: Set<String> = jedis.keys("USER#*")
+
+        var allPackets = mutableSetOf<Packet>()
+        for (key in allKeys) {
+            val allPacketsForUser = mapToPacket(jedis.hgetAll(key))
+
+            allPackets.addAll(allPacketsForUser)
+        }
+
+        return allPackets
+    }
+
+    override fun getUserKeys(user: String): MutableSet<Packet> {
+        val jedis = pool.getResource()
+
+        // Get a set of all the fields (packets) for a corresponding key (user)
+        // allPacketsHash will be a map<String, String> with the first string being the field and the second being a packet
+        val allPacketsHash = jedis.hgetAll("USER#" + user)
+
+        // Deserialize all the hashes back into packets
+        val allPacketsForUser = mapToPacket(allPacketsHash)
+
+        return allPacketsForUser
+    }
+
+    override fun mapToPacket(map: Map<String, String>): MutableSet<Packet> {
+        val allPackets = mutableSetOf<Packet>()
+
+        // Get all of the values from the map (each 'key' is a packet id but we want all of them so we can just grab all values)
+        val allPacketHashes = map.values
+
+        for (hash in allPacketHashes) {
+            allPackets.add(jsonSerializer.deserializePacket(hash))
+        }
+
+        return allPackets
     }
 }

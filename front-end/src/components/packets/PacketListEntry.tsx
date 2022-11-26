@@ -32,11 +32,10 @@ export function PacketListEntry(props: PacketListEntryProps) {
   };
 
   const handleNameEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.code)
     if (e.key === "Enter") {
-      handleNameInputBlur()
+      handleNameInputBlur();
     }
-  }
+  };
 
   const validateName = (name: string) => {
     if (name.length < 3) {
@@ -62,7 +61,9 @@ export function PacketListEntry(props: PacketListEntryProps) {
           onKeyDown={handleNameEnter}
         />
       )}
-      {!nameInputActive && <Link href={`/packet/${props.id}`}>{name}</Link>}
+      {!nameInputActive && (
+        <Link href={`./packet/${props.id}`}>{name}</Link>
+      )}
       <Divider />
     </Paper>
   );

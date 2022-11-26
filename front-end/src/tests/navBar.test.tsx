@@ -17,6 +17,6 @@ const navItems: NavInfo[] = [
 ];
 
 test.each(navItems)("Check if Nav Bar have %s link.", (item) => {
-  render(<NavBar content={navItems} barWidth="20vw" />);
+  render(<NavBar content={navItems} basePath="" barWidth="20vw" />);
   expect(screen.getByText(item.label)).toBeTruthy();
 });

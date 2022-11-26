@@ -97,7 +97,7 @@ export default function CreatePacketStepper(props: CreatePacketStepperProps) {
   return (
     <Paper style={styles.outerBox}>
       <header style={styles.header}>
-        <Link href={"/home"}>Back</Link>
+        <Link href={"/f22-gneiss/home"}>Back</Link>
         <h1>Edit Packet</h1>
       </header>
       <Stepper nonLinear activeStep={activeStep}>

@@ -5,10 +5,12 @@ import org.apache.tika.metadata.Metadata
 import org.apache.tika.parser.ParseContext
 import org.apache.tika.parser.pdf.PDFParser
 import org.apache.tika.sax.BodyContentHandler
+import org.springframework.stereotype.Component
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
 
+@Component
 class PDFHelper() : IPDFHelper {
     override fun writeFile(fileName: String, bytes: ByteArray) {
         var file = File(fileName)

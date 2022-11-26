@@ -18,7 +18,10 @@ services:
     ports:
       - ${REDIS_PORT}:6379
   back-end:
-    image: gneiss-back:latest
+    build:
+      context: .
+      dockerfile: back-end/Dockerfile
+
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
