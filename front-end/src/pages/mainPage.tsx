@@ -19,12 +19,14 @@ export function MainPage(props: MainPageProps) {
         const validFlag = authRes.data.validJWT;
 
         if (!validFlag) {
+          console.log("f22 push from .then")
           history.push("/f22-gneiss");
         }
       })
       .catch((e: any) => {
         // Refreshing the page as fast as you can shouldn't send you to login
         if (!e.message.includes("abort")) {
+          console.log("f22 push from .catch")
           history.push("/f22-gneiss");
         }
       });
@@ -54,7 +56,7 @@ export function MainPage(props: MainPageProps) {
   const httpService = getHttpService();
   const userRole = (jwt_decode(httpService.getAuth()) as any).role;
 
-  if (userRole === 'admin') {
+  if (userRole === "admin") {
     navItems.splice(navItems.length - 1, 0, {
       label: "Admin",
       href: "/admin",

@@ -198,7 +198,7 @@ export function NewAccountForm(props: newAcccountFormProps) {
             Create Account
           </Button>
         </div>
-        <Link style={styles.navLink} href="/" underline="always">
+        <Link style={styles.navLink} href="/f22-gneiss" underline="always">
           Back
         </Link>
         <Snackbar open={alertReason !== ""}>
