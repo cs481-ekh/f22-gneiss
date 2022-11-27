@@ -142,7 +142,7 @@ class PacketRequestHandlerTests {
         every { packetDao.set(any(), any(), capture(packetOutput)) } just Runs
         every { packetDao.get(any(), any()) } returns Packet("name", "a", "b", "c", "d")
         var packetHandler = getHandler()
-        val request = InvoicePDFPostRequest("outputName", ByteArray(0))
+        val request = InvoicePDFPostRequest("outputName", ByteArray(0), arrayOf("text"))
         packetHandler.invoicePDFPost("user", "packetid", request)
 
         assertThat(byteOutput.captured).isEqualTo(ByteArray(0))
