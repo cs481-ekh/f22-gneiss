@@ -8,6 +8,19 @@
 		<version>2.7.3</version>
 		<relativePath/> 
 	</parent>
+	<pluginRepositories>
+    <pluginRepository>
+        <id>kotlin-bintray</id>
+        <name>Kotlin Bintray</name>
+        <url>http://dl.bintray.com/kotlin/kotlin-dev</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </pluginRepository>
+</pluginRepositories>
 	<groupId>Gneiss</groupId>
 	<artifactId>PacketCompiler</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
