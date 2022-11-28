@@ -33,7 +33,7 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
         }
         return ret
     }
-    
+
     override fun delete(key: String, field: String): Boolean {
         val jedis = pool.getResource()
         var ret: Long
@@ -45,7 +45,7 @@ class PacketDao(jsonSerializer: IJsonSerializer) : IPacketDao {
         }
         return false
     }
-    
+
     override fun getAllKeys(): Map<String, Packet> {
         val jedis = pool.getResource()
         val allKeys: Set<String> = jedis.keys("USER#*")
