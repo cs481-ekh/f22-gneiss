@@ -15,6 +15,7 @@ export const getHttpService = () => {
       headers: { Authorization: cookies.get("Authorization") },
     }),
     setAuth: setAuthorization,
+    getAuth: (): string => cookies.get("Authorization"),
     removeAuth: removeAuthorization,
   };
 };

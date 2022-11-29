@@ -14,6 +14,13 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
+class PacketDeleteRequest(
+    val invoicePDFPath: String,
+    val approvalPDFPath: String,
+    val csvPDFPath: String,
+    val compiledPDFPath: String
+)
+
 class PacketPostRequest(
     val name: String,
     val invoicePDFPath: String,
@@ -46,6 +53,8 @@ class SinglePacketRequest(
     val compiledPDFPath: String
 )
 
+class PacketDeleteResponse()
+
 class PacketPostResponse()
 
 class PacketPatchResponse()
@@ -55,7 +64,7 @@ class ApprovalPDFPostResponse()
 class InvoicePDFPostResponse()
 
 class PacketGetAllResponse(
-    val allKeys: MutableSet<Packet>
+    val allKeys: Map<String, Packet>
 )
 
 @Service
@@ -64,6 +73,11 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
     var pdfHelper = pdfHelper
     var packetDao = packetDao
     var jwtHelper = jwtHelper
+
+    fun packetDelete(user: String, id: String, req: PacketPostRequest): PacketDeleteResponse {
+        packetDao.delete(user, id)
+        return PacketDeleteResponse()
+    }
 
     fun packetPost(user: String, id: String, req: PacketPostRequest): PacketPostResponse {
         var packet = Packet(req.name, req.invoicePDFPath, req.approvalPDFPath, req.csvPDFPath, req.compiledPDFPath)
@@ -126,11 +140,11 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
 
         // If there is no auth header return an empty response
         if (jwtBody == null) {
-            return ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mutableSetOf<Packet>()), HttpStatus.UNAUTHORIZED)
+            return ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mutableMapOf<String, Packet>()), HttpStatus.UNAUTHORIZED)
         }
 
         // If the user has higher permissions than user return all the packets, else return only those made by that specific user
-        var allKeys: MutableSet<Packet>
+        var allKeys: Map<String, Packet>
         if (jwtBody.role == "user") {
             allKeys = packetDao.getUserKeys(jwtBody.user)
         } else {

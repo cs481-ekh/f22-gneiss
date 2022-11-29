@@ -5,9 +5,8 @@ import Gneiss.PacketCompiler.Models.Packet
 interface IPacketDao {
     fun set(key: String, field: String, packet: Packet)
     fun get(key: String, field: String): Packet
+    fun delete(key: String, field: String): Boolean
 
-    fun getAllKeys(): MutableSet<Packet>
-    fun getUserKeys(user: String): MutableSet<Packet>
-
-    fun mapToPacket(map: Map<String, String>): MutableSet<Packet>
+    fun getAllKeys(): Map<String, Packet>
+    fun getUserKeys(user: String): Map<String, Packet>
 }

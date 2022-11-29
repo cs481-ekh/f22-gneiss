@@ -1,10 +1,33 @@
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer, SetupServerApi } from "msw/lib/node";
+import { Packet } from "../data/Models";
 import { PacketsPage } from "../pages/packetsPage";
+
+const packets: { [key: string]: any } = {
+  id1: {
+    name: "name1",
+    new: false,
+  },
+  id2: {
+    name: "name2",
+    new: false,
+  },
+  id3: {
+    name: "name3",
+    new: false,
+  },
+};
 
 let serverResponse = 0; //setting up fake server to send requests to.
 const server: SetupServerApi = setupServer(
+  rest.get("/api/packet/retrieve", (req, res, ctx) => {
+    return res(
+      ctx.json({
+        allKeys: packets,
+      })
+    );
+  }),
   rest.post("/api/packet/:id", async (req, res, ctx) => {
     return res(ctx.status(serverResponse));
   })
@@ -13,6 +36,17 @@ const makeServerBeforeTest = (response: number) => {
   serverResponse = response;
   server.listen();
 };
+
+test.each(Object.keys(packets))(
+  "Each packet shows up in list",
+  async (packet: any) => {
+    makeServerBeforeTest(200);
+    render(<PacketsPage />);
+    await waitFor(() =>
+      expect(screen.getByText(packets[packet].name)).toBeTruthy()
+    );
+  }
+);
 
 test("Clicking create button adds new packet", () => {
   render(<PacketsPage />);

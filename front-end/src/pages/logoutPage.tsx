@@ -8,7 +8,8 @@ export function LogoutPage(props: LogoutPageProps) {
   const httpService = getHttpService();
   useEffect(() => {
     httpService.removeAuth();
-    history.push("/");
+    console.log("f22 push from logout")
+    history.push("/f22-gneiss");
   });
 
   return (

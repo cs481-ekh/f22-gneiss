@@ -112,23 +112,27 @@ class PacketRequestHandlerTests {
 
     @Test
     fun getAllPacketsTest() {
-        every { packetDao.getAllKeys() } returns mutableSetOf<Packet>(Packet("name", "invoice", "approval", "csv", "compiled"))
+        val mockMap = mutableMapOf<String, Packet>()
+        mockMap["id"] = Packet("name", "invoice", "approval", "csv", "compiled")
+        every { packetDao.getAllKeys() } returns mockMap
         every { jwtHelper.parseJWT(any()) } returns JWTBody("username", "admin")
 
         var packetHandler = getHandler()
         val getAllPacketsResponse = packetHandler.getAllPackets("someJWT")
-        val expectedResponse = ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mutableSetOf<Packet>(Packet("name", "invoice", "approval", "csv", "compiled"))), HttpStatus.OK)
+        val expectedResponse = ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mockMap), HttpStatus.OK)
         assertThat(getAllPacketsResponse.equals(expectedResponse))
     }
 
     @Test
     fun getAllPacketsForUserTest() {
-        every { packetDao.getUserKeys(any()) } returns mutableSetOf<Packet>(Packet("name", "invoice", "approval", "csv", "compiled"))
+        val mockMap = mutableMapOf<String, Packet>()
+        mockMap["id"] = Packet("name", "invoice", "approval", "csv", "compiled")
+        every { packetDao.getUserKeys(any()) } returns mockMap
         every { jwtHelper.parseJWT(any()) } returns JWTBody("username", "user")
 
         var packetHandler = getHandler()
         val getUserPacketsResponse = packetHandler.getAllPackets("someJWT")
-        val expectedResponse = ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mutableSetOf<Packet>(Packet("name", "invoice", "approval", "csv", "compiled"))), HttpStatus.OK)
+        val expectedResponse = ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mockMap), HttpStatus.OK)
         assertThat(getUserPacketsResponse.equals(expectedResponse))
     }
 
@@ -138,7 +142,7 @@ class PacketRequestHandlerTests {
 
         var packetHandler = getHandler()
         val getAllPacketsAuthFailResponse = packetHandler.getAllPackets("someJWT")
-        val expectedResponse = ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mutableSetOf<Packet>()), HttpStatus.UNAUTHORIZED)
+        val expectedResponse = ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mutableMapOf<String, Packet>()), HttpStatus.UNAUTHORIZED)
         assertThat(getAllPacketsAuthFailResponse.equals(expectedResponse))
     }
 

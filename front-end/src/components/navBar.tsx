@@ -24,9 +24,13 @@ export function NavBar(props: INavBarProps) {
     },
   };
 
+  /**
+   * ${props.basePath} in href was tacking on an extra /f22-gneiss
+   * or extra basePath String while creating packet.
+   */
   const mapLinks = props.content.map((v) => (
     <ListItem key={v.label} disablePadding>
-      <ListItemButton component="a" href={`${props.basePath}${v.href}`}>
+      <ListItemButton component="a" href={`/f22-gneiss${v.href}`}>
         <ListItemText primary={v.label} />
       </ListItemButton>
     </ListItem>

@@ -30,7 +30,7 @@ class UserDao {
     companion object sqlQueries {
         val getAccountQuery = "SELECT id, email, first_name, last_name FROM users WHERE email = ?"
 
-        val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'admin')"
+        val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'user')"
 
         val validateCredentialsQuery = "SELECT id, password, first_name, last_name, role_id FROM users WHERE email = ?"
 
