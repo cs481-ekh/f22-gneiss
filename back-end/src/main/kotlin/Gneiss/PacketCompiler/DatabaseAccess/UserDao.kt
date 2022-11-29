@@ -32,7 +32,7 @@ class UserDao {
 
         val createAccountQuery = "INSERT INTO users (email, password, first_name, last_name, role_id) VALUES (?, ?, ?, ?, 'user')"
 
-        val validateCredentialsQuery = "SELECT id, password, first_name, last_name, role_id FROM users WHERE email = ?"
+        val validateCredentialsQuery = "SELECT password, role_id, banned FROM users WHERE email = ?"
 
         val getUsersQuery = "SELECT email, role_id, banned FROM users"
 
@@ -49,9 +49,13 @@ class UserDao {
         prepStatement.setString(1, email)
         var resultSet = prepStatement.executeQuery()
         resultSet.next()
-        val hashedPassword = resultSet.getString(2)
-        val roleId = resultSet.getString(5)
+        val hashedPassword = resultSet.getString(1)
+        val roleId = resultSet.getString(2)
+        val banned = resultSet.getBoolean(3)
         connection!!.close()
+        if (banned) {
+            return CredentialsResponse(false, "banned")
+        }
         if (BCrypt.checkpw(password, hashedPassword)) {
             return CredentialsResponse(true, roleId)
         }
