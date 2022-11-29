@@ -55,53 +55,89 @@ class PDFHelper() : IPDFHelper {
         HtmlConverter.convertToPdf(htmlText, fileOutputStream)
     }
     override fun csvToPDF(filename: String): String {
-            //var path = Paths.get(fileName);
-            //Stream<String> lines = Files.lines(path).skip(1); // skipping the header
-            //Need to decide how much this function carries, if I want it to both read and convert
-            //make sure to return
+        //READ: This function is meant to take a file path to the CSV and convert it to the PDF. We found
+        //an existing endpoint, but it's in java. We've refactored a lot of it to Kotlin, but there is
+        //still more work to do. Here is the endpoint for reference: https://github.com/roytuts/java/blob/master/java-csv-to-pdf/src/main/java/com/roytuts/java/csv/to/pdf/CsvToPdfConverter.java
+        //More files from that may need to be added, you'd need to do research in that.
 
             var path = Paths.get(filename);
             var bytes = Files.readAllBytes(path);
             var str = String(bytes);
-            // var splitted = Arrays.stream(str.split("\n")).map(String::trim).toArray(String[]::new);
-            
+
+            //String[] splitted = Arrays.stream(str.split("\n")).map(String::trim).toArray(String[]::new);
+    
+            /* List<String> list = Arrays.asList(splitted);
+    
+            Document document = new Document(PageSize.A4, 25, 25, 25, 25);
+            PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream("student.pdf"));
+    
+            document.open();
+    
+            Paragraph heading = new Paragraph("~: Student Details :~",
+                    FontFactory.getFont(FontFactory.HELVETICA, 20, Font.BOLD, new BaseColor(0, 255, 0)));
+    
+            document.add(heading);
+    
+            PdfPTable t = new PdfPTable(4);
+            t.setSpacingBefore(25);
+            t.setSpacingAfter(25);
+    
+            boolean isHeader = true;
+            for (String record : list) {
+                String[] line = Arrays.stream(record.split(",")).map(String::trim).toArray(String[]::new);*/
+                var line = []
+                var invoiceNumber = line[0];
+                var billingDate = line[1];
+                var billTo = line[2];
+                var cO = line[3];
+                var mailOrEmail = line[4];
+                var contactInfo = line[5];
+                var addressLine1 = line[6];
+                var addressLine2 = line[7];
+                var city = line[8];
+                var state = line[9];
+                var zipCode = line[10];
+                var zipCodeExtension = line[11];
+                var dateOfService = line[12];
+                var description = line[13];
+                var accountingString = line[14];
+                var amount = line[15];
+                var total = line[16];
+    
+                /* if (isHeader) {
+                    PdfPCell c1 = new PdfPCell(new Phrase(id));
+                    t.addCell(c1);
+    
+                    PdfPCell c2 = new PdfPCell(new Phrase(dob));
+                    t.addCell(c2);
+    
+                    PdfPCell c3 = new PdfPCell(new Phrase(email));
+                    t.addCell(c3);
+    
+                    PdfPCell c4 = new PdfPCell(new Phrase(address));
+                    t.addCell(c4);
+                } else {
+                    PdfPCell c1 = new PdfPCell(new Phrase(id));
+                    t.addCell(c1);
+    
+                    PdfPCell c2 = new PdfPCell(new Phrase(dob));
+                    t.addCell(c2);
+    
+                    PdfPCell c3 = new PdfPCell(new Phrase(email));
+                    t.addCell(c3);
+    
+                    PdfPCell c4 = new PdfPCell(new Phrase(address));
+                    t.addCell(c4);
+                }
+    
+            }
+    
+            document.add(t);
+    
+            document.close();
+            pdfWriter.close(); */
+            //Not sure if below should be here or not
             return str
-    
-            
-    
-            // // System.out.println(Arrays.toString(splitted));
-    
-            // List<String> list = Arrays.asList(splitted);
-    
-            // var document = Document(PageSize.A4, 25, 25, 25, 25);
-            // var pdfWriter = PdfWriter.getInstance(document, FileOutputStream("student.pdf"));
-    
-            // document.open();
-    
-            // var heading = Paragraph("~: Student Details :~",
-            // 		FontFactory.getFont(FontFactory.HELVETICA, 20, Font.BOLD, new BaseColor(0, 255, 0)));
-    
-            // document.add(heading);
-    
-            // PdfPTable t = new PdfPTable(4);
-            // t.setSpacingBefore(25);
-            // t.setSpacingAfter(25);
-    
-            // boolean isHeader = true;
-    
-            //for line in lines {
-                //Keep var info, rest Phillip has commented out in local changes
-                //var info = listOf(line.split(","));
-        
-                // var sl = info.get(0);
-                // var id = info.get(1);
-                // var name = info.get(2);
-                // var manager = info.get(3);
-        
-                // System.out.println("Sl No: " + sl + ", ID: " + id + ", Name: " + name + ", Manager: " + manager);
                 
         };
-        
-            //lines.close();
-            //no returning, just convertin
 }
