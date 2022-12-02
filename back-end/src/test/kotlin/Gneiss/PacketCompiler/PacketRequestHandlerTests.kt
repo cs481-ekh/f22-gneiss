@@ -11,16 +11,19 @@ import Gneiss.PacketCompiler.Service.PacketGetAllResponse
 import Gneiss.PacketCompiler.Service.PacketPatchRequest
 import Gneiss.PacketCompiler.Service.PacketPostRequest
 import Gneiss.PacketCompiler.Service.PacketRequestHandler
+import Gneiss.PacketCompiler.Service.SinglePacketRequest
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.slot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.nio.file.Files
 
 @SpringBootTest
 class PacketRequestHandlerTests {
@@ -141,5 +144,31 @@ class PacketRequestHandlerTests {
         val getAllPacketsAuthFailResponse = packetHandler.getAllPackets("someJWT")
         val expectedResponse = ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(mutableMapOf<String, Packet>()), HttpStatus.UNAUTHORIZED)
         assertThat(getAllPacketsAuthFailResponse.equals(expectedResponse))
+    }
+
+    @Test
+    fun getSinglePacketNoAuth() {
+        every { jwtHelper.parseJWT(any()) } returns null
+
+        var packetHandler = getHandler()
+        val singlePacketRequst = SinglePacketRequest(false, "someFile.pdf")
+        val getSinglePacketsAuthFailResponse = packetHandler.getSinglePacket("someJWT", "someFile.pdf", singlePacketRequst)
+        val expectedResponse = ResponseEntity<ByteArray>(ByteArray(0), HttpStatus.UNAUTHORIZED)
+
+        assertThat(getSinglePacketsAuthFailResponse.equals(expectedResponse))
+    }
+
+    @Test
+    fun getSinglePacketSuccess() {
+        mockkStatic(Files::class)
+        every { Files.readAllBytes(any()) } returns ByteArray(0)
+        every { jwtHelper.parseJWT(any()) } returns JWTBody("user", "user")
+
+        var packetHandler = getHandler()
+        val singlePacketRequst = SinglePacketRequest(false, "someFile.pdf")
+        val getSinglePacketsAuthFailResponse = packetHandler.getSinglePacket("someJWT", "someFile.pdf", singlePacketRequst)
+        val expectedResponse = ResponseEntity<ByteArray>(ByteArray(0), HttpStatus.OK)
+
+        assertThat(getSinglePacketsAuthFailResponse.equals(expectedResponse))
     }
 }

@@ -5,9 +5,14 @@ import Gneiss.PacketCompiler.Helpers.IJWTHelper
 import Gneiss.PacketCompiler.Helpers.IPDFHelper
 import Gneiss.PacketCompiler.Helpers.JWTBody
 import Gneiss.PacketCompiler.Models.Packet
+import org.springframework.http.ContentDisposition
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.io.File
+import java.nio.file.Files
 
 class PacketDeleteRequest(
     val invoicePDFPath: String,
@@ -41,6 +46,11 @@ class ApprovalPDFPostRequest(
 class InvoicePDFPostRequest(
     val outputName: String,
     val fileBytes: ByteArray
+)
+
+class SinglePacketRequest(
+    val inlineFlag: Boolean,
+    val compiledPDFPath: String
 )
 
 class PacketDeleteResponse()
@@ -142,5 +152,34 @@ class PacketRequestHandler(pdfHelper: IPDFHelper, packetDao: IPacketDao, jwtHelp
         }
 
         return ResponseEntity<PacketGetAllResponse>(PacketGetAllResponse(allKeys), HttpStatus.OK)
+    }
+
+    fun getSinglePacket(jwt: String, id: String, req: SinglePacketRequest): ResponseEntity<ByteArray> {
+        // Parse the jwt to get the users username and role, if null return a Unauthorized http response
+        val jwtBody: JWTBody? = jwtHelper.parseJWT(jwt)
+
+        if (jwtBody == null) {
+            return ResponseEntity<ByteArray>(ByteArray(0), HttpStatus.UNAUTHORIZED)
+        }
+
+        // Get the pdf file as a byteBuffer
+        val packetFile = File(req.compiledPDFPath)
+        val packetSize = packetFile.length()
+        val pdfByteArray: ByteArray = Files.readAllBytes(packetFile.toPath())
+
+        // Define the headers needed to specify we are returning a pdf
+        val contentDisposition: ContentDisposition
+        if (req.inlineFlag) {
+            contentDisposition = ContentDisposition.builder("inline").filename(id).build()
+        } else {
+            contentDisposition = ContentDisposition.builder("attachment").filename(id).build()
+        }
+
+        val headers: HttpHeaders = HttpHeaders()
+        headers.setContentType(MediaType.APPLICATION_PDF)
+        headers.setContentLength(packetSize)
+        headers.setContentDisposition(contentDisposition)
+
+        return ResponseEntity<ByteArray>(pdfByteArray, headers, HttpStatus.OK)
     }
 }
