@@ -19,6 +19,4 @@ The aim of the project is to automate the process of storing and fetching contra
 Paketto consists of two back-end databases, an SQL database for handling user accounts & permissions, and a no-SQL Redis database for the storage of packets. The no-SQL format allows for the Redis database to be adjusted by the end user, should the department want to restructure its data formatting in the future. The databases are integrated into a React web application, consisting of account login and creation pages, a main page for managing a user's packets and creating new ones, as well as admin pages for managing the app's user permissions.
 
 ## Pictures
-![Docs](docs/adminGetBanned.png)
-![Imgur](https://imgur.com/n9W60Aj.png)
-![Imgur](https://imgur.com/rnxX2nZ.png)
+![Admin Page](https://github.com/cs481-ekh/f22-gneiss/blob/update-github-page/docs/adminGetBanned.png)
