@@ -16,7 +16,7 @@ The aim of the project is to automate the process of storing and fetching contra
  - Teddy Ramey
 
 ## Project Description:
-~~PiRate uses a python based controller that will run security tests against a client computer from an externally connected Raspberry Pi. The tests have been structured according to the layout provided to you within our angular website's test upload page. With that said, the entire website is run using angular and is hosted on a node express server which will gather your IP address, as well as the directories that the tests reside in and any potential results from previous tests. After gathering this information it will get passed back to be viewed on the angular website and will update whenever a new test is added to the tests directory. The results of running tests can be saved to an external log file for later viewing, as well as the program remembering your device or being able to upload old test results.~~
+Paketto consists of two back-end databases, an SQL database for handling user accounts & permissions, and a no-SQL Redis database for the storage of packets. The no-SQL format allows for the Redis database to be adjusted by the end user, should the department want to restructure its data formatting in the future. The databases are integrated into a React web application, consisting of account login and creation pages, a main page for managing a user's packets and creating new ones, as well as admin pages for managing the app's user permissions.
 
 ## Pictures
 ![Imgur](https://imgur.com/5iyfEWk.png)
