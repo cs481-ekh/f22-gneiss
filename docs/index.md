@@ -20,6 +20,9 @@ Paketto consists of two back-end databases, an SQL database for handling user ac
 
 ## Pictures
 ![Account Creation](Account%20Creation.png)
+
 ![Main Page](Main%20Page.png)
+
 ![Approval Step](Approval%20Step.png)
+
 ![Admin Page](adminGetBanned.png)
